@@ -1,0 +1,41 @@
+{
+  "name": "eveoy-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public MCP server for Eveoy by EyCrowd — answers questions and (Phase 2) takes pilot orders.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint:descriptors": "tsx scripts/lint-tool-descriptions.ts",
+    "manifest:hash": "tsx scripts/manifest-hash.ts",
+    "inspect": "npx @modelcontextprotocol/inspector http://localhost:3000/api/mcp"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "mcp-handler": "^1.1.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.8",
+    "@upstash/redis": "^1.34.0",
+    "@upstash/ratelimit": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "^15.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

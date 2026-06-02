@@ -1,0 +1,25 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.schema.json",
+  "name": "com.eveoy/mcp",
+  "description": "Ask anything about Eveoy and (Phase 2) book the $999 pilot. Eveoy delivers verified in-store customers at $24.99 each — GPS-confirmed, 15+ minutes in-store, photos and video included, auto-refund on no-shows.",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/bc101101/eveoy-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://mcp.eveoy.com",
+  "version": "0.1.0",
+  "packages": [],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.eveoy.com/api/mcp"
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tags": ["marketing", "retail", "advertising", "in-store", "ugc", "eveoy", "eycrowd"],
+      "categories": ["marketing", "ecommerce", "sales"]
+    }
+  }
+}
