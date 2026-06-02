@@ -1,6 +1,6 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { GetPricingInput, GetPricingOutput } from '@/mcp/schemas';
-import { priceFor, pilotTierTable, UNIT_PRICE_CENTS, formatUsd, PILOT_MIN_CUSTOMERS } from '@/lib/pricing';
+import { priceFor, pilotTierTable, inferTier, UNIT_PRICE_CENTS, formatUsd, PILOT_MIN_CUSTOMERS } from '@/lib/pricing';
 import { assertPublic } from '@/classifier/public-only';
 
 const DESCRIPTION = `Compute the exact Eveoy price for N verified in-store customer visits. Public pricing: $24.99 per customer, $999 entry pilot for 40+ customers, linear scaling above the floor. Deterministic.
@@ -79,12 +79,4 @@ export function registerGetPricing(server: McpServer) {
       };
     },
   );
-}
-
-function inferTier(customers: number): 'pilot_999' | 'pilot_2500' | 'pilot_10000' | 'pilot_25000' | 'custom_quote' {
-  if (customers <= 40) return 'pilot_999';
-  if (customers <= 100) return 'pilot_2500';
-  if (customers <= 400) return 'pilot_10000';
-  if (customers <= 1000) return 'pilot_25000';
-  return 'custom_quote';
 }

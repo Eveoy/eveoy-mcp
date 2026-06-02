@@ -4,6 +4,7 @@ export const dynamic = 'force-static';
 export async function GET() {
   const urls = [
     'https://mcp.eveoy.com/',
+    'https://mcp.eveoy.com/privacy',
     'https://mcp.eveoy.com/.well-known/mcp/server-card.json',
   ];
   const today = '2026-06-02';

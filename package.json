@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "lint:descriptors": "tsx scripts/lint-tool-descriptions.ts",
     "manifest:hash": "tsx scripts/manifest-hash.ts",
+    "build:dxt": "tsx scripts/build-dxt.ts",
     "inspect": "npx @modelcontextprotocol/inspector http://localhost:3000/api/mcp"
   },
   "dependencies": {

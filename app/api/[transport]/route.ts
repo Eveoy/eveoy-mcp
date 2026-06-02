@@ -1,14 +1,41 @@
 import { createMcpHandler } from 'mcp-handler';
 import { registerAll } from '@/mcp/register';
 import { env } from '@/lib/env';
+import { log } from '@/lib/log';
 
 export const runtime = 'nodejs';
 export const maxDuration = 800;
 export const dynamic = 'force-dynamic';
 
+/**
+ * Phase 2 observability — env-gated. If SENTRY_DSN is set, dynamically
+ * import @sentry/node and wrap the registered server with
+ * wrapMcpServerWithSentry. No hard dep; graceful no-op when DSN absent
+ * or the package isn't installed.
+ *
+ * Reference: https://x.com/getsentry/status/1955989547205926987
+ */
+async function wrapWithSentryIfAvailable<T>(server: T): Promise<T> {
+  if (!process.env.SENTRY_DSN) return server;
+  try {
+    const sentry = (await import('@sentry/node').catch(() => null)) as
+      | { wrapMcpServerWithSentry?: <S>(s: S) => S }
+      | null;
+    if (sentry?.wrapMcpServerWithSentry) {
+      log.info('sentry.mcp.wrapped');
+      return sentry.wrapMcpServerWithSentry(server);
+    }
+    log.warn('sentry.mcp.skip', { reason: 'wrapMcpServerWithSentry missing' });
+  } catch (err) {
+    log.warn('sentry.mcp.error', { reason: String(err) });
+  }
+  return server;
+}
+
 const handler = createMcpHandler(
-  (server) => {
-    registerAll(server);
+  async (server) => {
+    const wrapped = await wrapWithSentryIfAvailable(server);
+    registerAll(wrapped);
   },
   {
     serverInfo: {
