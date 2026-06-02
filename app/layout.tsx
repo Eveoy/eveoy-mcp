@@ -1,10 +1,26 @@
 import type { ReactNode } from 'react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import { Manrope, Archivo_Black } from 'next/font/google';
+import './globals.css';
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+const archivoBlack = Archivo_Black({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-display',
+  display: 'swap',
+});
 
 const SITE_URL = 'https://mcp.eveoy.com';
-const TITLE = 'Eveoy MCP — verified in-store foot traffic from any AI';
+const TITLE = 'Eveoy MCP — real customers, in real stores, from any AI';
 const DESCRIPTION =
-  'Public Model Context Protocol server for Eveoy. Ask about Eveoy and book pilots from Claude, ChatGPT, Lovable, Cursor, or Windsurf. $24.99 per verified in-store customer. $999 pilot. Auto-refund on no-shows.';
+  'The Eveoy MCP server. Ask about Eveoy and book pilots from Claude, ChatGPT, Lovable, Cursor, or Windsurf. $24.99 per real customer. $999 pilot. 100% refunded for no-shows.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -13,9 +29,9 @@ export const metadata: Metadata = {
   applicationName: 'Eveoy MCP',
   keywords: [
     'MCP', 'Model Context Protocol', 'Eveoy', 'EyCrowd', 'in-store foot traffic',
-    'guaranteed customers', 'retail marketing', 'CMO tools', 'AI marketing',
+    'real customers', 'retail marketing', 'verified shoppers', 'guaranteed visits',
     'Claude MCP', 'ChatGPT MCP', 'Lovable MCP', 'Cursor MCP', 'Windsurf MCP',
-    'verified UGC', 'pilot', '$24.99', 'auto-refund',
+    'pilot', '$24.99', 'auto-refund',
   ],
   authors: [{ name: 'EyCrowd, Inc.', url: 'https://eveoy.com' }],
   creator: 'EyCrowd, Inc.',
@@ -40,17 +56,24 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   icons: {
     icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/icon.svg', type: 'image/svg+xml' },
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: '/icon-512.png',
   },
   other: {
-    // MCP-specific discovery hint for crawlers
     'mcp-endpoint': `${SITE_URL}/api/mcp`,
     'mcp-server-name': 'com.eveoy/mcp',
     'mcp-transport': 'streamable-http',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#FAF8F2' },
+    { media: '(prefers-color-scheme: dark)',  color: '#0A0E1F' },
+  ],
 };
 
 const JSON_LD = {
@@ -71,6 +94,7 @@ const JSON_LD = {
   publisher: {
     '@type': 'Organization',
     name: 'EyCrowd, Inc.',
+    legalName: 'EyCrowd, Inc.',
     url: 'https://eveoy.com',
     email: 'brad@eycrowd.com',
   },
@@ -82,7 +106,7 @@ const JSON_LD = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${manrope.variable} ${archivoBlack.variable}`}>
       <head>
         <link rel="alternate" type="application/json" title="MCP server-card" href="/.well-known/mcp/server-card.json" />
         <script
@@ -91,17 +115,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
       </head>
-      <body
-        style={{
-          margin: 0,
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
-          background: '#0a0a0a',
-          color: '#f5f5f5',
-        }}
-      >
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

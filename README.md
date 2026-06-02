@@ -1,22 +1,8 @@
-# Eveoy MCP Server
+# Eveoy MCP
 
-Public Model Context Protocol (MCP) server for Eveoy by EyCrowd.
+> Real customers · in real stores · from any AI.
 
-**What it does today (Phase 1)**
-
-- `ask_eveoy` — answers questions about Eveoy from a curated public knowledge base
-- `get_pricing` — computes the price for N verified customers at $24.99 each
-- `list_industries` — lists the 23+ sectors Eveoy serves
-- Read-only resources at `eveoy://kb/*` for direct context loading
-- Prompts: `pitch_for_role`, `pilot_scope_intake`
-
-**Coming in Phase 2**
-
-- OAuth 2.1 + PKCE for write tools
-- `create_pilot_order` — generates a Stripe Checkout URL for the published $999 pilot tier
-- `check_order_status` — subject-scoped order lookup
-
----
+The official Eveoy MCP server. Ask about Eveoy. Book pilots. From Claude, ChatGPT, Lovable, Cursor, Windsurf — anywhere the Model Context Protocol works.
 
 ## Endpoint
 
@@ -24,85 +10,67 @@ Public Model Context Protocol (MCP) server for Eveoy by EyCrowd.
 https://mcp.eveoy.com/api/mcp
 ```
 
-Transport: **Streamable HTTP** (MCP spec `2025-06-18`).
+Streamable HTTP (MCP spec `2025-06-18`). 5-minute setup. No contracts.
 
-## Install per client
+## Tools
 
-### Lovable
+- `ask_eveoy` — any question about Eveoy, grounded in the public knowledge base
+- `get_pricing` — exact price for N real customers at $24.99 each
+- `list_industries` — the 23+ sectors Eveoy serves
 
-1. In your Lovable workspace: **Connectors → Chat connectors → New MCP server**
-2. **Server name:** `Eveoy`
-3. **Server URL:** `https://mcp.eveoy.com/api/mcp`
-4. Click **Add & authorize**
+## Slash commands (prompts)
 
-The agent in your Lovable chat can now answer Eveoy questions and (after Phase 2) book pilots directly from chat.
+- `/eveoy_price_quote` — one-line price for a pilot
+- `/eveoy_objection_handle` — tight responses to common buyer objections
+- `/pitch_for_role` — role-tuned pitch (CMO · CFO · VP Retail · CEO)
+- `/pilot_scope_intake` — guided pilot-scoping conversation
 
-### Claude Desktop
+## Add to your AI
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+| Client | Steps |
+|---|---|
+| **Lovable** | Connectors → Chat connectors → New MCP server. Paste `https://mcp.eveoy.com/api/mcp`. Add & authorize. |
+| **Claude Desktop** | Edit `~/Library/Application Support/Claude/claude_desktop_config.json` and add `{"mcpServers":{"eveoy":{"url":"https://mcp.eveoy.com/api/mcp"}}}`. Restart. |
+| **Claude.ai** | Settings → Connectors → Add custom connector. Paste the URL. |
+| **ChatGPT** | Settings → Connectors → Add MCP server. Paste the URL. |
+| **Cursor** | Click "Add to Cursor" on [mcp.eveoy.com](https://mcp.eveoy.com), or Settings → MCP → Add (HTTP). |
+| **Windsurf** | Click "Open in Windsurf" on [mcp.eveoy.com](https://mcp.eveoy.com), or Settings → MCP Servers → Add. |
 
-```json
-{
-  "mcpServers": {
-    "eveoy": {
-      "url": "https://mcp.eveoy.com/api/mcp"
-    }
-  }
-}
-```
+## What it does NOT say
 
-Restart Claude Desktop.
+This server speaks public Eveoy only. A versioned classifier in `src/classifier/denylist.ts` blocks every internal pattern from the about-eveoy knowledge base — financials, roadmap, partner names, sales playbook, secrets, internal IPs, foreign emails. If the question can't be answered from the public set, the tool replies *"That detail isn't publicly available — email brad@eycrowd.com for more."*
 
-### Claude.ai
+## Security posture
 
-**Settings → Connectors → Add custom connector** → URL: `https://mcp.eveoy.com/api/mcp`.
-
-### ChatGPT (Apps)
-
-**Settings → Connectors → Add MCP server** → URL: `https://mcp.eveoy.com/api/mcp`.
-
-### Cursor
-
-**Settings → MCP → Add MCP Server** → Type: `HTTP`. URL: `https://mcp.eveoy.com/api/mcp`.
-
-### Windsurf
-
-**Settings → MCP Servers → Add server** → URL: `https://mcp.eveoy.com/api/mcp`.
-
----
-
-## Security & confidentiality
-
-This server is **public** but speaks only public Eveoy facts (those reconciled against eveoy.com). A fail-closed classifier blocks any internal content — financials, roadmap, partner names, sales playbook, etc. — before it can be returned to a client.
-
-Highlights:
 - Streamable HTTP per MCP spec `2025-06-18`
 - Origin allowlist + Host pinning + HSTS in `middleware.ts`
-- Rate limits per IP (anonymous) and per OAuth subject (Phase 2)
-- Zod `.strict()` schemas on every tool — no extra params accepted
-- Output classifier with versioned denylist in `src/classifier/denylist.ts`
+- Zod `.strict()` schemas on every tool — no extra params
+- Rate limits per IP (anonymous) and per OAuth subject (Phase 2) via Upstash Redis
+- Fail-closed output classifier — every response passes `assertPublic`
 - No tokens or secrets ever logged; IPs HMAC-hashed with rotating salt
+- Tool descriptor lint gate in CI; tool-manifest hash exposed at `/.well-known/mcp-tool-manifest.sig`
 
-See `/Users/bcowdrey/.claude/plans/come-up-with-a-zippy-comet.md` (Plan v2) for the full security model.
+Full security model: [the plan](https://github.com/bc101101/eveoy-mcp/blob/main/.notes/plan.md) (or `/Users/bcowdrey/.claude/plans/come-up-with-a-zippy-comet.md` locally).
 
 ## Local development
 
 ```bash
-pnpm install
-cp .env.example .env.local      # then fill in IP_HASH_SALT at minimum
-pnpm dev                        # starts on http://localhost:3000
-pnpm inspect                    # opens MCP Inspector against localhost
+npm install
+cp .env.example .env.local       # set IP_HASH_SALT at minimum
+npm run dev                      # http://localhost:3000
+npm run inspect                  # opens MCP Inspector against localhost
 ```
 
-## Tests
+## Tests + gates
 
 ```bash
-pnpm typecheck
-pnpm test
-pnpm lint:descriptors            # CI gate on tool descriptor integrity
+npm run typecheck
+npm test
+npm run lint:descriptors         # CI gate on tool descriptor integrity
+npm run build
 ```
 
-The classifier test suite (`src/classifier/__tests__/classifier.test.ts`) MUST stay at 100% — every internal pattern from §10–15 of the about-eveoy KB has a deny case.
+35 unit tests, including a sweep that the classifier denies every internal pattern from §10–15 of the about-eveoy KB.
 
 ## Deploy
 
@@ -110,25 +78,33 @@ The classifier test suite (`src/classifier/__tests__/classifier.test.ts`) MUST s
 vercel link
 vercel env pull .env.local
 vercel deploy                    # preview
-vercel deploy --prod             # production after Pre-Deploy Code Review (Protocol 5)
+vercel deploy --prod             # production (after Pre-Deploy Code Review)
 ```
 
-Required environment for production: see `.env.example`.
+Required environment for production: see [`.env.example`](./.env.example).
 
-## Registry submissions (Phase 4)
+## Distribution
 
-`mcp/server.json` is the source of truth. After deploy, submit in this order:
+The Eveoy MCP is meant to be findable in every registry an AI agent might check.
 
-1. **Official MCP Registry** — `mcp-publisher publish ./mcp/server.json` (DNS TXT verification on `eveoy.com`)
-2. **mcp.so** — web form at mcp.so/submit
-3. **Smithery.ai** — `smithery mcp publish https://mcp.eveoy.com -n eveoy/mcp`
-4. **Glama.ai/mcp** — auto-indexes from the GitHub repo
-5. **mcpservers.org/remote-mcp-servers** — GitHub PR (Lovable's recommended discovery surface)
-6. **PulseMCP** — mirrors official registry
-7. **punkpeye/awesome-mcp-servers** — GitHub PR
-8. **ChatGPT Apps directory** — OpenAI Apps SDK portal (weeks of review)
-9. **Claude Desktop Directory** — Anthropic submission
+- [`mcp/server.json`](./mcp/server.json) — Official MCP Registry manifest (reverse-DNS `com.eveoy/mcp`)
+- [`smithery.yaml`](./smithery.yaml) — Smithery auto-scan config
+- [`dxt/manifest.json`](./dxt/manifest.json) — Claude Desktop one-click `.dxt` package
+- [`/.well-known/mcp/server-card.json`](https://mcp.eveoy.com/.well-known/mcp/server-card.json) — out-of-band metadata mirror
+- [`/sitemap.xml`](https://mcp.eveoy.com/sitemap.xml) + [`/robots.txt`](https://mcp.eveoy.com/robots.txt) with MCP discovery hints
+
+Submission order, contacts, and the single highest-leverage lever per registry: [`docs/REGISTRY_SUBMISSION_CHECKLIST.md`](./docs/REGISTRY_SUBMISSION_CHECKLIST.md).
+
+30-day launch plan synthesized from 20+ X.com posts (Dec 2025–Jun 2026): [`docs/LAUNCH_PLAYBOOK.md`](./docs/LAUNCH_PLAYBOOK.md).
+
+Sub-60s demo recipe (artifact-first format, proven by Alex Albert/Anthropic): [`docs/DEMO_RECIPE.md`](./docs/DEMO_RECIPE.md).
+
+## About Eveoy
+
+You pay $24.99 per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it. $999 entry pilot for 40+ customers. 100% refunded for no-shows.
+
+[eveoy.com](https://eveoy.com) · [brad@eycrowd.com](mailto:brad@eycrowd.com)
 
 ## License
 
-Proprietary. © The Eveoy™ App by EyCrowd, Inc.
+Proprietary. © The Eveoy™ MCP by EyCrowd, Inc.

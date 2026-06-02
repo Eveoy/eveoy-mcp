@@ -1,0 +1,30 @@
+{
+  "dxt_version": "0.1",
+  "name": "eveoy",
+  "display_name": "Eveoy",
+  "version": "1.0.0",
+  "description": "Ask about Eveoy and book pilots — $24.99 per real customer, in real stores, from any AI.",
+  "long_description": "The Eveoy MCP. Real customers · in real stores · from any AI. You don't pay for tokens, you don't pay for clicks, you don't pay for hope. You pay $24.99 per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it. $999 entry pilot for 40+ customers. 100% refunded for no-shows.",
+  "author": {
+    "name": "EyCrowd, Inc.",
+    "email": "brad@eycrowd.com",
+    "url": "https://eveoy.com"
+  },
+  "homepage": "https://mcp.eveoy.com",
+  "documentation": "https://mcp.eveoy.com",
+  "support": "mailto:brad@eycrowd.com",
+  "icon": "icon.png",
+  "license": "Proprietary",
+  "keywords": ["eveoy", "eycrowd", "marketing", "retail", "foot-traffic", "in-store", "ugc", "pilots", "verified-shoppers"],
+  "categories": ["marketing", "sales", "retail"],
+  "server": {
+    "type": "remote",
+    "url": "https://mcp.eveoy.com/api/mcp",
+    "transport": "streamable-http"
+  },
+  "tools_generated": true,
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}
