@@ -1,15 +1,32 @@
 {
-  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.eveoy/mcp",
-  "description": "Ask anything about Eveoy and (Phase 2) book the $999 pilot. Eveoy delivers verified in-store customers at $24.99 each — GPS-confirmed, 15+ minutes in-store, photos and video included, auto-refund on no-shows.",
-  "status": "active",
+  "title": "Eveoy — Verified In-Store Foot Traffic ($24.99/customer)",
+  "description": "Ask about Eveoy and book pilots — $24.99 per verified in-store customer, auto-refund.",
+  "version": "1.0.0",
+  "websiteUrl": "https://mcp.eveoy.com",
   "repository": {
     "url": "https://github.com/bc101101/eveoy-mcp",
     "source": "github"
   },
-  "websiteUrl": "https://mcp.eveoy.com",
-  "version": "0.1.0",
-  "packages": [],
+  "icons": [
+    {
+      "src": "https://mcp.eveoy.com/icon-512.png",
+      "sizes": ["512x512"],
+      "mimeType": "image/png"
+    },
+    {
+      "src": "https://mcp.eveoy.com/icon.svg",
+      "sizes": ["any"],
+      "mimeType": "image/svg+xml"
+    },
+    {
+      "src": "https://mcp.eveoy.com/icon-dark.svg",
+      "sizes": ["any"],
+      "mimeType": "image/svg+xml",
+      "theme": "dark"
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
@@ -18,8 +35,28 @@
   ],
   "_meta": {
     "io.modelcontextprotocol.registry/publisher-provided": {
-      "tags": ["marketing", "retail", "advertising", "in-store", "ugc", "eveoy", "eycrowd"],
-      "categories": ["marketing", "ecommerce", "sales"]
+      "vendor": "EyCrowd, Inc.",
+      "categories": ["marketing", "sales", "retail", "advertising", "ecommerce"],
+      "tags": [
+        "eveoy",
+        "eycrowd",
+        "foot-traffic",
+        "in-store",
+        "retail",
+        "marketing",
+        "ugc",
+        "customer-acquisition",
+        "ads",
+        "guaranteed-visits",
+        "pilot",
+        "brand-experiences",
+        "qsr",
+        "hospitality"
+      ],
+      "supportEmail": "brad@eycrowd.com",
+      "docsUrl": "https://mcp.eveoy.com",
+      "termsUrl": "https://eveoy.com/terms",
+      "privacyUrl": "https://eveoy.com/privacy"
     }
   }
 }

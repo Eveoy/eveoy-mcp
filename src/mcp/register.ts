@@ -5,6 +5,8 @@ import { registerListIndustries } from './tools/list-industries';
 import { registerKbResources } from './resources/kb';
 import { registerPitchForRolePrompt } from './prompts/pitch-for-role';
 import { registerPilotScopeIntakePrompt } from './prompts/pilot-scope-intake';
+import { registerEveoyPriceQuotePrompt } from './prompts/eveoy-price-quote';
+import { registerEveoyObjectionHandlePrompt } from './prompts/eveoy-objection-handle';
 import { disabledTools } from '@/lib/env';
 import { log } from '@/lib/log';
 
@@ -23,8 +25,10 @@ const RESOURCE_GROUPS: Registration[] = [
 ];
 
 const PROMPTS: Registration[] = [
-  { name: 'pitch_for_role',     register: registerPitchForRolePrompt },
-  { name: 'pilot_scope_intake', register: registerPilotScopeIntakePrompt },
+  { name: 'pitch_for_role',         register: registerPitchForRolePrompt },
+  { name: 'pilot_scope_intake',     register: registerPilotScopeIntakePrompt },
+  { name: 'eveoy_price_quote',      register: registerEveoyPriceQuotePrompt },
+  { name: 'eveoy_objection_handle', register: registerEveoyObjectionHandlePrompt },
 ];
 
 export function registerAll(server: McpServer): void {

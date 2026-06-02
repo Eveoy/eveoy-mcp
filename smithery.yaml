@@ -1,0 +1,24 @@
+startCommand:
+  type: http
+  url: https://mcp.eveoy.com/api/mcp
+
+metadata:
+  displayName: Eveoy
+  description: Ask about Eveoy and book pilots — $24.99 per verified in-store customer.
+  homepage: https://mcp.eveoy.com
+  icon: https://mcp.eveoy.com/icon-512.png
+  categories: [marketing, sales, retail, advertising]
+  tags:
+    - eveoy
+    - eycrowd
+    - foot-traffic
+    - in-store
+    - retail
+    - marketing
+    - guaranteed-visits
+    - brand-experiences
+
+configSchema:
+  type: object
+  properties: {}
+  additionalProperties: false
