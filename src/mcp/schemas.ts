@@ -1,15 +1,20 @@
 import { z } from 'zod';
 import { INDUSTRIES_PUBLIC } from '@/industries';
 import {
-  MIN_SHOPPERS_PER_LOCATION,
-  MAX_SHOPPERS_PER_LOCATION,
+  MIN_CUSTOMERS_PER_LOCATION,
+  MAX_CUSTOMERS_PER_LOCATION,
   MIN_LOCATIONS,
   MAX_LOCATIONS,
-  DEFAULT_SHOPPERS_PER_LOCATION,
+  DEFAULT_CUSTOMERS_PER_LOCATION,
   DEFAULT_LOCATIONS,
+  CAMPAIGN_START_LEAD_DAYS,
+  earliestStartDate,
 } from '@/lib/pricing';
 
-// ─── Input schemas (mirror eveoy.com/order constraints exactly) ───
+// ─── Input schemas — mirror eveoy.com/order constraints exactly ────
+// Wire-format field names align with the Supabase edge function body
+// shape so Phase 2's tool can passthrough without a translation layer.
+// See docs/ORDER_FLOW_SPEC.md for the full integration contract.
 
 export const AskEveoyInput = z.object({
   question: z
@@ -32,15 +37,16 @@ export const AskEveoyInput = z.object({
 }).strict();
 
 export const GetPricingInput = z.object({
-  shoppers_per_location: z
+  customers_per_location: z
     .number()
     .int()
-    .min(MIN_SHOPPERS_PER_LOCATION)
-    .max(MAX_SHOPPERS_PER_LOCATION)
-    .default(DEFAULT_SHOPPERS_PER_LOCATION)
+    .min(MIN_CUSTOMERS_PER_LOCATION)
+    .max(MAX_CUSTOMERS_PER_LOCATION)
+    .default(DEFAULT_CUSTOMERS_PER_LOCATION)
     .describe(
-      `Verified shoppers per store. Mirrors eveoy.com/order: min ${MIN_SHOPPERS_PER_LOCATION}, ` +
-        `max ${MAX_SHOPPERS_PER_LOCATION}. Default ${DEFAULT_SHOPPERS_PER_LOCATION} (the "$999 pilot" config).`,
+      `Verified shoppers per store (UI label "Shoppers per location"). Mirrors eveoy.com/order: ` +
+        `min ${MIN_CUSTOMERS_PER_LOCATION}, max ${MAX_CUSTOMERS_PER_LOCATION}. ` +
+        `Default ${DEFAULT_CUSTOMERS_PER_LOCATION} (the "$999 pilot" config).`,
     ),
   locations: z
     .number()
@@ -59,7 +65,7 @@ export const ListIndustriesInput = z.object({}).strict();
 // ─── Output schemas ─────────────────────────────────────────────────
 
 export const GetPricingOutput = z.object({
-  shoppers_per_location: z.number().int(),
+  customers_per_location: z.number().int(),
   locations: z.number().int(),
   total_customers: z.number().int(),
   unit_price_usd: z.number(),
@@ -80,35 +86,72 @@ export const AskEveoyOutput = z.object({
   audience: z.string(),
 });
 
-// ─── Phase 2 — locked spec, not yet wired ───────────────────────────
-// CreatePilotOrderInput mirrors eveoy.com/order field-for-field so the
-// MCP never accepts a value the form would reject (or vice versa).
+// ─── Phase 2 — locked spec, not yet wired ──────────────────────────
+// Mirrors the Supabase edge function `create-checkout-session` body
+// shape exactly, plus the contact fields eveoy.com/order currently
+// discards (which Phase 2 should plumb through — see ORDER_FLOW_SPEC
+// "Known gaps to flag").
 
+const AGE_BUCKETS = ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'] as const;
+const LOCATION_TYPES = ['Country', 'Region / State', 'DMA (US)', 'City', 'ZIP / postal code'] as const;
+const HOUSEHOLD_INCOMES = ['Top 5%', 'Top 10%', 'Top 10-25%', 'Top 25-50%'] as const;
+
+export const AdvancedTargetingInput = z
+  .object({
+    age:             z.array(z.enum(AGE_BUCKETS)).max(6).optional(),
+    locationType:    z.enum(LOCATION_TYPES).nullable().optional(),
+    locationValues:  z.array(z.string().trim().min(1).max(120)).max(50).optional(),
+    gender:          z.enum(['Men', 'Women']).nullable().optional(),
+    householdIncome: z.array(z.enum(HOUSEHOLD_INCOMES)).max(4).optional(),
+  })
+  .strict()
+  .nullable()
+  .describe('Optional advanced targeting; exact JSONB shape stored on public.orders.advanced_targeting');
+
+/**
+ * The body the Supabase `create-checkout-session` edge function expects
+ * TODAY. Phase 2 MCP tool will pass this through unchanged.
+ */
+export const CreateCheckoutSessionBody = z.object({
+  customers_per_location: z.number().int().min(MIN_CUSTOMERS_PER_LOCATION).max(MAX_CUSTOMERS_PER_LOCATION),
+  locations:              z.number().int().min(MIN_LOCATIONS).max(MAX_LOCATIONS),
+  advancedTargeting:      AdvancedTargetingInput,
+}).strict();
+
+/**
+ * The user-facing tool input for create_pilot_order. Includes the
+ * contact fields the eveoy.com/order page currently collects but
+ * discards (see ORDER_FLOW_SPEC #1) — when Phase 2 ships, we propose
+ * extending the edge fn to accept these too and persist them on the
+ * orders table. Until then, they're collected by the MCP and passed
+ * as Stripe Checkout metadata (capped at 500 chars per value).
+ */
 export const CreatePilotOrderInput = z.object({
-  // contact (matches eveoy.com/order)
+  // contact (matches eveoy.com/order form fields)
   your_name:     z.string().trim().min(2).max(80).describe('"Your name" on eveoy.com/order'),
   work_email:    z.string().email().max(254).describe('"Work email" on eveoy.com/order'),
   brand_website: z.string().url().max(255).describe('"Brand Website" on eveoy.com/order'),
   phone:         z.string().trim().min(7).max(30).regex(/^[+\d][\d\s().-]*$/).describe('"Phone" on eveoy.com/order'),
 
-  // pricing inputs (the same fields the form computes the total from)
-  shoppers_per_location: z.number().int().min(MIN_SHOPPERS_PER_LOCATION).max(MAX_SHOPPERS_PER_LOCATION),
-  locations:             z.number().int().min(MIN_LOCATIONS).max(MAX_LOCATIONS),
+  // pricing inputs (wire-format names, same as the edge fn body)
+  customers_per_location: z.number().int().min(MIN_CUSTOMERS_PER_LOCATION).max(MAX_CUSTOMERS_PER_LOCATION),
+  locations:              z.number().int().min(MIN_LOCATIONS).max(MAX_LOCATIONS),
 
   // scheduling
   campaign_start_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD')
-    .describe('"Campaign experience start date" on eveoy.com/order. ISO date.'),
+    .refine(
+      (s) => s >= earliestStartDate(),
+      () => ({
+        message: `Campaign start must be at least ${CAMPAIGN_START_LEAD_DAYS} days from today (earliest: ${earliestStartDate()})`,
+      }),
+    )
+    .describe(
+      `"Campaign experience start date" on eveoy.com/order. ISO date YYYY-MM-DD. ` +
+        `Must be ≥ ${CAMPAIGN_START_LEAD_DAYS} days from today.`,
+    ),
 
-  // demographics — optional section on the form
-  demographics: z
-    .object({
-      // The eveoy.com/order page renders this section as optional with no specific
-      // fields visible to anonymous fetch. Keep this object loose for now; lock it
-      // down field-by-field when the demographic UI is finalized.
-      notes: z.string().max(500).optional(),
-    })
-    .strict()
-    .optional(),
+  // optional advanced targeting
+  advancedTargeting: AdvancedTargetingInput,
 }).strict();

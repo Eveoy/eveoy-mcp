@@ -6,11 +6,12 @@
 
 ## The math is the same as eveoy.com/order
 
-Total = **shoppers_per_location × locations × $24.99**
+Total = **shoppers per location × locations × $24.99**
 
 You pick:
 - **Shoppers per location** — min 20, max 1,000
 - **Locations** — min 1, max 50
+- **Campaign start date** — at least 14 days from today (campaigns need lead time to brief shoppers and reach the door)
 
 That's it. There are no tiers. Same inputs, same constraints as eveoy.com/order.
 
