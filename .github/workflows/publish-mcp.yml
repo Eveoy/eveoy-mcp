@@ -10,11 +10,10 @@ on:
 
 permissions:
   contents: read
-  id-token: write   # OIDC for mcp-publisher login
 
 jobs:
   publish:
-    name: Validate + publish server.json
+    name: Validate + publish server.json (DNS-verified com.eveoy/*)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,14 +26,23 @@ jobs:
           chmod +x "$HOME/.local/bin/mcp-publisher"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Validate server.json
+      - name: Validate server.json (description ≤ 100 chars, name matches DNS namespace)
         run: |
           if ! command -v jq >/dev/null; then sudo apt-get install -y jq; fi
           jq -e '.name and .description and .version and (.description | length <= 100)' mcp/server.json
+          jq -e '.name | startswith("com.eveoy/")' mcp/server.json
           mcp-publisher validate ./mcp/server.json
 
-      - name: Login (GitHub OIDC)
-        run: mcp-publisher login github-oidc
+      - name: Login (DNS — proves ownership of eveoy.com)
+        env:
+          DNS_PRIV_KEY: ${{ secrets.MCP_REGISTRY_DNS_PRIVATE_KEY }}
+        run: |
+          if [ -z "$DNS_PRIV_KEY" ]; then
+            echo "::error::MCP_REGISTRY_DNS_PRIVATE_KEY repo secret is missing."
+            echo "Run scripts/setup-dns-key.sh locally to generate it."
+            exit 1
+          fi
+          mcp-publisher login dns --domain eveoy.com --private-key "$DNS_PRIV_KEY"
 
       - name: Publish
         run: mcp-publisher publish ./mcp/server.json
