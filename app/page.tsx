@@ -154,7 +154,7 @@ export default function Home() {
           <div style={{ marginTop: 16, fontSize: 14, opacity: 0.85 }}>
             <p>Endpoint: <code className="endpoint" style={{ display: 'inline-block', padding: '6px 10px' }}>{ENDPOINT}</code></p>
             <p>Streamable HTTP transport, MCP spec <code>2025-06-18</code>. Read tools are anonymous and rate-limited. Write tools (Phase 2) will require OAuth 2.1 + PKCE with RFC 8707 audience binding.</p>
-            <p>Server-card metadata at <a href="/.well-known/mcp/server-card.json"><code>/.well-known/mcp/server-card.json</code></a>. Repo: <a href="https://github.com/bc101101/eveoy-mcp">github.com/bc101101/eveoy-mcp</a>.</p>
+            <p>Server-card metadata at <a href="/.well-known/mcp/server-card.json"><code>/.well-known/mcp/server-card.json</code></a>. Repo: <a href="https://github.com/eveoy/eveoy-mcp">github.com/eveoy/eveoy-mcp</a>.</p>
           </div>
         </details>
       </section>

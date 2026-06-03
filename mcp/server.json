@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "websiteUrl": "https://mcp.eveoy.com",
   "repository": {
-    "url": "https://github.com/bc101101/eveoy-mcp",
+    "url": "https://github.com/eveoy/eveoy-mcp",
     "source": "github"
   },
   "icons": [

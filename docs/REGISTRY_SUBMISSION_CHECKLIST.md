@@ -10,7 +10,7 @@ Submit in this order. Each step backlinks the next.
 - [ ] `mcp/server.json` validates against `https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json`
 - [ ] `public/icon-512.png` exists (the SVG placeholders ship but most registries display PNG in card grids)
 - [ ] `eveoy.com` DNS reachable for TXT-record verification
-- [ ] GitHub repo public at `github.com/bc101101/eveoy-mcp` (or whichever namespace you use — update `mcp/server.json` accordingly)
+- [ ] GitHub repo public at `github.com/eveoy/eveoy-mcp` (or whichever namespace you use — update `mcp/server.json` accordingly)
 - [ ] `https://mcp.eveoy.com/.well-known/mcp/server-card.json` returns the same JSON as `mcp/server.json`
 
 ---
@@ -52,7 +52,7 @@ mcp-publisher publish ./mcp/server.json
 
 **Why now:** auto-scans the GitHub repo; produces a public Quality Score page that is a long-tail SEO magnet. Quality Score is 70% Tool Definition Quality + 30% Server Coherence — every tool we wrote follows the canonical template, so we should score high.
 
-- [ ] Visit https://glama.ai/mcp and submit `github.com/bc101101/eveoy-mcp`
+- [ ] Visit https://glama.ai/mcp and submit `github.com/eveoy/eveoy-mcp`
 - [ ] Within 24h, claim the listing as the maintainer (uses GitHub OAuth)
 - [ ] Verify all 3 tools surface with descriptions intact
 
@@ -88,7 +88,7 @@ Target section: **📊 Marketing** (create the category if missing — PRs that 
 Single-line entry:
 
 ```markdown
-- [bc101101/eveoy-mcp](https://github.com/bc101101/eveoy-mcp) 📇 ☁️ — Eveoy MCP: ask about Eveoy and book pilots at $24.99/verified in-store customer. Streamable HTTP. Auto-refund on no-shows.
+- [eveoy/eveoy-mcp](https://github.com/eveoy/eveoy-mcp) 📇 ☁️ — Eveoy MCP: ask about Eveoy and book pilots at $24.99/verified in-store customer. Streamable HTTP. Auto-refund on no-shows.
 ```
 
 Legend: 📇 = remote/cloud-hosted, ☁️ = Streamable HTTP.

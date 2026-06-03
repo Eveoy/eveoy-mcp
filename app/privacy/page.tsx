@@ -33,7 +33,7 @@ export default function Privacy() {
       <h2 style={{ marginTop: 32, fontSize: 28 }}>What we never say</h2>
       <p>
         A fail-closed classifier in{' '}
-        <a href="https://github.com/bc101101/eveoy-mcp/blob/main/src/classifier/denylist.ts">
+        <a href="https://github.com/eveoy/eveoy-mcp/blob/main/src/classifier/denylist.ts">
           <code>src/classifier/denylist.ts</code>
         </a>{' '}
         blocks internal Eveoy data (financials, partner names, roadmap, sales playbook, secrets)

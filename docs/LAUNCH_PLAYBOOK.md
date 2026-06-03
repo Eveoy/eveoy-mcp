@@ -62,7 +62,7 @@ Reply with your brand and an agent will scan it live.
 —
 
 Built with @vercel Fluid Compute + @modelcontextprotocol Streamable HTTP.
-Repo: github.com/bc101101/eveoy-mcp
+Repo: github.com/eveoy/eveoy-mcp
 ```
 
 ### Tuesday daypart
