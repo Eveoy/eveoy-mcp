@@ -12,9 +12,11 @@ dist/
 .env
 .env*.local
 
-# keys
+# keys / deploy credentials (never commit)
 *.pem
 .keys/
+*.cf-token
+.eveoy-cf-deploy.env
 
 # testing
 /coverage

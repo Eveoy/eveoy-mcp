@@ -26,7 +26,7 @@
 
   // 15-min cache for the live eveoy.com fetch path (Phase 3). Eventually
   // consistent — correct for read caching, NOT used for rate counters.
-  "kv_namespaces": [{ "binding": "CACHE", "id": "PLACEHOLDER_SET_AFTER_kv_create" }],
+  "kv_namespaces": [{ "binding": "CACHE", "id": "da0dc20e2dad4f01b94a2cad266d6d1a" }],
 
   // Per-identifier soft rate limit (GA binding). period is 10 or 60 only.
   // 60/min anonymous (Lovable brief). Phase 2 adds a higher authenticated tier.
