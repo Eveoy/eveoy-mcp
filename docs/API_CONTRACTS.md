@@ -40,7 +40,27 @@ and return the get-app URL string respectively.
 - `/create-checkout-session` → `{ locations, customers_per_location, advancedTargeting? }` ⇒ `{ url, sessionId }`.
 - `/get-order-summary` → `{ session_id }` ⇒ `{ customer_email(masked), locations, customers_per_location, total_cents, status }`.
 - `/subscribe-beehiiv` → `{ email, source, utm_* }` ⇒ `{ ok:true }`.
-- `/unlock-business` → `{ email, full_slug, source_url }` ⇒ `{ store_location_id, contacts{...}, enriched_at }`.
+- `/unlock-business` → `{ email, full_slug, source_url? }` (email + full_slug required) ⇒
+  `{ ok, cached, city_record { naics_code, council_district, account_number },
+  contacts { phone, email, website, hours, *_source, phone_updated_at, representative,
+  representative_title, representative_source, representative_updated_at, enriched_at },
+  rating, rating_source, rating_updated_at }`. Errors: 400 invalid_json / invalid_email /
+  missing_full_slug, 404 not_found, 405 method_not_allowed.
+
+  **Parity rule (CLAUDE_CODE §4.4) — single source of truth.** `claim_business` MUST mirror
+  the website's unlock flow exactly: same endpoint, same payload, surface the response
+  verbatim. Do NOT branch the logic. The Worker does NOT run its own AI lookup, freshness
+  check, or lead insert. Server behavior (identical for web + MCP, do not re-implement):
+  1. Always inserts a `leads` row, even on partial AI failure.
+  2. Returns `city_record` IDs instantly from the DB.
+  3. Contacts resolved as `*_ai ?? open-data` column; open-data is never overwritten.
+  4. JIT Gemini 2.5 Flash lookup (12s timeout) when a contact/representative is missing or
+     `enriched_at` > 90 days; results write only to `_ai` shadow columns.
+  5. `cached:true` = no AI ran; `cached:false` = JIT just ran.
+  6. Google rating < 3.0 is floored to a random 3.0 / 3.1 / 3.2.
+
+  There is **no** separate `claim-business` writeback endpoint — `/unlock-business` IS the
+  complete claim contract. "Claim ownership" === submit the email through this flow.
 
 ## Classifier scoping
 
@@ -50,6 +70,8 @@ and return the get-app URL string respectively.
 ## Still pending on the Lovable side
 
 1. `create-checkout-session`: `success_url_override` (allowlist) + contact fields (your_name, work_email, brand_website, phone, campaign_start_date).
-2. `claim-business` real writeback (today `unlock-business` is lead-capture only).
-3. `get_case_studies` source.
-4. OAuth issuer for write tools (recommendation: MCP's own AS at `mcp.eveoy.com`).
+2. `get_case_studies` source (insights page vs newsletter archive).
+3. OAuth issuer for write tools — only if we decide to gate them (recommendation: MCP's own AS at `mcp.eveoy.com`).
+
+> Explicitly NOT pending: a `claim-business` writeback fn. Per Lovable, `/unlock-business`
+> is the entire claim contract — do not build, stub, or request a separate endpoint.

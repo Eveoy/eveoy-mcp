@@ -29,18 +29,24 @@ export function registerStartCheckout(server: McpServer) {
       // Local price for the confirmation line; the edge fn recomputes server-side.
       const p = priceFor({ customersPerLocation: customers_per_location, locations });
       try {
-        const data = await callEdge<{ url: string; sessionId: string }>('/create-checkout-session', {
-          locations,
-          customers_per_location,
-          advancedTargeting: advancedTargeting ?? null,
-        });
+        // Guard the raw edge response (semi-trusted) BEFORE we trust its fields.
+        const data = assertNoSecrets(
+          await callEdge<{ url: string; sessionId: string }>('/create-checkout-session', {
+            locations,
+            customers_per_location,
+            advancedTargeting: advancedTargeting ?? null,
+          }),
+          { tool: 'start_checkout' },
+        );
+        if (typeof data !== 'object' || data === null || typeof data.url !== 'string') {
+          return { content: [{ type: 'text', text: 'Checkout could not be created. Please try again.' }], isError: true };
+        }
         const out = {
           checkout_url: data.url,
           session_id: data.sessionId,
           total: p.total_usd,
           customers: p.total_customers,
         };
-        assertNoSecrets(out, { tool: 'start_checkout' });
         return {
           content: [{
             type: 'text',
