@@ -3,8 +3,9 @@ import { ListMetrosInput, ListMetrosOutput } from '@/mcp/schemas';
 import { assertPublic } from '@/classifier/public-only';
 
 // Eveoy Directory coverage, from eveoy.com/directory (verified 2026-06-22).
-// Static today; when the directory-sitemap edge fn contract is provided this
-// becomes a live wrapper (see docs/QUESTIONS_FOR_LOVABLE.md).
+// Static today. Per Lovable: directory-sitemap is sitemap-only (no query API);
+// a new `directory-query` edge fn is the Phase-2 dependency for live coverage +
+// search_directory / get_business. See docs/QUESTIONS_FOR_LOVABLE.md.
 const LIVE = [{ metro: 'Los Angeles', kind: 'registry', businesses: 629431 }];
 const COMING = [
   { metro: 'New York', kind: 'registry' },

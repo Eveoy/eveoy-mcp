@@ -62,7 +62,7 @@ export function registerAskEveoy(server: McpServer) {
         `Audience guidance: ${lens}`,
         '',
         'Answer using ONLY the public Eveoy material below. If the question asks for something not covered, reply:',
-        '"That detail isn\'t publicly available — email brad@eycrowd.com for more."',
+        '"That detail isn\'t publicly available — email support@eveoy.com for more."',
         '',
         '<eveoy_public_kb>',
         sections,

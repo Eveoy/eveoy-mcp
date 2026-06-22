@@ -67,11 +67,12 @@ not wired until the Supabase edge-fn request/response contracts are provided.
 **Security stance (firm):** the Worker should hold **only** `SUPABASE_URL` +
 `SUPABASE_ANON_KEY`. Stripe stays in the edge fn (no `STRIPE_SECRET_KEY` in the
 Worker). Beehiiv stays in `subscribe-beehiiv` (no `BEEHIIV_API_KEY` in the Worker).
-`SUPABASE_SERVICE_ROLE_KEY` only if a specific edge fn genuinely can't gate itself —
-and never returned in tool output. Auth: `@cloudflare/workers-oauth-provider`, but
-**reuse the site's existing OAuth server** if possible (the site already publishes
-`/.well-known/oauth-authorization-server`). The fail-closed public-only classifier
-stays in front of every response at every phase.
+No `SUPABASE_SERVICE_ROLE_KEY` in the Worker — every edge fn self-gates (Lovable will
+fix any that can't rather than leak the role). Auth: the MCP stands up its **own**
+OAuth 2.1 server at `mcp.eveoy.com/.well-known/oauth-authorization-server` via
+`@cloudflare/workers-oauth-provider` (the site's existing OAuth `.well-known` files are
+placeholder stubs, not a live IdP; they'll be repointed at the Worker's issuer). The
+fail-closed public-only classifier stays in front of every response at every phase.
 
 ## Discovery alignment (what slots into the site)
 

@@ -8,7 +8,7 @@ export interface ClassifierResult {
 }
 
 const PUBLIC_FALLBACK =
-  "That detail isn't publicly available. For specifics, please email brad@eycrowd.com.";
+  "That detail isn't publicly available. For specifics, please email support@eveoy.com.";
 
 /**
  * Inspect a payload for denylisted patterns. Pure check — no side effects.

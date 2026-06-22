@@ -33,4 +33,4 @@ Below Starter, the smallest possible order is 20 customers × 1 store = $499.80.
 
 ## Custom quote
 
-Anything above 50 locations or 1,000 shoppers per location? Email **brad@eycrowd.com**.
+Anything above 50 locations or 1,000 shoppers per location? Email **support@eveoy.com**.

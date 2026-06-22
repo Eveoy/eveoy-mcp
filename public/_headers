@@ -1,0 +1,11 @@
+# Cloudflare static-asset headers. Open CORS on agent-discovery endpoints so any
+# client can read them cross-origin (Lovable brief: "* for GET discovery endpoints").
+/.well-known/*
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+/llms.txt
+  Access-Control-Allow-Origin: *
+/sitemap.xml
+  Access-Control-Allow-Origin: *
+/robots.txt
+  Access-Control-Allow-Origin: *

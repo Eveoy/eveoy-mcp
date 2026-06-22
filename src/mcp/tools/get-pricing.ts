@@ -22,12 +22,12 @@ Use this when the user wants to:
 
 Trigger phrases include: "how much does eveoy cost", "price for 500 shoppers", "what's a pilot cost", "cost per shopper", "eveoy pricing", "quote me a pilot for 100 shoppers in 4 stores", "what would 1000 shoppers cost".
 
-Returns: { customers_per_location, locations, total_customers, unit_price_usd, total_usd, formatted_total, matches_marketing_pilot }. Reflects the same math the eveoy.com/order page applies; never returns a number the form would reject.
+Returns: { customers_per_location, locations, total_customers, unit_price_usd, total_usd, formatted_total, ugc_photos, is_starter_tier }. Reflects the same math the eveoy.com/order page applies; never returns a number the form would reject.
 
 Do NOT use this for:
 - General "what is eveoy" questions (use ask_eveoy)
 - Industries served (use list_industries)
-- Custom volume contracts beyond the 50-location ceiling — route the buyer to brad@eycrowd.com
+- Custom volume contracts beyond the 50-location ceiling — route the buyer to support@eveoy.com
 
 Cost: free. Latency: <100ms. Read-only. Idempotent. Deterministic.`;
 

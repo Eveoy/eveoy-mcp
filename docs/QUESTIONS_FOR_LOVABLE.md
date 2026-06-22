@@ -3,6 +3,28 @@
 Two parts: (A) what we need from Lovable to finish, (B) the answers Lovable asked us
 to send back so they can wire the site.
 
+> **Status (2026-06-22): A0–A7 RESOLVED by Lovable.** Decisions recorded inline below
+> and applied to the build. The only thing still OPEN is **A2 — the edge-function
+> contracts doc** (Lovable is sending request/response shapes separately); Phase 2
+> tools stay stubbed until it arrives. Confirmed decisions:
+> - **A0** Canonical Worker = `Eveoy/eveoy-mcp`; Lovable deletes its `mcp-server/` scaffold. ✅
+> - **A1** 10 minutes canonical; "made a purchase" is standard + configurable. ✅ (applied)
+> - **A2** `directory-sitemap` is sitemap-only → a new `directory-query` edge fn is needed
+>   for `search_directory`/`get_business` (do NOT wrap directory-sitemap). `create-checkout-session`
+>   will gain `success_url_override` (allowlist: mcp.eveoy.com, eveoy.com, www, *.lovable.app) +
+>   persisted contact fields. Other contracts in a follow-up doc. ⏳ OPEN
+> - **A3** Worker holds only `SUPABASE_URL` + `SUPABASE_ANON_KEY`; Stripe/Beehiiv keys stay in
+>   their edge fns; no service-role in the Worker (edge fns self-gate). ✅ (applied)
+> - **A4** Site OAuth `.well-known` files are placeholder stubs. The MCP stands up its OWN
+>   OAuth server at `mcp.eveoy.com/.well-known/oauth-authorization-server` via
+>   `@cloudflare/workers-oauth-provider`; the site will point at the Worker's issuer. ✅ (Phase 2)
+> - **A5** `get_app_link` keeps returning `https://eveoy.com/get-app` (platform-detecting redirect). ✅
+>   Beehiiv publication id arrives in the contracts doc.
+> - **A6** Public contact = `support@eveoy.com`; dropped `brad@eycrowd.com` from MCP surfaces. ✅ (applied)
+> - **A7** Hostname `mcp.eveoy.com` ✅ · serverInfo `eveoy-mcp` ✅ · CORS: `*.lovable.app` suffix
+>   already covers `eveoy-v7.lovable.app` + `id-preview--*.lovable.app` (no change needed) ✅ ·
+>   Web Bot Auth deferred ✅.
+
 ---
 
 ## A. Questions / decisions we need from Lovable

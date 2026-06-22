@@ -28,7 +28,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 - **Founder & CEO:** Brad Cowdrey
 - **Headquarters:** San Francisco, CA
 - **Web:** https://eveoy.com
-- **Contact:** support@eveoy.com · brad@eycrowd.com
+- **Contact:** support@eveoy.com
 
 ## Receipts to date
 
