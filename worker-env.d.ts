@@ -15,9 +15,12 @@ export interface Env {
   MCP_CANONICAL_HOST: string;
   EVEOY_ORIGIN: string;
   MCP_CLASSIFIER_STRICT: string;
+  SUPABASE_URL: string;
+  SITE_URL: string;
 
   // Secrets (wrangler secret put)
   IP_HASH_SALT?: string;
+  SUPABASE_ANON_KEY?: string; // publishable, but stored as a secret per Lovable
 }
 
 /** Cloudflare Rate Limiting binding (GA). */

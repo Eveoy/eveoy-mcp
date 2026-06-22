@@ -27,6 +27,9 @@ export class EveoyMCP extends McpAgent<Env> {
   );
 
   async init() {
+    // Tools run in THIS Durable Object isolate, so config must be set here
+    // (the fetch-handler's setRuntimeConfig ran in the separate Worker isolate).
+    setRuntimeConfig(this.env);
     registerAll(this.server);
   }
 }

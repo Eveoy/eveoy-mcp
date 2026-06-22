@@ -12,17 +12,25 @@ const PUBLIC_FALLBACK =
 
 /**
  * Inspect a payload for denylisted patterns. Pure check — no side effects.
+ * `exclude` drops specific rule ids (e.g. the foreign-email rule for tools
+ * that legitimately return external business contacts).
  */
-export function classify(value: unknown): ClassifierResult {
+export function classify(value: unknown, exclude: Set<string> = new Set()): ClassifierResult {
   const text = stringify(value);
   const hits: ClassifierResult['hits'] = [];
   for (const rule of DENY_RULES) {
+    if (exclude.has(rule.id)) continue;
     if (rule.pattern.test(text)) {
       hits.push({ id: rule.id, reason: rule.reason });
     }
   }
   return { ok: hits.length === 0, hits };
 }
+
+// Rules that protect EXTERNAL/PII data. Directory + contact tools return
+// business emails/phones by design, so they run assertNoSecrets (which skips
+// these) rather than the full assertPublic.
+const PII_RULE_IDS = new Set(['pii.foreign_email']);
 
 /**
  * Fail-closed guard. Use at every tool boundary BEFORE returning to client.
@@ -33,7 +41,20 @@ export function classify(value: unknown): ClassifierResult {
  * Strict mode (MCP_CLASSIFIER_STRICT=1): throw — the request fails entirely.
  */
 export function assertPublic<T>(value: T, context: { tool?: string; resource?: string } = {}): T {
-  const result = classify(value);
+  return guard(value, new Set(), context);
+}
+
+/**
+ * Like assertPublic but allows external business contacts (skips the PII /
+ * foreign-email rule). Use for directory + contact tools that return public
+ * business data by design — they still must never leak secrets/internal data.
+ */
+export function assertNoSecrets<T>(value: T, context: { tool?: string; resource?: string } = {}): T {
+  return guard(value, PII_RULE_IDS, context);
+}
+
+function guard<T>(value: T, exclude: Set<string>, context: { tool?: string; resource?: string }): T {
+  const result = classify(value, exclude);
   if (result.ok) return value;
 
   for (const hit of result.hits) {

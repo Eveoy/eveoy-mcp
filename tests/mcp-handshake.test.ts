@@ -25,13 +25,20 @@ describe('MCP register — end-to-end metadata sanity', () => {
   const toolNames = Object.keys(toolMap);
   const promptNames = Object.keys(promptMap);
 
-  it('registers the Phase 1 read tools', () => {
+  it('registers the full tool set (Phase 1 + edge-backed)', () => {
     expect(toolNames.sort()).toEqual([
       'ask_eveoy',
+      'book_demo',
+      'check_order_status',
+      'claim_business',
       'get_app_link',
+      'get_business',
       'get_pricing',
       'list_industries',
       'list_metros',
+      'search_directory',
+      'start_checkout',
+      'subscribe_newsletter',
     ]);
   });
 

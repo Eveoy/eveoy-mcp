@@ -48,31 +48,37 @@ Native Cloudflare Worker (`McpAgent` + Durable Object). 55 tests pass, tsc clean
 
 **Resources:** `eveoy://kb/*` (8). **Prompts:** 4. **Static:** landing, /privacy, /robots.txt, /sitemap.xml, /.well-known/mcp/server-card.json, icons, /eveoy.dxt.
 
-## Phase 2 — blocked on Lovable edge-fn contracts (see QUESTIONS_FOR_LOVABLE.md)
+## Phase 2 — WIRED (Lovable shipped the edge-fn contracts 2026-06-22)
 
-Mirror the brief's tool list. Schemas locked where known (`CreatePilotOrderInput`),
-not wired until the Supabase edge-fn request/response contracts are provided.
+The Worker is now a thin adapter over Supabase edge functions ([`docs/API_CONTRACTS.md`](API_CONTRACTS.md)).
+All wired tools verified live through the MCP protocol on `wrangler dev`.
 
-| Tool | Auth | Wraps (Supabase edge fn) |
+| Tool | Wraps (Supabase edge fn) | Status |
 |---|---|---|
-| `search_directory` | none | `directory-sitemap` (needs a queryable endpoint, not just the sitemap) |
-| `get_business` | none | `directory-sitemap` (by slug/id) |
-| `get_case_studies` | none | source TBD (insights/newsletter) |
-| `subscribe_newsletter` | none | `subscribe-beehiiv` |
-| `book_demo` | OAuth | booking flow |
-| `claim_business` | OAuth | `unlock-business` |
-| `start_checkout` | OAuth | `create-checkout-session` (already contracted in ORDER_FLOW_SPEC.md) |
-| `check_order_status` | OAuth | `get-order-summary` |
+| `ask_eveoy` | `/ask-eveoy` (Gemini + live llms.txt) | ✅ wired, local KB fallback |
+| `search_directory` | `/directory-query` | ✅ wired |
+| `get_business` | `/directory-business` | ✅ wired |
+| `check_order_status` | `/get-order-summary` | ✅ wired |
+| `subscribe_newsletter` | `/subscribe-beehiiv` | ✅ wired |
+| `claim_business` | `/unlock-business` (lead capture) | ✅ wired |
+| `start_checkout` | `/create-checkout-session` | ✅ wired |
+| `book_demo` | static `/book-demo` URL | ✅ |
+| `get_case_studies` | source TBD | ❓ pending Lovable |
 
-**Security stance (firm):** the Worker should hold **only** `SUPABASE_URL` +
-`SUPABASE_ANON_KEY`. Stripe stays in the edge fn (no `STRIPE_SECRET_KEY` in the
-Worker). Beehiiv stays in `subscribe-beehiiv` (no `BEEHIIV_API_KEY` in the Worker).
-No `SUPABASE_SERVICE_ROLE_KEY` in the Worker — every edge fn self-gates (Lovable will
-fix any that can't rather than leak the role). Auth: the MCP stands up its **own**
-OAuth 2.1 server at `mcp.eveoy.com/.well-known/oauth-authorization-server` via
-`@cloudflare/workers-oauth-provider` (the site's existing OAuth `.well-known` files are
-placeholder stubs, not a live IdP; they'll be repointed at the Worker's issuer). The
-fail-closed public-only classifier stays in front of every response at every phase.
+**Auth decision (current):** write tools (`subscribe_newsletter`, `claim_business`,
+`start_checkout`) are **anonymous** — Lovable designed the edge fns to accept anon-key
+calls and the actions are low-risk (newsletter opt-in, lead capture, and a Stripe
+Checkout *link* the human still has to pay on Stripe's hosted page). They carry
+`readOnlyHint:false` confirm-hint annotations and are covered by the 60/min per-IP
+limit. OAuth gating remains available later (MCP's own AS via
+`@cloudflare/workers-oauth-provider`) if abuse appears; the site's OAuth `.well-known`
+files are placeholder stubs.
+
+**Security stance (held):** the Worker holds **only** `SUPABASE_URL` +
+`SUPABASE_ANON_KEY` + `SITE_URL`. Stripe/Beehiiv/service-role keys never leave their
+edge functions. The output classifier runs on every response — full `assertPublic` on
+`ask_eveoy`/KB, scoped `assertNoSecrets` on directory/order/contact tools (which return
+business contacts by design but still must never leak secrets/internal data).
 
 ## Discovery alignment (what slots into the site)
 

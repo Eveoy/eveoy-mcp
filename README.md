@@ -21,11 +21,26 @@ The official Eveoy MCP server — a **native Cloudflare Worker** (`McpAgent` + D
 
 ## What it does
 
-Three tools. One endpoint. Just receipts.
+Twelve tools. One endpoint. Just receipts. The Worker is a thin adapter — read/static
+tools run locally; the rest call Eveoy's Supabase edge functions ("the brain") with the
+publishable anon key only.
 
-- `ask_eveoy` — any question about Eveoy, grounded in the public knowledge base
-- `get_pricing` — exact price for a pilot; inputs mirror eveoy.com/order (`customers_per_location` 20–1000, `locations` 1–50)
+**Read / static**
+- `ask_eveoy` — any question about Eveoy (proxies the live `/ask-eveoy` brain; local KB fallback)
+- `get_pricing` — exact price; mirrors eveoy.com/order (Starter/Proof/Rollout, $24.99/customer)
 - `list_industries` — the 23+ sectors Eveoy serves
+- `list_metros` — Eveoy directory coverage (LA live)
+- `get_app_link` · `book_demo` — canonical install / demo links
+
+**Edge-backed (Supabase)**
+- `search_directory` — directory search (`/directory-query`)
+- `get_business` — one business by slug/id (`/directory-business`)
+- `check_order_status` — masked order lookup (`/get-order-summary`)
+- `subscribe_newsletter` — newsletter opt-in (`/subscribe-beehiiv`)
+- `claim_business` — listing claim + contact reveal (`/unlock-business`)
+- `start_checkout` — Stripe Checkout URL (`/create-checkout-session`)
+
+Contracts: [`docs/API_CONTRACTS.md`](docs/API_CONTRACTS.md). Architecture: [`docs/WORKING_WITH_LOVABLE.md`](docs/WORKING_WITH_LOVABLE.md).
 
 Four prompts. No ramp-up. No guesswork.
 

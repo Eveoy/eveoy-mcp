@@ -66,6 +66,64 @@ export const ListMetrosInput = z.object({}).strict();
 
 export const GetAppLinkInput = z.object({}).strict();
 
+export const BookDemoInput = z.object({}).strict();
+
+// ─── Advanced targeting (shared by start_checkout + Phase-2 order) ──
+// Exact JSONB shape stored on public.orders.advanced_targeting.
+const AGE_BUCKETS = ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'] as const;
+const LOCATION_TYPES = ['Country', 'Region / State', 'DMA (US)', 'City', 'ZIP / postal code'] as const;
+const HOUSEHOLD_INCOMES = ['Top 5%', 'Top 10%', 'Top 10-25%', 'Top 25-50%'] as const;
+
+export const AdvancedTargetingInput = z
+  .object({
+    age:             z.array(z.enum(AGE_BUCKETS)).max(6).optional(),
+    locationType:    z.enum(LOCATION_TYPES).nullable().optional(),
+    locationValues:  z.array(z.string().trim().min(1).max(120)).max(50).optional(),
+    gender:          z.enum(['Men', 'Women']).nullable().optional(),
+    householdIncome: z.array(z.enum(HOUSEHOLD_INCOMES)).max(4).optional(),
+  })
+  .strict()
+  .nullable()
+  .optional();
+
+// ─── Directory tools (wrap directory-query / directory-business) ────
+
+export const SearchDirectoryInput = z.object({
+  q: z.string().trim().max(120).optional().describe('Free-text: city, neighborhood, or business name.'),
+  metro: z.string().trim().max(40).optional().describe('Metro slug, e.g. "la".'),
+  naics: z.string().trim().regex(/^\d{2,6}$/).optional().describe('NAICS code, e.g. "722515".'),
+  limit: z.number().int().min(1).max(50).default(20).describe('Page size, 1–50.'),
+  after: z.string().trim().max(200).optional().describe('Pagination cursor: prior response nextCursor.'),
+}).strict();
+
+export const GetBusinessInput = z.object({
+  slug: z.string().trim().max(200).optional().describe('Business full_slug.'),
+  id: z.string().trim().max(64).optional().describe('Business UUID.'),
+}).strict();
+
+// ─── Order + lead tools ────────────────────────────────────────────
+
+export const CheckOrderStatusInput = z.object({
+  session_id: z.string().trim().min(6).max(120).describe('Stripe Checkout session id (cs_...).'),
+}).strict();
+
+export const SubscribeNewsletterInput = z.object({
+  email: z.string().email().max(254).describe('Email to subscribe to the Eveoy newsletter.'),
+}).strict();
+
+export const ClaimBusinessInput = z.object({
+  email: z.string().email().max(254).describe('Your email (the claimant).'),
+  full_slug: z.string().trim().min(3).max(200).describe('Directory listing full_slug to claim/look up.'),
+}).strict();
+
+export const StartCheckoutInput = z.object({
+  customers_per_location: z.number().int().min(MIN_CUSTOMERS_PER_LOCATION).max(MAX_CUSTOMERS_PER_LOCATION)
+    .describe(`Verified customers per store (${MIN_CUSTOMERS_PER_LOCATION}–${MAX_CUSTOMERS_PER_LOCATION}); mirrors eveoy.com/order.`),
+  locations: z.number().int().min(MIN_LOCATIONS).max(MAX_LOCATIONS).default(DEFAULT_LOCATIONS)
+    .describe(`Number of store locations (${MIN_LOCATIONS}–${MAX_LOCATIONS}).`),
+  advancedTargeting: AdvancedTargetingInput,
+}).strict();
+
 // ─── Output schemas ─────────────────────────────────────────────────
 
 export const GetPricingOutput = z.object({
@@ -109,22 +167,6 @@ export const AskEveoyOutput = z.object({
 // shape exactly, plus the contact fields eveoy.com/order currently
 // discards (which Phase 2 should plumb through — see ORDER_FLOW_SPEC
 // "Known gaps to flag").
-
-const AGE_BUCKETS = ['13-17', '18-24', '25-34', '35-44', '45-54', '55+'] as const;
-const LOCATION_TYPES = ['Country', 'Region / State', 'DMA (US)', 'City', 'ZIP / postal code'] as const;
-const HOUSEHOLD_INCOMES = ['Top 5%', 'Top 10%', 'Top 10-25%', 'Top 25-50%'] as const;
-
-export const AdvancedTargetingInput = z
-  .object({
-    age:             z.array(z.enum(AGE_BUCKETS)).max(6).optional(),
-    locationType:    z.enum(LOCATION_TYPES).nullable().optional(),
-    locationValues:  z.array(z.string().trim().min(1).max(120)).max(50).optional(),
-    gender:          z.enum(['Men', 'Women']).nullable().optional(),
-    householdIncome: z.array(z.enum(HOUSEHOLD_INCOMES)).max(4).optional(),
-  })
-  .strict()
-  .nullable()
-  .describe('Optional advanced targeting; exact JSONB shape stored on public.orders.advanced_targeting');
 
 /**
  * The body the Supabase `create-checkout-session` edge function expects
