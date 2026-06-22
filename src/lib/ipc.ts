@@ -1,18 +1,21 @@
 import { createHmac } from 'node:crypto';
-import { env } from './env';
+import { config } from '@/config';
 
 /**
- * Hash an IP address with a rotating salt before logging or rate-limit keying.
- * The raw IP never leaves this function.
+ * Hash an IP with a rotating salt before logging or rate-limit keying.
+ * The raw IP never leaves this function. node:crypto is available on
+ * Workers via the nodejs_compat flag.
  */
 export function hashIp(ip: string | null | undefined): string {
-  const salt = env().IP_HASH_SALT ?? 'dev-only-salt-rotate-in-prod';
   if (!ip) return 'unknown';
-  return createHmac('sha256', salt).update(ip).digest('base64url').slice(0, 16);
+  return createHmac('sha256', config().ipHashSalt).update(ip).digest('base64url').slice(0, 16);
 }
 
+/** Extract the client IP from Cloudflare / proxy headers. */
 export function extractIp(headers: Headers): string | null {
-  const fwd = headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0]!.trim();
-  return headers.get('x-real-ip');
+  return (
+    headers.get('cf-connecting-ip') ??
+    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    headers.get('x-real-ip')
+  );
 }

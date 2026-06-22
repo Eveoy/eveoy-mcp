@@ -1,5 +1,5 @@
 import { DENY_RULES, type DenyRule } from './denylist';
-import { classifierStrict } from '@/lib/env';
+import { config } from '@/config';
 import { log } from '@/lib/log';
 
 export interface ClassifierResult {
@@ -45,7 +45,7 @@ export function assertPublic<T>(value: T, context: { tool?: string; resource?: s
     });
   }
 
-  if (classifierStrict()) {
+  if (config().classifierStrict) {
     throw new ClassifierViolation(result.hits.map((h) => h.id).join(','));
   }
 

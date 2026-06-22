@@ -6,7 +6,7 @@ Submit in this order. Each step backlinks the next.
 
 ## 0. Prerequisites (one-time)
 
-- [ ] `mcp.eveoy.com` resolves to Vercel deployment
+- [ ] `mcp.eveoy.com` resolves to the Cloudflare Worker (Custom Domain)
 - [ ] `mcp/server.json` validates against `https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json`
 - [ ] `public/icon-512.png` exists (the SVG placeholders ship but most registries display PNG in card grids)
 - [ ] `eveoy.com` DNS reachable for TXT-record verification

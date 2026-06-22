@@ -141,12 +141,9 @@ export const CreatePilotOrderInput = z.object({
   campaign_start_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD')
-    .refine(
-      (s) => s >= earliestStartDate(),
-      () => ({
-        message: `Campaign start must be at least ${CAMPAIGN_START_LEAD_DAYS} days from today (earliest: ${earliestStartDate()})`,
-      }),
-    )
+    .refine((s) => s >= earliestStartDate(), {
+      message: `Campaign start must be at least ${CAMPAIGN_START_LEAD_DAYS} days from today.`,
+    })
     .describe(
       `"Campaign experience start date" on eveoy.com/order. ISO date YYYY-MM-DD. ` +
         `Must be ≥ ${CAMPAIGN_START_LEAD_DAYS} days from today.`,

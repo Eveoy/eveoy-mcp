@@ -19,7 +19,7 @@
   "categories": ["marketing", "sales", "retail"],
   "server": {
     "type": "remote",
-    "url": "https://mcp.eveoy.com/api/mcp",
+    "url": "https://mcp.eveoy.com/mcp",
     "transport": "streamable-http"
   },
   "tools_generated": true,

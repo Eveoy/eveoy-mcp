@@ -1,40 +1,22 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { KB_CONTENT, type KbKey } from './kb-content';
 
 /**
- * Loads curated public-only KB files. These are imported via fs at module
- * init time so the deployment bundle is hermetic.
+ * Public-only KB access + keyword routing. Content is inlined via kb-content.ts
+ * (no node:fs) so this is fully portable to Cloudflare Workers.
  *
- * Adding a new file: drop it into src/knowledge/public/ and add to KB_FILES.
+ * Adding a file: drop it in src/knowledge/public/, add the key to
+ * scripts/gen-kb-content.sh, run it, then add a KEYWORDS entry below.
  */
-const PUBLIC_DIR = join(process.cwd(), 'src/knowledge/public');
+export type { KbKey } from './kb-content';
 
-export const KB_FILES = {
-  overview:    'overview.md',
-  product:     'product.md',
-  pricing:     'pricing.md',
-  comparison:  'comparison.md',
-  'why-now':   'why-now.md',
-  'ugc-ripple':'ugc-ripple.md',
-  sectors:     'sectors.md',
-} as const;
-
-export type KbKey = keyof typeof KB_FILES;
-
-const cache = new Map<KbKey, string>();
+export const KB_KEYS = Object.keys(KB_CONTENT) as KbKey[];
 
 export function loadKb(key: KbKey): string {
-  const cached = cache.get(key);
-  if (cached) return cached;
-  const content = readFileSync(join(PUBLIC_DIR, KB_FILES[key]), 'utf8');
-  cache.set(key, content);
-  return content;
+  return KB_CONTENT[key];
 }
 
 export function loadAllKb(): Record<KbKey, string> {
-  return Object.fromEntries(
-    (Object.keys(KB_FILES) as KbKey[]).map((k) => [k, loadKb(k)]),
-  ) as Record<KbKey, string>;
+  return { ...KB_CONTENT };
 }
 
 const KEYWORDS: Array<{ kb: KbKey; words: RegExp }> = [

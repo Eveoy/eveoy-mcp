@@ -4,16 +4,16 @@
 >
 > Real customers · in real stores · from any AI.
 
-The official Eveoy MCP server. You don't pay for tokens. You don't pay for clicks. You don't pay for hope. You pay **$24.99** per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it.
+The official Eveoy MCP server — a **native Cloudflare Worker** (`McpAgent` + Durable Objects). You don't pay for tokens. You don't pay for clicks. You don't pay for hope. You pay **$24.99** per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it.
 
-**Endpoint** `https://mcp.eveoy.com/api/mcp`
+**Endpoint** `https://mcp.eveoy.com/mcp` · Streamable HTTP (MCP spec `2025-06-18`)
 
 ## Add it to your AI
 
 | Client | One-line setup |
 |---|---|
 | **Lovable** | Connectors → Chat connectors → New MCP server → paste the URL → Add & authorize. |
-| **Claude Desktop** | Add `{"mcpServers":{"eveoy":{"url":"https://mcp.eveoy.com/api/mcp"}}}` to `claude_desktop_config.json`. Restart. |
+| **Claude Desktop** | Add `{"mcpServers":{"eveoy":{"url":"https://mcp.eveoy.com/mcp"}}}` to `claude_desktop_config.json`. Restart. |
 | **Claude.ai** | Settings → Connectors → Add custom connector → paste the URL. |
 | **ChatGPT** | Settings → Connectors → Add MCP server → paste the URL. |
 | **Cursor** | Click *Add to Cursor* on [mcp.eveoy.com](https://mcp.eveoy.com), or Settings → MCP → Add (HTTP). |
@@ -24,86 +24,87 @@ The official Eveoy MCP server. You don't pay for tokens. You don't pay for click
 Three tools. One endpoint. Just receipts.
 
 - `ask_eveoy` — any question about Eveoy, grounded in the public knowledge base
-- `get_pricing` — exact price for N real customers at $24.99 each
+- `get_pricing` — exact price for a pilot; inputs mirror eveoy.com/order (`customers_per_location` 20–1000, `locations` 1–50)
 - `list_industries` — the 23+ sectors Eveoy serves
 
-Four prompts. Zero ramp-up.
+Four prompts. No ramp-up. No guesswork.
 
 - `/eveoy_price_quote` · `/eveoy_objection_handle` · `/pitch_for_role` · `/pilot_scope_intake`
 
 ## What it won't say
 
-This server speaks public Eveoy only. A versioned classifier in [`src/classifier/denylist.ts`](src/classifier/denylist.ts) blocks every internal pattern from the about-eveoy knowledge base — financials, roadmap, partner names, sales playbook, secrets. If a question can't be answered from the public set, the response is *"That detail isn't publicly available — email brad@eycrowd.com for more."*
+This server speaks public Eveoy only. A versioned classifier in [`src/classifier/denylist.ts`](src/classifier/denylist.ts) blocks every internal pattern from the about-eveoy knowledge base — financials, roadmap, partner names, sales playbook, secrets — before it can leave the server. If a question can't be answered from the public set, the response is *"That detail isn't publicly available — email brad@eycrowd.com for more."*
 
 ---
 
-## For developers
+## Architecture (Cloudflare-native)
 
-### Run locally
+```
+mcp.eveoy.com  (Worker Custom Domain)
+   │
+   ▼  one Worker (src/index.ts)
+ ├─ static assets (public/)         landing, /privacy, icons,
+ │    served free from the edge       /.well-known/server-card.json,
+ │    run_worker_first: /mcp,/sse,/health   robots.txt, sitemap.xml, eveoy.dxt
+ ├─ EveoyMCP  (McpAgent + Durable Object + SQLite)
+ │    wraps the official SDK McpServer; session state + SSE resumability
+ │    serve('/mcp') = Streamable HTTP · serveSSE('/sse') = legacy
+ ├─ KV (CACHE)            15-min eveoy.com fetch cache (Phase 3)
+ ├─ Rate Limit binding    per-IP soft limit (120/60s)
+ └─ Phase 2: @cloudflare/workers-oauth-provider for write-tool auth
+```
+
+The deterministic core (`src/lib/pricing.ts`, `src/classifier/*`, `src/industries.ts`, `src/mcp/schemas.ts`, `src/knowledge/*`, tool/prompt bodies) is platform-agnostic — no Cloudflare or Vercel imports. The Worker shell (`src/index.ts`) and `src/config.ts` are the only platform-coupled files.
+
+## Local development
 
 ```bash
 npm install
-cp .env.example .env.local       # set IP_HASH_SALT at minimum
-npm run dev                      # http://localhost:3000
-npm run inspect                  # opens MCP Inspector against localhost
+cp .dev.vars.example .dev.vars      # set IP_HASH_SALT
+npm run dev                         # wrangler dev → http://localhost:8787 (workerd)
+npm run inspect                     # MCP Inspector against localhost:8787/mcp
 ```
 
-### Quality gates
+## Quality gates
 
 ```bash
-npm run typecheck
-npm test                         # 38 tests
-npm run lint:descriptors         # CI gate on tool descriptor integrity
-npm run build
-npm run build:dxt                # produces dist/eveoy.dxt for Claude Desktop
+npm run typecheck                   # tsc --noEmit
+npm test                            # 50 tests (vitest)
+npm run lint:descriptors            # tool-descriptor integrity gate
+npx wrangler deploy --dry-run --outdir dist   # bundle validation, no login
 ```
 
-The classifier suite (`src/classifier/__tests__/classifier.test.ts`) must stay at 100% — every internal pattern from §10–15 of the about-eveoy KB has a deny case. The handshake suite (`tests/mcp-handshake.test.ts`) asserts every tool follows the canonical description template and carries zero Glama anti-slop tokens.
+The classifier suite must stay at 100% — every internal pattern from §10–15 of the about-eveoy KB has a deny case. The handshake suite asserts every tool follows the canonical description template, carries zero Glama anti-slop tokens, and that `server.json` + `dxt/manifest.json` descriptions stay ≤100 chars.
 
-### Security posture
+## Deploy
+
+See [`docs/CLOUDFLARE_DEPLOY.md`](docs/CLOUDFLARE_DEPLOY.md) for the full runbook (account, KV namespace, secrets, custom domain, DNS zone move, registry publish). Short version:
+
+```bash
+wrangler login
+wrangler kv namespace create CACHE          # paste the id into wrangler.jsonc
+wrangler secret put IP_HASH_SALT
+wrangler deploy
+```
+
+## Security posture
 
 - Streamable HTTP per MCP spec `2025-06-18`
-- Origin allowlist + Host pinning + HSTS in [`middleware.ts`](middleware.ts)
-- Zod `.strict()` schemas on every tool — no extra params
-- Rate limits per IP (anonymous) and per OAuth subject (Phase 2) via Upstash Redis
+- Origin allowlist + Host pinning + HSTS + CORS in the Worker fetch gate ([src/index.ts](src/index.ts))
+- Zod `.strict()` schemas on every tool — no extra params, inputs mirror eveoy.com/order
+- Per-IP soft rate limit (Cloudflare Rate Limit binding), fail-open on limiter error
 - Fail-closed public-only output classifier — every response passes `assertPublic`
-- No tokens or secrets ever logged; IPs HMAC-hashed with rotating salt
-- Tool descriptor lint gate in CI; tool-manifest hash exposed at `/.well-known/mcp-tool-manifest.sig`
+- No tokens or secrets ever logged; IPs HMAC-hashed with a rotating salt
+- Session state isolated per Durable Object
 
-### Deploy
-
-```bash
-vercel link
-vercel env pull .env.local
-vercel deploy                    # preview
-vercel deploy --prod             # after Pre-Deploy Code Review (Protocol 5)
-```
-
-Required environment for production: see [`.env.example`](.env.example).
-
-### Distribution surface
-
-The Eveoy MCP is meant to be findable in every registry an AI agent might check.
+## Distribution
 
 - [`mcp/server.json`](mcp/server.json) — Official MCP Registry manifest (reverse-DNS `com.eveoy/mcp`)
 - [`smithery.yaml`](smithery.yaml) — Smithery auto-scan config
-- [`dxt/manifest.json`](dxt/manifest.json) — Claude Desktop `.dxt` package metadata; build with `npm run build:dxt` → `dist/eveoy.dxt` (also served live at `https://mcp.eveoy.com/api/eveoy.dxt`)
-- [`/.well-known/mcp/server-card.json`](https://mcp.eveoy.com/.well-known/mcp/server-card.json) — out-of-band metadata mirror
-- [`/sitemap.xml`](https://mcp.eveoy.com/sitemap.xml) + [`/robots.txt`](https://mcp.eveoy.com/robots.txt) — with MCP discovery hints
+- [`dxt/manifest.json`](dxt/manifest.json) — Claude Desktop `.dxt`; `npm run build:dxt` → served at `/eveoy.dxt`
+- `/.well-known/mcp/server-card.json` — out-of-band metadata mirror · `/sitemap.xml` · `/robots.txt`
 
-Submission order, contacts, and the single highest-leverage lever per registry: [`docs/REGISTRY_SUBMISSION_CHECKLIST.md`](docs/REGISTRY_SUBMISSION_CHECKLIST.md).
-
-30-day launch plan synthesized from 20+ X.com posts (Dec 2025–Jun 2026): [`docs/LAUNCH_PLAYBOOK.md`](docs/LAUNCH_PLAYBOOK.md).
-
-Sub-60s artifact-first demo recipe: [`docs/DEMO_RECIPE.md`](docs/DEMO_RECIPE.md).
-
----
-
-## About Eveoy
-
-You pay $24.99 per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it. $999 entry pilot for 40+ customers. 100% refunded for no-shows.
-
-[eveoy.com](https://eveoy.com) · [brad@eycrowd.com](mailto:brad@eycrowd.com)
+Submission order and levers: [`docs/REGISTRY_SUBMISSION_CHECKLIST.md`](docs/REGISTRY_SUBMISSION_CHECKLIST.md). Launch plan: [`docs/LAUNCH_PLAYBOOK.md`](docs/LAUNCH_PLAYBOOK.md). Demo recipe: [`docs/DEMO_RECIPE.md`](docs/DEMO_RECIPE.md). Phase 2 order contract: [`docs/ORDER_FLOW_SPEC.md`](docs/ORDER_FLOW_SPEC.md). Working with Lovable: [`docs/WORKING_WITH_LOVABLE.md`](docs/WORKING_WITH_LOVABLE.md).
 
 ## License
 

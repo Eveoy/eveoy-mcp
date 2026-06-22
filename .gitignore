@@ -1,48 +1,32 @@
 # dependencies
 node_modules/
-.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+
+# build / wrangler
+dist/
+.wrangler/
+.mf/
+
+# local secrets (Workers convention) — NEVER commit
+.dev.vars
+.dev.vars.*
+.env
+.env*.local
+
+# keys
+*.pem
+.keys/
 
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-next-env.d.ts
-
-# production
-/build
-
 # misc
 .DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (NEVER commit)
-.env
-.env*.local
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# vercel
-.vercel
-
-# typescript
 *.tsbuildinfo
 
 # editor
 .vscode/
 .idea/
+
+# logs
+*-debug.log*
+npm-debug.log*

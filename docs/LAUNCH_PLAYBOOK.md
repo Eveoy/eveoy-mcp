@@ -49,7 +49,7 @@ How to add it (60 seconds):
 • Cursor → cursor://… [deeplink]
 • Windsurf → windsurf://… [deeplink]
 • Claude Desktop → claude_desktop_config.json snippet
-• Lovable → Chat connectors → paste mcp.eveoy.com/api/mcp
+• Lovable → Chat connectors → paste mcp.eveoy.com/mcp
 
 —
 
@@ -61,8 +61,8 @@ Reply with your brand and an agent will scan it live.
 
 —
 
-Built with @vercel Fluid Compute + @modelcontextprotocol Streamable HTTP.
-Repo: github.com/eveoy/eveoy-mcp
+Built on @Cloudflare Workers + Durable Objects + @modelcontextprotocol Streamable HTTP.
+Repo: github.com/Eveoy/eveoy-mcp
 ```
 
 ### Tuesday daypart

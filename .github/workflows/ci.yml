@@ -18,4 +18,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run lint:descriptors
-      - run: npm run build
+      # Build-time validation of the Worker bundle without deploying.
+      - run: npx wrangler deploy --dry-run --outdir dist

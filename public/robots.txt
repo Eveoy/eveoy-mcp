@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mcp.eveoy.com/sitemap.xml
+
+# MCP discovery hint
+# mcp-endpoint: https://mcp.eveoy.com/mcp
+# mcp-server-card: https://mcp.eveoy.com/.well-known/mcp/server-card.json

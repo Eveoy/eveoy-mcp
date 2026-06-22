@@ -1,5 +1,5 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { KB_FILES, loadKb, type KbKey } from '@/knowledge/kb-loader';
+import { KB_KEYS, loadKb, type KbKey } from '@/knowledge/kb-loader';
 import { assertPublic } from '@/classifier/public-only';
 
 const TITLES: Record<KbKey, string> = {
@@ -13,7 +13,7 @@ const TITLES: Record<KbKey, string> = {
 };
 
 export function registerKbResources(server: McpServer) {
-  for (const key of Object.keys(KB_FILES) as KbKey[]) {
+  for (const key of KB_KEYS) {
     server.registerResource(
       `kb-${key}`,
       `eveoy://kb/${key}`,

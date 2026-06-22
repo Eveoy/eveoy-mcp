@@ -7,7 +7,7 @@ import { registerPitchForRolePrompt } from './prompts/pitch-for-role';
 import { registerPilotScopeIntakePrompt } from './prompts/pilot-scope-intake';
 import { registerEveoyPriceQuotePrompt } from './prompts/eveoy-price-quote';
 import { registerEveoyObjectionHandlePrompt } from './prompts/eveoy-objection-handle';
-import { disabledTools } from '@/lib/env';
+import { config } from '@/config';
 import { log } from '@/lib/log';
 
 type Registration = { name: string; register: (s: McpServer) => void };
@@ -32,7 +32,7 @@ const PROMPTS: Registration[] = [
 ];
 
 export function registerAll(server: McpServer): void {
-  const disabled = disabledTools();
+  const disabled = config().disabledTools;
   for (const t of TOOLS) {
     if (disabled.has(t.name)) {
       log.warn('tool.disabled', { tool: t.name });

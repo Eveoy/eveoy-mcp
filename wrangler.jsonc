@@ -1,0 +1,45 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "eveoy-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-22",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "observability": { "enabled": true },
+
+  // Static surface — landing, privacy, icons, .well-known, sitemap, dxt.
+  // run_worker_first forces the Worker for the MCP + health paths; every
+  // other path is served straight from the edge asset store.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/mcp", "/sse", "/sse/message", "/health"]
+  },
+
+  // McpAgent session state (SQLite-backed Durable Object). Mandatory for McpAgent.
+  "durable_objects": {
+    "bindings": [{ "name": "MCP_OBJECT", "class_name": "EveoyMCP" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["EveoyMCP"] }],
+
+  // 15-min cache for the live eveoy.com fetch path (Phase 3). Eventually
+  // consistent — correct for read caching, NOT used for rate counters.
+  "kv_namespaces": [{ "binding": "CACHE", "id": "PLACEHOLDER_SET_AFTER_kv_create" }],
+
+  // Per-identifier soft rate limit (GA binding). period is 10 or 60 only.
+  "ratelimits": [
+    { "name": "MCP_LIMIT", "namespace_id": "1001", "simple": { "limit": 120, "period": 60 } }
+  ],
+
+  "vars": {
+    "MCP_CANONICAL_HOST": "mcp.eveoy.com",
+    "EVEOY_ORIGIN": "https://eveoy.com",
+    "MCP_CLASSIFIER_STRICT": "0"
+  }
+
+  // Attach the custom domain AFTER the zone is live on Cloudflare:
+  //   "routes": [{ "pattern": "mcp.eveoy.com", "custom_domain": true }]
+  // Secrets (wrangler secret put): IP_HASH_SALT
+}

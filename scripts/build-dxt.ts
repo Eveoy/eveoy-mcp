@@ -13,7 +13,8 @@ import { join } from 'node:path';
 
 const ROOT = process.cwd();
 const STAGE = join(ROOT, '.dxt-build');
-const OUT_DIR = join(ROOT, 'dist');
+// Output into public/ so the Worker's assets binding serves it at /eveoy.dxt
+const OUT_DIR = join(ROOT, 'public');
 const OUT = join(OUT_DIR, 'eveoy.dxt');
 
 function build() {
