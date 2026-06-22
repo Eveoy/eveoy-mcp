@@ -40,10 +40,12 @@
     "MCP_CLASSIFIER_STRICT": "0",
     "SUPABASE_URL": "https://ascyiwwrflizprjypxxr.supabase.co",
     "SITE_URL": "https://eveoy.com"
-  }
+  },
 
-  // Attach the custom domain AFTER the zone is live on Cloudflare:
-  //   "routes": [{ "pattern": "mcp.eveoy.com", "custom_domain": true }]
+  // Zone is live on Cloudflare → attach mcp.eveoy.com as a Custom Domain.
+  // Requires a token with Zone:eveoy.com Workers Routes:Edit (+ DNS:Edit).
+  "routes": [{ "pattern": "mcp.eveoy.com", "custom_domain": true }]
+
   // Secrets (wrangler secret put): IP_HASH_SALT, SUPABASE_ANON_KEY
   //   (anon key is publishable but stored as a secret per Lovable's guidance)
 }
