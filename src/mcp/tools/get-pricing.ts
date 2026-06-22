@@ -52,12 +52,13 @@ export function registerGetPricing(server: McpServer) {
         `Eveoy pricing for ${p.customers_per_location} shoppers × ${p.locations} location${p.locations === 1 ? '' : 's'} (${p.total_customers} real customers):`,
         '',
         `  Total: ${p.total_usd}`,
-        `  Per shopper: ${formatUsd(UNIT_PRICE_CENTS)} (universal unit price)`,
+        `  Per shopper: ${formatUsd(UNIT_PRICE_CENTS)} (flat, all-in)`,
+        `  UGC photos: ~${p.ugc_photos} (≈2 per customer, yours to keep)`,
         '',
-        p.matches_marketing_pilot ? '  ✓ This is the published "$999 entry pilot" configuration.' : '',
+        p.is_starter_tier ? '  ✓ This is the Starter tier (40 customers · 80 UGC photos · 1 store).' : '',
         `  Constraints (from eveoy.com/order): ${MIN_CUSTOMERS_PER_LOCATION}–${MAX_CUSTOMERS_PER_LOCATION} shoppers/location · ${MIN_LOCATIONS}–${MAX_LOCATIONS} locations · earliest start date is 14 days from today.`,
         '',
-        'Reference configurations:',
+        'Published tiers:',
         ...pricingExamples().map(
           (e) =>
             `  • ${e.label.padEnd(22)}  ${String(e.customers_per_location).padStart(5)}/loc × ${String(e.locations).padStart(2)} loc — ${e.total_usd.padEnd(14)} (${e.note})`,
@@ -75,7 +76,8 @@ export function registerGetPricing(server: McpServer) {
         unit_price_usd: p.unit_price_usd,
         total_usd: p.total_cents / 100,
         formatted_total: p.total_usd,
-        matches_marketing_pilot: p.matches_marketing_pilot,
+        ugc_photos: p.ugc_photos,
+        is_starter_tier: p.is_starter_tier,
       };
 
       const safe = assertPublic(lines, { tool: 'get_pricing' });

@@ -27,6 +27,7 @@ export const MAX_LOCATIONS = 50;
 export const DEFAULT_CUSTOMERS_PER_LOCATION = 40;
 export const DEFAULT_LOCATIONS = 1;
 export const CAMPAIGN_START_LEAD_DAYS = 14;
+export const UGC_PHOTOS_PER_CUSTOMER = 2;
 
 export interface PricingInput {
   customersPerLocation?: number;
@@ -40,7 +41,8 @@ export interface PricingResult {
   unit_price_usd: number;
   total_cents: number;
   total_usd: string;
-  matches_marketing_pilot: boolean;
+  ugc_photos: number;
+  is_starter_tier: boolean;
 }
 
 export function priceFor(input: PricingInput = {}): PricingResult {
@@ -68,7 +70,9 @@ export function priceFor(input: PricingInput = {}): PricingResult {
     unit_price_usd: UNIT_PRICE_CENTS / 100,
     total_cents,
     total_usd: formatUsd(total_cents),
-    matches_marketing_pilot: customers === DEFAULT_CUSTOMERS_PER_LOCATION && locations === DEFAULT_LOCATIONS,
+    // ~2 quality-rated UGC photos per verified customer (Starter 40→80, Proof 100→200, Rollout 400→800)
+    ugc_photos: total_customers * UGC_PHOTOS_PER_CUSTOMER,
+    is_starter_tier: customers === DEFAULT_CUSTOMERS_PER_LOCATION && locations === DEFAULT_LOCATIONS,
   };
 }
 
@@ -77,18 +81,16 @@ export function formatUsd(cents: number): string {
 }
 
 /**
- * Reference configurations, mirroring eveoy.com/order's default and a few
- * common scale-ups. NOT a tier-based pricing model — pricing is always
- * customers × locations × $24.99.
+ * Published tiers (eveoy.com/pricing) + the floor and ceiling. Pricing is
+ * always customers × locations × $24.99; these are the named reference points.
  */
 export function pricingExamples() {
   return [
-    { label: 'Smallest possible',    customers_per_location: 20,   locations: 1,  total_usd: '$499.80',     note: 'Floor: 20 customers/location' },
-    { label: 'Marketing default',    customers_per_location: 40,   locations: 1,  total_usd: '$999.60',     note: 'The "$999 pilot" anchor' },
-    { label: 'Single-store, larger', customers_per_location: 100,  locations: 1,  total_usd: '$2,499.00',   note: '~2-week proof window' },
-    { label: 'Multi-store pilot',    customers_per_location: 100,  locations: 4,  total_usd: '$9,996.00',   note: '400 customers across 4 stores' },
-    { label: 'Regional rollout',     customers_per_location: 100,  locations: 10, total_usd: '$24,990.00',  note: '1,000 customers, 10 stores' },
-    { label: 'Largest possible',     customers_per_location: 1000, locations: 50, total_usd: '$1,249,500',  note: 'Ceiling: 50,000 customers' },
+    { label: 'Below Starter (floor)', customers_per_location: 20,   locations: 1,  total_usd: '$499.80',     note: '20-customer floor · 40 UGC photos' },
+    { label: 'Starter',               customers_per_location: 40,   locations: 1,  total_usd: '$999.60',     note: '40 customers · 80 UGC photos · 1 store' },
+    { label: 'Proof',                 customers_per_location: 100,  locations: 1,  total_usd: '$2,499.00',   note: '100 customers · 200 UGC photos · 90-day readout' },
+    { label: 'Rollout',               customers_per_location: 100,  locations: 4,  total_usd: '$9,996.00',   note: '400 customers · 800 UGC photos · 3–4 stores' },
+    { label: 'Beyond Rollout',        customers_per_location: 1000, locations: 50, total_usd: '$1,249,500',  note: 'Ceiling: 50,000 customers' },
   ];
 }
 

@@ -10,6 +10,7 @@ const TITLES: Record<KbKey, string> = {
   'why-now':  'Eveoy — Why now',
   'ugc-ripple':'Eveoy — UGC ripple effect',
   sectors:    'Eveoy — Industries served',
+  directory:  'Eveoy — Business directory',
 };
 
 export function registerKbResources(server: McpServer) {

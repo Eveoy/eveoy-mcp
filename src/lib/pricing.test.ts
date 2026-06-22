@@ -15,21 +15,28 @@ import {
 } from './pricing';
 
 describe('priceFor — mirrors eveoy.com/order', () => {
-  it('default (no args) matches the marketing $999 pilot exactly', () => {
+  it('default (no args) matches the Starter tier exactly ($999.60, 80 UGC photos)', () => {
     const p = priceFor();
     expect(p.customers_per_location).toBe(DEFAULT_CUSTOMERS_PER_LOCATION);
     expect(p.locations).toBe(DEFAULT_LOCATIONS);
     expect(p.total_customers).toBe(40);
     expect(p.total_cents).toBe(99960);
     expect(p.total_usd).toBe('$999.60');
-    expect(p.matches_marketing_pilot).toBe(true);
+    expect(p.ugc_photos).toBe(80);
+    expect(p.is_starter_tier).toBe(true);
   });
 
-  it('honors the per-location floor of 20 (smallest valid order = $499.80)', () => {
+  it('honors the per-location floor of 20 (smallest valid order = $499.80, 40 photos)', () => {
     const p = priceFor({ customersPerLocation: 20, locations: 1 });
     expect(p.total_customers).toBe(20);
     expect(p.total_usd).toBe('$499.80');
-    expect(p.matches_marketing_pilot).toBe(false);
+    expect(p.ugc_photos).toBe(40);
+    expect(p.is_starter_tier).toBe(false);
+  });
+
+  it('computes UGC photos at ~2 per customer for Proof + Rollout', () => {
+    expect(priceFor({ customersPerLocation: 100, locations: 1 }).ugc_photos).toBe(200); // Proof
+    expect(priceFor({ customersPerLocation: 100, locations: 4 }).ugc_photos).toBe(800); // Rollout
   });
 
   it('multiplies across locations correctly', () => {
@@ -84,9 +91,13 @@ describe('formatUsd', () => {
 });
 
 describe('pricingExamples', () => {
-  it('lists the marketing-default as the second example (after the smallest possible)', () => {
-    const ex = pricingExamples();
-    expect(ex[1]).toMatchObject({ customers_per_location: 40, locations: 1, total_usd: '$999.60' });
+  it('names the official tiers Starter / Proof / Rollout', () => {
+    const labels = pricingExamples().map((e) => e.label);
+    expect(labels).toContain('Starter');
+    expect(labels).toContain('Proof');
+    expect(labels).toContain('Rollout');
+    const starter = pricingExamples().find((e) => e.label === 'Starter');
+    expect(starter).toMatchObject({ customers_per_location: 40, locations: 1, total_usd: '$999.60' });
   });
   it('every example is internally consistent with priceFor()', () => {
     for (const e of pricingExamples()) {

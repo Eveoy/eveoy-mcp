@@ -26,6 +26,8 @@ const KEYWORDS: Array<{ kb: KbKey; words: RegExp }> = [
   { kb: 'sectors',    words: /\b(sector|industr|categor|vertical|qsr|retail|apparel|beauty|food)\b/i },
   { kb: 'ugc-ripple', words: /\b(ugc|content|social|viral|amplif|seo|loyalty|refer)\b/i },
   { kb: 'why-now',    words: /\b(why|now|problem|trend|cac|cpc|cpm|attribution|opt[- ]?in|att|foot traffic)\b/i },
+  // Leading-boundary stems only (no trailing \b) so "directory"/"metros"/"registries" match.
+  { kb: 'directory',  words: /\bdirector|\blisting|\bregistr|\bmetro|\bdataset|\bstorefront|\bbulk export/i },
   { kb: 'overview',   words: /\b(what|who|company|founders?|eveoy|eycrowd|tagline|headquarters?)\b/i },
 ];
 

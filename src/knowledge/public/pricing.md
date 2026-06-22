@@ -1,8 +1,8 @@
 # Eveoy pricing
 
-## Per shopper
+## Per customer
 
-**$24.99 per verified shopper.** That price includes the full eight-outcome bundle: visit, photos/video, content rights, CRM data, done-for-you service, and the guarantee.
+**$24.99 per verified customer** — flat, all-in. No setup fees. No contracts. No monthly minimums. The same $24.99 at every volume.
 
 ## The math is the same as eveoy.com/order
 
@@ -11,28 +11,25 @@ Total = **shoppers per location × locations × $24.99**
 You pick:
 - **Shoppers per location** — min 20, max 1,000
 - **Locations** — min 1, max 50
-- **Campaign start date** — at least 14 days from today (campaigns need lead time to brief shoppers and reach the door)
+- **Campaign start date** — at least 14 days from today
 
-That's it. There are no tiers. Same inputs, same constraints as eveoy.com/order.
+Every customer also returns **~2 quality-rated UGC photos** (e.g. 40 customers → 80 photos), yours to keep forever.
 
-## The "$999 pilot" is a default, not a floor
+## Published tiers
 
-40 shoppers × 1 location × $24.99 = $999.60. That's the published entry-pilot configuration — it's where most pilots start. **You can go smaller.** The real per-location floor is 20 shoppers; the smallest possible order is 20 × 1 × $24.99 = **$499.80**.
-
-## Reference configurations
-
-| Configuration | Shoppers/loc | Locations | Total | Use case |
+| Tier | Price | Customers | UGC photos | Stores |
 |---|---|---|---|---|
-| Smallest possible | 20 | 1 | $499.80 | Single-store flash test |
-| **"$999 pilot"** (default) | **40** | **1** | **$999.60** | Public entry pilot |
-| Single-store, larger | 100 | 1 | $2,499.00 | ~2-week proof window |
-| Multi-store pilot | 100 | 4 | $9,996.00 | 400 customers across 4 stores |
-| Regional rollout | 100 | 10 | $24,990.00 | 1,000 customers, 10 stores |
-| Largest possible | 1,000 | 50 | $1,249,500 | Ceiling: 50,000 customers |
+| **Starter** | $999 | 40 real customers | 80 | 1 store |
+| **Proof** | $2,499 | 100 real customers | 200 | 1 store + 90-day readout |
+| **Rollout** | $9,996 | 400+ real customers | 800+ | 3–4 stores |
+
+Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer.
+
+Below Starter, the smallest possible order is 20 customers × 1 store = $499.80. Above Rollout it scales linearly to a ceiling of 1,000 × 50 = $1,249,500.
 
 ## The guarantee never changes
 
-100% refunded for no-shows at every spend tier. If a visit doesn't clear verification — right customer, 15+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
+100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
 
 ## Custom quote
 

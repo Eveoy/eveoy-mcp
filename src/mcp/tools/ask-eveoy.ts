@@ -11,7 +11,7 @@ const AUDIENCE_LENS: Record<string, string> = {
     'Lead with guaranteed sales math. Show the example: $999 pilot × 40+ customers × ~$35 average ticket = $1,400 revenue = 2.4x in the same reporting period.',
   cro: 'Lead with predictable revenue per dollar spent. Clean attribution: spend goes in, POS revenue comes out.',
   ceo: 'Strategic, concise. Customer acquisition becomes a line item with known return.',
-  vp_retail: 'Lead with guaranteed foot traffic, 15+ minutes in-store, GPS-verified.',
+  vp_retail: 'Lead with guaranteed foot traffic, 10+ minutes in-store, GPS-verified.',
   founder: 'Same as CEO — strategic and concise.',
   franchise_owner: 'Lead with per-location revenue and the no-contract pilot.',
   general: 'Lead with what Eveoy is: $24.99 per verified in-store customer, $999 pilot, auto-refund on no-shows.',

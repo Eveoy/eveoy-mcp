@@ -1,0 +1,28 @@
+# Eveoy MCP
+
+> The Eveoy MCP server. Eveoy is the experience marketing platform built for verified
+> in-store customer visits: you pay $24.99 per real customer who walks into your store,
+> spends 10+ minutes, makes a purchase, and brings back ~2 quality-rated photos. Tiers:
+> Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+). 100% refunded for no-shows.
+
+## Endpoint
+- MCP (Streamable HTTP): https://mcp.eveoy.com/mcp
+- MCP (legacy SSE): https://mcp.eveoy.com/sse  +  POST /sse/message
+- Server card: https://mcp.eveoy.com/.well-known/mcp/server-card.json
+
+## Tools (read-only, anonymous)
+- ask_eveoy — any question about Eveoy, grounded in the public knowledge base
+- get_pricing — exact pilot price; inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
+- list_industries — the 23+ sectors Eveoy serves
+- list_metros — Eveoy directory coverage (Los Angeles live; more coming)
+- get_app_link — the Eveoy shopper-app install link
+
+## Prompts
+- /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake
+
+## Links
+- Site: https://eveoy.com
+- Pricing: https://eveoy.com/pricing
+- Order: https://eveoy.com/order
+- Directory: https://eveoy.com/directory
+- Contact: support@eveoy.com

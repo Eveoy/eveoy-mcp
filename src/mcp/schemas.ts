@@ -62,6 +62,10 @@ export const GetPricingInput = z.object({
 
 export const ListIndustriesInput = z.object({}).strict();
 
+export const ListMetrosInput = z.object({}).strict();
+
+export const GetAppLinkInput = z.object({}).strict();
+
 // ─── Output schemas ─────────────────────────────────────────────────
 
 export const GetPricingOutput = z.object({
@@ -71,12 +75,26 @@ export const GetPricingOutput = z.object({
   unit_price_usd: z.number(),
   total_usd: z.number(),
   formatted_total: z.string(),
-  matches_marketing_pilot: z.boolean(),
+  ugc_photos: z.number().int(),
+  is_starter_tier: z.boolean(),
 });
 
 export const ListIndustriesOutput = z.object({
   industries: z.array(z.enum(INDUSTRIES_PUBLIC)),
   count: z.number().int(),
+  notes: z.string(),
+});
+
+export const ListMetrosOutput = z.object({
+  live: z.array(z.object({ metro: z.string(), kind: z.string(), businesses: z.number().int().optional() })),
+  coming_soon: z.array(z.object({ metro: z.string(), kind: z.string() })),
+  directory_url: z.string(),
+  notes: z.string(),
+});
+
+export const GetAppLinkOutput = z.object({
+  url: z.string(),
+  platforms: z.array(z.string()),
   notes: z.string(),
 });
 

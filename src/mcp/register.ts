@@ -2,6 +2,8 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAskEveoy } from './tools/ask-eveoy';
 import { registerGetPricing } from './tools/get-pricing';
 import { registerListIndustries } from './tools/list-industries';
+import { registerListMetros } from './tools/list-metros';
+import { registerGetAppLink } from './tools/get-app-link';
 import { registerKbResources } from './resources/kb';
 import { registerPitchForRolePrompt } from './prompts/pitch-for-role';
 import { registerPilotScopeIntakePrompt } from './prompts/pilot-scope-intake';
@@ -13,11 +15,14 @@ import { log } from '@/lib/log';
 type Registration = { name: string; register: (s: McpServer) => void };
 
 const TOOLS: Registration[] = [
-  { name: 'ask_eveoy',      register: registerAskEveoy },
-  { name: 'get_pricing',    register: registerGetPricing },
-  { name: 'list_industries',register: registerListIndustries },
-  // Phase 2: { name: 'create_pilot_order', register: registerCreatePilotOrder },
-  // Phase 2: { name: 'check_order_status', register: registerCheckOrderStatus },
+  { name: 'ask_eveoy',       register: registerAskEveoy },
+  { name: 'get_pricing',     register: registerGetPricing },
+  { name: 'list_industries', register: registerListIndustries },
+  { name: 'list_metros',     register: registerListMetros },
+  { name: 'get_app_link',    register: registerGetAppLink },
+  // Phase 2 (need Supabase edge-fn contracts — see docs/QUESTIONS_FOR_LOVABLE.md):
+  //   search_directory, get_business, get_case_studies, subscribe_newsletter (none-auth)
+  //   book_demo, claim_business, start_checkout (OAuth)
 ];
 
 const RESOURCE_GROUPS: Registration[] = [

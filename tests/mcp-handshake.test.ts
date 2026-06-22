@@ -25,8 +25,14 @@ describe('MCP register — end-to-end metadata sanity', () => {
   const toolNames = Object.keys(toolMap);
   const promptNames = Object.keys(promptMap);
 
-  it('registers exactly the three Phase 1 read tools', () => {
-    expect(toolNames.sort()).toEqual(['ask_eveoy', 'get_pricing', 'list_industries']);
+  it('registers the Phase 1 read tools', () => {
+    expect(toolNames.sort()).toEqual([
+      'ask_eveoy',
+      'get_app_link',
+      'get_pricing',
+      'list_industries',
+      'list_metros',
+    ]);
   });
 
   it('registers the four named prompts', () => {

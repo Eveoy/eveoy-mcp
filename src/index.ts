@@ -7,12 +7,13 @@ import { extractIp, hashIp } from '@/lib/ipc';
 import { log } from '@/lib/log';
 
 const SERVER_INSTRUCTIONS =
-  'Eveoy — Verified In-Store Foot Traffic ($24.99/customer). Real customers, in real stores, ' +
-  'from any AI. You don\'t pay for tokens, you don\'t pay for clicks, you don\'t pay for hope. ' +
-  'You pay $24.99 per real customer who walked into your store, spent 15 minutes, and brought back ' +
-  'the photos to prove it. Use ask_eveoy for any question, get_pricing for an exact quote (inputs ' +
-  'mirror eveoy.com/order), list_industries to confirm coverage. Read-only and anonymous today; ' +
-  'write tools (Phase 2) will require OAuth 2.1.';
+  'Eveoy — the experience marketing platform built for verified in-store customer visits ' +
+  '($24.99/customer). You don\'t pay for clicks, impressions, or hope. You pay $24.99 per real ' +
+  'customer who walked into your store, spent 10 minutes, made a purchase, and brought back the ' +
+  'photos to prove it (~2 UGC photos each). Published tiers: Starter $999 (40 customers), ' +
+  'Proof $2,499 (100), Rollout $9,996 (400+). Use ask_eveoy for any question, get_pricing for an ' +
+  'exact quote (inputs mirror eveoy.com/order), list_industries to confirm coverage. Read-only and ' +
+  'anonymous today; write tools (book_demo, claim_business, start_checkout) arrive in Phase 2 behind OAuth 2.1.';
 
 /**
  * McpAgent wraps the official SDK McpServer. Tool/resource/prompt registration
@@ -21,7 +22,7 @@ const SERVER_INSTRUCTIONS =
  */
 export class EveoyMCP extends McpAgent<Env> {
   server = new McpServer(
-    { name: 'eveoy', version: '1.0.0' },
+    { name: 'eveoy-mcp', version: '1.0.0' },
     { instructions: SERVER_INSTRUCTIONS },
   );
 
@@ -33,6 +34,8 @@ export class EveoyMCP extends McpAgent<Env> {
 // ─── Edge gate: Origin allowlist · Host pin · CORS · HSTS ──────────
 
 const ALLOWED_ORIGINS = new Set([
+  'https://eveoy.com',
+  'https://www.eveoy.com',
   'https://claude.ai',
   'https://chatgpt.com',
   'https://chat.openai.com',

@@ -7,7 +7,7 @@
 export const KB_CONTENT = {
   'overview': String.raw`# Eveoy by EyCrowd — Overview
 
-**Eveoy is the authentic marketing channel powered by real people.** It is the first platform where brands pay only for verified, in-store customer visits.
+**Eveoy is the experience marketing platform — the first built for verified in-store customer visits.** Brands pay only when real customers walk into their stores.
 
 ## Tagline
 
@@ -18,31 +18,29 @@ export const KB_CONTENT = {
 You pay **$24.99 per real customer** who:
 
 - Walks into your store (GPS-verified)
-- Spends 15+ minutes with your brand
+- Spends 10+ minutes with your brand
+- Makes a purchase
 - Completes the activities you define
 - Delivers verified photos and video
 
-If any criterion isn't met, the visit is automatically refunded. No fake clicks, no impressions, no influencer guesswork.
+If any criterion isn't met, the visit is automatically refunded. No clicks, no impressions, no hope — just receipts.
 
-## Entry pilot
+## Entry tier
 
-**$999 for 40+ verified customers. Zero risk, no contracts, auto-refund on any no-show.**
+**Starter: $999 for 40 verified customers (plus 80 UGC photos) in one store.** Zero risk, no contracts, auto-refund on any no-show.
 
 ## Company
 
 - **Product:** The Eveoy App, by EyCrowd, Inc.
-- **Founders:** Brad Cowdrey (CEO/CTO), Ayman Al-Zamil
-- **Headquarters:** 1160 Battery Street, Suite 100, San Francisco, CA 94111
-- **Offices:** San Francisco · Los Angeles · Denver · Houston · Riyadh
+- **Founder & CEO:** Brad Cowdrey
+- **Headquarters:** San Francisco, CA
 - **Web:** https://eveoy.com
-- **Contact:** brad@eycrowd.com
+- **Contact:** support@eveoy.com · brad@eycrowd.com
 
 ## Receipts to date
 
 - 20,000+ verified shoppers
 - 10,000+ brand experiences delivered
-- 10,247 receipts issued this year
-- 0 fake clicks billed
 - 100% refunded on no-shows
 `,
   'product': String.raw`# How Eveoy works
@@ -51,7 +49,7 @@ If any criterion isn't met, the visit is automatically refunded. No fake clicks,
 
 1. **Tell us what you want.** 5-minute setup in the app — audience, location, quantity.
 2. **We send the right shoppers.** Matched from the 20,000+ verified community.
-3. **You get a receipt.** Real visit + 15+ minutes in-store + verified photos and video.
+3. **You get a receipt.** Real visit + 10+ minutes in-store + verified photos and video.
 
 ## Eight things happen. You pay for one.
 
@@ -59,7 +57,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 
 1. **Foot traffic** — a real, demographically matched customer walks into the store
 2. **Social engagement** — interaction with staff and store environment
-3. **Brand learning** — the customer absorbs the brand (15+ minutes in-store)
+3. **Brand learning** — the customer absorbs the brand (10+ minutes in-store)
 4. **Brand activities** — campaign-defined tasks completed
 5. **Content creation** — verified photos and video, brand-owned forever
 6. **CRM data** — first-party data on a real, matched customer
@@ -69,7 +67,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## What the brand pays for
 
 - ✓ Right customer type
-- ✓ 60+ seconds in store (15+ minutes for full payout)
+- ✓ 60+ seconds in store (10+ minutes for full payout)
 - ✓ Good photos and videos
 - ✓ Every task finished
 - ✓ Quality rating ≥ 4.0 / 5
@@ -88,9 +86,9 @@ You own every photo and video forever. No licensing fees, no expiration, no rest
 `,
   'pricing': String.raw`# Eveoy pricing
 
-## Per shopper
+## Per customer
 
-**$24.99 per verified shopper.** That price includes the full eight-outcome bundle: visit, photos/video, content rights, CRM data, done-for-you service, and the guarantee.
+**$24.99 per verified customer** — flat, all-in. No setup fees. No contracts. No monthly minimums. The same $24.99 at every volume.
 
 ## The math is the same as eveoy.com/order
 
@@ -99,28 +97,25 @@ Total = **shoppers per location × locations × $24.99**
 You pick:
 - **Shoppers per location** — min 20, max 1,000
 - **Locations** — min 1, max 50
-- **Campaign start date** — at least 14 days from today (campaigns need lead time to brief shoppers and reach the door)
+- **Campaign start date** — at least 14 days from today
 
-That's it. There are no tiers. Same inputs, same constraints as eveoy.com/order.
+Every customer also returns **~2 quality-rated UGC photos** (e.g. 40 customers → 80 photos), yours to keep forever.
 
-## The "$999 pilot" is a default, not a floor
+## Published tiers
 
-40 shoppers × 1 location × $24.99 = $999.60. That's the published entry-pilot configuration — it's where most pilots start. **You can go smaller.** The real per-location floor is 20 shoppers; the smallest possible order is 20 × 1 × $24.99 = **$499.80**.
-
-## Reference configurations
-
-| Configuration | Shoppers/loc | Locations | Total | Use case |
+| Tier | Price | Customers | UGC photos | Stores |
 |---|---|---|---|---|
-| Smallest possible | 20 | 1 | $499.80 | Single-store flash test |
-| **"$999 pilot"** (default) | **40** | **1** | **$999.60** | Public entry pilot |
-| Single-store, larger | 100 | 1 | $2,499.00 | ~2-week proof window |
-| Multi-store pilot | 100 | 4 | $9,996.00 | 400 customers across 4 stores |
-| Regional rollout | 100 | 10 | $24,990.00 | 1,000 customers, 10 stores |
-| Largest possible | 1,000 | 50 | $1,249,500 | Ceiling: 50,000 customers |
+| **Starter** | $999 | 40 real customers | 80 | 1 store |
+| **Proof** | $2,499 | 100 real customers | 200 | 1 store + 90-day readout |
+| **Rollout** | $9,996 | 400+ real customers | 800+ | 3–4 stores |
+
+Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer.
+
+Below Starter, the smallest possible order is 20 customers × 1 store = $499.80. Above Rollout it scales linearly to a ceiling of 1,000 × 50 = $1,249,500.
 
 ## The guarantee never changes
 
-100% refunded for no-shows at every spend tier. If a visit doesn't clear verification — right customer, 15+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
+100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
 
 ## Custom quote
 
@@ -137,7 +132,7 @@ Anything above 50 locations or 1,000 shoppers per location? Email **brad@eycrowd
 | UGC Creator   | $150–$500/piece         | No visit          | Yes (1 piece)  | None           | Moderate              |
 | Sampling      | $5–$50+                 | Partial           | No             | Limited        | Moderate              |
 
-To replicate the Eveoy bundle — verified visit + 15+ minutes + brand activities + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
+To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activities + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
 
 ## À la carte (the same outcome, bought separately)
 
@@ -222,6 +217,27 @@ Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-stor
 - All other B2C brands
 
 Built for every aisle, every shelf, every store.
+`,
+  'directory': String.raw`# The Eveoy Directory
+
+A free, live, searchable list of every active consumer brand, store, and business — by dataset. Browse at https://eveoy.com/directory.
+
+## Two dataset families
+
+**Registry datasets** (government / city records, ~11.1M businesses)
+- Los Angeles — **live**, 629,431 active businesses
+- New York, Chicago, San Francisco, Houston — coming soon
+
+**Listing datasets** (retail storefront aggregations, ~8.2M businesses)
+- California, Texas, New York, Florida, Colorado — coming soon
+
+## What you can do
+
+- Browse a metro's businesses for free
+- Request notification when a new metro goes live
+- Book a demo for bulk exports, API access, and custom data slices
+
+The directory is a separate surface from Eveoy's core product (verified in-store customer visits at $24.99). It's a public data resource that helps brands and agents find real-world businesses.
 `,
 } as const;
 

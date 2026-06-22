@@ -4,7 +4,7 @@
 
 1. **Tell us what you want.** 5-minute setup in the app — audience, location, quantity.
 2. **We send the right shoppers.** Matched from the 20,000+ verified community.
-3. **You get a receipt.** Real visit + 15+ minutes in-store + verified photos and video.
+3. **You get a receipt.** Real visit + 10+ minutes in-store + verified photos and video.
 
 ## Eight things happen. You pay for one.
 
@@ -12,7 +12,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 
 1. **Foot traffic** — a real, demographically matched customer walks into the store
 2. **Social engagement** — interaction with staff and store environment
-3. **Brand learning** — the customer absorbs the brand (15+ minutes in-store)
+3. **Brand learning** — the customer absorbs the brand (10+ minutes in-store)
 4. **Brand activities** — campaign-defined tasks completed
 5. **Content creation** — verified photos and video, brand-owned forever
 6. **CRM data** — first-party data on a real, matched customer
@@ -22,7 +22,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## What the brand pays for
 
 - ✓ Right customer type
-- ✓ 60+ seconds in store (15+ minutes for full payout)
+- ✓ 60+ seconds in store (10+ minutes for full payout)
 - ✓ Good photos and videos
 - ✓ Every task finished
 - ✓ Quality rating ≥ 4.0 / 5
