@@ -1,6 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { AskEveoyInput, AskEveoyOutput } from '@/mcp/schemas';
 import { loadKb, pickKbForQuestion } from '@/knowledge/kb-loader';
+import { capabilitiesHint, capabilitiesMarkdown, isCapabilityQuestion } from '@/mcp/capabilities';
 import { callEdge } from '@/integrations/edge';
 import { assertPublic } from '@/classifier/public-only';
 import { log } from '@/lib/log';
@@ -23,10 +24,11 @@ Use this when the user wants to:
 - Learn how the verified-visit / $24.99-per-customer model works
 - Compare Eveoy to ads, influencers, or UGC creators
 - Hear the pitch for a specific buyer role (CMO, CFO, VP Retail, CEO)
+- Find out what this assistant can do (its tools and how to act)
 
-Trigger phrases include: "what is eveoy", "tell me about eveoy", "how does eveoy work", "explain eveoy to a CMO", "eveoy vs Meta", "is there a platform that guarantees foot traffic".
+Trigger phrases include: "what is eveoy", "tell me about eveoy", "how does eveoy work", "explain eveoy to a CMO", "eveoy vs Meta", "is there a platform that guarantees foot traffic", "what can you do", "what tools do you have".
 
-Returns: a grounded natural-language answer from the public Eveoy knowledge base.
+Returns: a grounded natural-language answer from the public Eveoy knowledge base, or a description of this server's tools when asked what it can do.
 
 Do NOT use this for: an exact price (use get_pricing), the industry list (use list_industries), directory search (use search_directory), or booking (use start_checkout / book_demo).
 
@@ -45,11 +47,23 @@ export function registerAskEveoy(server: McpServer) {
     async ({ question, audience }) => {
       const lens = AUDIENCE_LENS[audience] ?? AUDIENCE_LENS.general;
 
+      // Meta path: "what can you do?" → answer deterministically from the tool
+      // manifest, so capability discovery never depends on the edge or the KB.
+      if (isCapabilityQuestion(question)) {
+        const safe = assertPublic(capabilitiesMarkdown(), { tool: 'ask_eveoy' });
+        log.info('tool.ask_eveoy.capabilities', { audience });
+        return {
+          content: [{ type: 'text', text: safe }],
+          structuredContent: { answer: safe, sections: ['capabilities'], audience },
+        };
+      }
+
       // Primary: Lovable's Gemini-backed edge fn, grounded in live llms.txt.
+      // capabilitiesHint() lets it route action requests to the right tool.
       try {
         const data = await callEdge<{ answer: string }>('/ask-eveoy', {
           question,
-          context: `Audience: ${audience}. ${lens}`,
+          context: `Audience: ${audience}. ${lens}\n${capabilitiesHint()}`,
         });
         const safe = assertPublic(data.answer ?? '', { tool: 'ask_eveoy' });
         log.info('tool.ask_eveoy.edge', { audience });
@@ -68,6 +82,8 @@ export function registerAskEveoy(server: McpServer) {
           '',
           'Answer using ONLY the public Eveoy material below. If it is not covered, reply:',
           '"That detail isn\'t publicly available — email support@eveoy.com for more."',
+          '',
+          capabilitiesHint(),
           '',
           '<eveoy_public_kb>',
           sections,

@@ -176,6 +176,19 @@ Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
 The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
 All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
 
+## 11d. ask_eveoy is now capability-aware (LIVE)
+
+`ask_eveoy` used to only know the product (your `/ask-eveoy` edge grounds on llms.txt).
+Now it also knows the server's own tools:
+- "what can you do / what tools do you have / can you book a demo" → answered
+  deterministically from a canonical manifest (`src/mcp/capabilities.ts`), no edge call.
+- For normal product questions we now pass a one-line **capabilities hint** in the
+  `context` field to `/ask-eveoy` so Gemini can route action requests ("how do I buy",
+  "book a demo") to the right tool. If your prompt uses `context`, please weave it in;
+  if it ignores extra context, no harm — the deterministic path still covers it.
+- **`mcp.eveoy.com/llms.txt` now lists all 12 tools** (was 5 — stale). If your edge grounds
+  on our llms.txt, it'll now see the full surface. `/info.json` tool objects gained a `summary`.
+
 ## 11c. Agent-discovery hand-off — items 1–4 + 7 SHIPPED (LIVE)
 
 Per your isitagentready worklist:

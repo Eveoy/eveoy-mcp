@@ -10,12 +10,20 @@
 - MCP (legacy SSE): https://mcp.eveoy.com/sse  +  POST /sse/message
 - Server card: https://mcp.eveoy.com/.well-known/mcp/server-card.json
 
-## Tools (read-only, anonymous)
-- ask_eveoy — any question about Eveoy, grounded in the public knowledge base
+## Tools
+Read-only, anonymous unless noted.
+- ask_eveoy — any question about Eveoy, grounded in the public knowledge base; also describes what this server can do
 - get_pricing — exact pilot price; inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
+- start_checkout — create a Stripe Checkout link to buy a pilot (requires one-time sign-in)
+- book_demo — link to book a live Eveoy demo or talk to the team
+- check_order_status — look up the status of an existing order by reference
+- search_directory — search the Eveoy business directory by name, city, or category
+- get_business — fetch a single directory business listing
+- claim_business — claim a directory listing to verify ownership and see its contacts
 - list_industries — the 23+ sectors Eveoy serves
 - list_metros — Eveoy directory coverage (Los Angeles live; more coming)
 - get_app_link — the Eveoy shopper-app install link
+- subscribe_newsletter — subscribe an email to the Eveoy newsletter
 
 ## Prompts
 - /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake
