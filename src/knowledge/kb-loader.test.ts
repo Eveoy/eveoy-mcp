@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { pickKbForQuestion, loadKb, KB_KEYS } from './kb-loader';
+import { classify } from '../classifier/public-only';
 
 describe('pickKbForQuestion — keyword routing', () => {
   it('routes pricing questions to the pricing KB', () => {
@@ -18,5 +19,18 @@ describe('pickKbForQuestion — keyword routing', () => {
 
   it('every routable key resolves to non-empty content', () => {
     for (const k of KB_KEYS) expect(loadKb(k).length).toBeGreaterThan(20);
+  });
+
+  it('routes proof / testimonial questions to the validation KB', () => {
+    expect(pickKbForQuestion('do you have any testimonials?')).toContain('validation');
+    expect(pickKbForQuestion('who is Eveoy for?')).toContain('validation');
+    expect(pickKbForQuestion('show me proof it works')).toContain('validation');
+  });
+
+  it('no KB file trips the public-only classifier (no internal data leaks)', () => {
+    for (const k of KB_KEYS) {
+      const result = classify(loadKb(k));
+      expect(result.ok, `${k} tripped: ${result.hits.map((h) => h.id).join(', ')}`).toBe(true);
+    }
   });
 });

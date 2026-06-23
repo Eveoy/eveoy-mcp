@@ -189,6 +189,40 @@ Now it also knows the server's own tools:
 - **`mcp.eveoy.com/llms.txt` now lists all 12 tools** (was 5 — stale). If your edge grounds
   on our llms.txt, it'll now see the full surface. `/info.json` tool objects gained a `summary`.
 
+## 11e. ask_eveoy knowledge enrichment + CONFLICTS to reconcile (LIVE)
+
+I reviewed the internal Eveoy knowledge base and added **only public, site-confirmed**
+supporting context to the MCP's local KB (the fallback path). I held the line strictly:
+the live site is source of truth, and the fail-closed classifier blocks all internal data.
+
+**What I added (public-safe — mirror in your `/ask-eveoy` grounding if useful):**
+- Category statement + plain "what it is" (two-sided marketplace + SaaS + automated verification).
+- **Guaranteed-purchase add-on** (shopper buys a specified SKU, brand covers product cost, sale
+  flows through the brand's register) — this was missing from the MCP KB; it's on your site.
+- Glossary: verified visit, shopper, Action IRL, receipt, brief/campaign/order.
+- New `validation` KB section: exec quotes (Google / Wendy's, verbatim), sample campaigns
+  (Retail Reveal, Cafe Crowd, Shelf Sweep, Taco Turnout), who-it's-for / not-for, Insights link.
+- Company facts: Founder & CEO Brad Cowdrey; US offices; **sales email hello@eveoy.com**;
+  iOS/Android app links; LinkedIn.
+
+**Conflicts I found (site vs. internal vs. current MCP) — YOUR call to reconcile:**
+1. **Photos per visit.** Your site says **3 photos/visit** ("~1,200 photos / ~400 visits";
+   "3 photos" in the receipt bundle). The MCP pricing tool uses **2/customer** (Starter "80 photos
+   for 40"). These conflict. I did **not** change the pricing math (it must match eveoy.com/order
+   and the create-checkout contract). **Please confirm the correct number on /order** and I'll align
+   `get_pricing` + `/info.json`.
+2. **Legal entity.** Site schema `legalName` = **"Eveoy, Inc."**; internal docs say "EyCrowd, Inc."
+   I removed the entity from the KB to avoid asserting either. Confirm the correct public entity.
+3. **Receipts count.** Your Insights post says **"20,247 receipts."** MCP KB previously said 10,247
+   (stale) — I set it to "20,000+". Confirm the live number if you want it exact.
+4. **Time in store.** Confirmed **10+ minutes** across your homepage, schema FAQ, and llms.txt. (An
+   older internal doc said "15+ min / 60+ sec" — stale. I aligned one MCP line to "10+ minutes".)
+
+**What I deliberately EXCLUDED (internal — keep these out of public grounding too):**
+financials/burn/raise/margins, CAC figures, man-hours/$ invested, Project Y / Project Coach,
+AWS Marketplace/ULA specifics, Saudi entity & partners, patent counts, and the internal sales
+playbook. The MCP's classifier hard-blocks all of these; a test asserts no KB file trips it.
+
 ## 11c. Agent-discovery hand-off — items 1–4 + 7 SHIPPED (LIVE)
 
 Per your isitagentready worklist:

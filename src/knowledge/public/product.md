@@ -22,7 +22,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## What the brand pays for
 
 - ✓ Right customer type
-- ✓ 60+ seconds in store (10+ minutes for full payout)
+- ✓ 10+ minutes in store
 - ✓ Good photos and videos
 - ✓ Every task finished
 - ✓ Quality rating ≥ 4.0 / 5
@@ -38,3 +38,18 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## Brand ownership
 
 You own every photo and video forever. No licensing fees, no expiration, no restrictions.
+
+## Optional: guarantee a purchase, not just a visit
+
+Add a purchase activity and the shopper buys a specified SKU. The brand covers the product cost on top of the $24.99 visit fee, and the sale flows through the brand's own register. You get a guaranteed transaction, not just a guaranteed visit.
+
+## The receipt
+
+A receipt is the proof bundle from one verified visit: GPS arrival, time in store, photos, and video. It is not a sales receipt unless you added a purchase activity. A receipt is harder to fake than an impression — it says this real person walked in, stayed, did the activities, and brought back proof you own.
+
+## Plain-English glossary
+
+- **Verified visit** — the single unit Eveoy sells: one real consumer + correct store + 10+ minutes + completed activities + photo/video proof, all confirmed by the app. $24.99.
+- **Shopper** — a real, everyday US consumer who signed up to the Eveoy app and opted into a brand's visit. Compensated per visit for their time and travel. Not an influencer, gig worker, actor, or mystery shopper.
+- **Action IRL** — Eveoy's phrase for buying real-world action instead of digital attention. It maps to "verified in-store visit" — it is not a separate product or tier.
+- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, activities, and any guaranteed-purchase add-on. Created at https://eveoy.com/order.

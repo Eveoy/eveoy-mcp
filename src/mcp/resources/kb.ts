@@ -11,6 +11,7 @@ const TITLES: Record<KbKey, string> = {
   'ugc-ripple':'Eveoy — UGC ripple effect',
   sectors:    'Eveoy — Industries served',
   directory:  'Eveoy — Business directory',
+  validation: 'Eveoy — Proof, validation, and fit',
 };
 
 export function registerKbResources(server: McpServer) {

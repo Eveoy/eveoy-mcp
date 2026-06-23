@@ -28,7 +28,9 @@ const KEYWORDS: Array<{ kb: KbKey; words: RegExp }> = [
   { kb: 'why-now',    words: /\b(why|now|problem|trend|cac|cpc|cpm|attribution|opt[- ]?in|att|foot traffic)\b/i },
   // Leading-boundary stems only (no trailing \b) so "directory"/"metros"/"registries" match.
   { kb: 'directory',  words: /\bdirector|\blisting|\bregistr|\bmetro|\bdataset|\bstorefront|\bbulk export/i },
-  { kb: 'overview',   words: /\b(what|who|company|founders?|eveoy|eycrowd|tagline|headquarters?)\b/i },
+  { kb: 'overview',   words: /\b(what|who|company|founders?|eveoy|eycrowd|tagline|headquarters?|offices?|contact|app|email|linkedin)\b/i },
+  // Leading-boundary stems (no trailing \b) so plurals like "testimonials" match.
+  { kb: 'validation', words: /\bproof|\btestimonial|\bquote|\breview|\btrust|\bresult|\bexample|\bcampaign|\breputation|\blegit|who\b.{0,12}(for|use)/i },
 ];
 
 export function pickKbForQuestion(question: string): KbKey[] {

@@ -5,13 +5,17 @@
  */
 
 export const KB_CONTENT = {
-  'overview': String.raw`# Eveoy by EyCrowd — Overview
+  'overview': String.raw`# Eveoy — Overview
 
-**Eveoy is the experience marketing platform — the first built for verified in-store customer visits.** Brands pay only when real customers walk into their stores.
+**Eveoy is an experience marketing platform — the world's first built for verified in-store customer visits.** Brands pay only when real customers walk into their stores. Fill your stores and sell out of your products. Built for B2C brands.
 
 ## Tagline
 
 > Marketing was always a bet. We made it a sure thing.
+
+## What it is, plainly
+
+Eveoy is a two-sided marketplace and software platform with automated verification built in. Real US consumers from a 20,000+ verified community opt into brand visits; the brand briefs a campaign and reviews receipts in software; the platform confirms every visit by GPS, time in store, completed activities, and photo/video proof. No account managers, no staffing — the software runs the visit end to end. The single unit you buy is a **verified in-store visit** at **$24.99**.
 
 ## What you pay for
 
@@ -19,28 +23,32 @@ You pay **$24.99 per real customer** who:
 
 - Walks into your store (GPS-verified)
 - Spends 10+ minutes with your brand
-- Makes a purchase
 - Completes the activities you define
 - Delivers verified photos and video
 
 If any criterion isn't met, the visit is automatically refunded. No clicks, no impressions, no hope — just receipts.
 
+**Optional — guarantee a purchase, not just a visit.** Add a purchase activity and the shopper buys a specified SKU; the brand covers the product cost on top of the $24.99, and the sale flows through the brand's own register.
+
 ## Entry tier
 
-**Starter: $999 for 40 verified customers (plus 80 UGC photos) in one store.** Zero risk, no contracts, auto-refund on any no-show.
+**Starter: $999 for 40 verified customers in one store.** Zero risk, no contracts, auto-refund on any no-show.
 
 ## Company
 
-- **Product:** The Eveoy App, by EyCrowd, Inc.
+- **Product:** The Eveoy™ App
 - **Founder & CEO:** Brad Cowdrey
-- **Headquarters:** San Francisco, CA
-- **Web:** https://eveoy.com
-- **Contact:** support@eveoy.com
+- **Offices:** San Francisco, Los Angeles, Denver, Houston
+- **Web:** https://eveoy.com · **Directory:** https://eveoy.com/directory · **Insights:** https://eveoy.com/insights
+- **Apps:** iOS https://apps.apple.com/us/app/eveoy/id1641843518 · Android https://play.google.com/store/apps/details?id=com.eveoy.shopper
+- **LinkedIn:** https://www.linkedin.com/company/eveoy
+- **Support:** support@eveoy.com · **Sales:** hello@eveoy.com
 
 ## Receipts to date
 
-- 20,000+ verified shoppers
+- 20,000+ verified shoppers in the community
 - 10,000+ brand experiences delivered
+- 0 fake clicks billed
 - 100% refunded on no-shows
 `,
   'product': String.raw`# How Eveoy works
@@ -67,7 +75,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## What the brand pays for
 
 - ✓ Right customer type
-- ✓ 60+ seconds in store (10+ minutes for full payout)
+- ✓ 10+ minutes in store
 - ✓ Good photos and videos
 - ✓ Every task finished
 - ✓ Quality rating ≥ 4.0 / 5
@@ -83,6 +91,21 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 ## Brand ownership
 
 You own every photo and video forever. No licensing fees, no expiration, no restrictions.
+
+## Optional: guarantee a purchase, not just a visit
+
+Add a purchase activity and the shopper buys a specified SKU. The brand covers the product cost on top of the $24.99 visit fee, and the sale flows through the brand's own register. You get a guaranteed transaction, not just a guaranteed visit.
+
+## The receipt
+
+A receipt is the proof bundle from one verified visit: GPS arrival, time in store, photos, and video. It is not a sales receipt unless you added a purchase activity. A receipt is harder to fake than an impression — it says this real person walked in, stayed, did the activities, and brought back proof you own.
+
+## Plain-English glossary
+
+- **Verified visit** — the single unit Eveoy sells: one real consumer + correct store + 10+ minutes + completed activities + photo/video proof, all confirmed by the app. $24.99.
+- **Shopper** — a real, everyday US consumer who signed up to the Eveoy app and opted into a brand's visit. Compensated per visit for their time and travel. Not an influencer, gig worker, actor, or mystery shopper.
+- **Action IRL** — Eveoy's phrase for buying real-world action instead of digital attention. It maps to "verified in-store visit" — it is not a separate product or tier.
+- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, activities, and any guaranteed-purchase add-on. Created at https://eveoy.com/order.
 `,
   'pricing': String.raw`# Eveoy pricing
 
@@ -186,12 +209,12 @@ To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activitie
 Every $24.99 visit triggers compounding organic effects:
 
 1. **Social amplification.** Shoppers share authentic in-store content on personal social media. A customer with 500 followers acts like a micro-influencer post — at $24.99 instead of $100–$500.
-2. **Network effect.** Referred customers have ~16% higher LTV and are 4x more likely to refer others.
+2. **Network effect.** Referred customers have ~16% higher LTV and are 4x more likely to refer others (industry benchmark).
 3. **Brand-owned content library.** A $999 pilot delivers ~40 customers' worth of verified photos and video. At market UGC rates of $150–$300/piece, the content alone has $6K–$12K+ replacement value.
 4. **Algorithmic advantage.** Authentic UGC gets higher engagement, lower CPMs, and better conversion when reused in paid campaigns.
 5. **Local SEO signals.** GPS-verified visits boost Google Maps visibility and local search.
 6. **First-party data.** Each visit creates an opportunity for email capture, loyalty enrollment, and CRM engagement.
-7. **Receipts as trust.** 10,247 receipts issued this year and 0 fake clicks billed is a track record competitors can't manufacture.
+7. **Receipts as trust.** 20,000+ receipts issued and 0 fake clicks billed is a track record competitors can't manufacture.
 `,
   'sectors': String.raw`# Industries served
 
@@ -238,6 +261,51 @@ A free, live, searchable list of every active consumer brand, store, and busines
 - Book a demo for bulk exports, API access, and custom data slices
 
 The directory is a separate surface from Eveoy's core product (verified in-store customer visits at $24.99). It's a public data resource that helps brands and agents find real-world businesses.
+`,
+  'validation': String.raw`# Proof, validation, and who Eveoy is for
+
+## The receipts
+
+- 20,000+ verified shoppers in the community
+- 10,000+ brand experiences delivered
+- 0 fake clicks billed
+- 100% refunded on no-shows
+
+These are receipts, not projections: every number ties back to a real customer who crossed a real threshold.
+
+## What people who've spent billions on ads said
+
+- "Wow. This is something I have never seen before." — Fmr. Marketing Director, Google
+- "Love the app — most innovative this year!" — Fmr. Chief Marketing Officer, Wendy's
+
+## Sample campaigns
+
+- **Retail Reveal** — Los Angeles, CA
+- **Cafe Crowd** — Las Vegas, NV
+- **Shelf Sweep** — Los Angeles, CA
+- **Taco Turnout** — Temecula, CA
+
+## Who it's for
+
+- Retail brands with owned stores, flagships, or showrooms
+- CPG brands with shelf placement in third-party retailers (grocery, mass, drug, specialty)
+- Hospitality — restaurants, cafés, bars, hotels, experiences
+- Local and regional chains that need predictable foot traffic
+- DTC brands opening physical retail, pop-ups, or wholesale
+- Event, sampling, and activation teams running launches or seasonal pushes
+
+Eveoy serves B2C brands with a physical presence in the United States.
+
+## Where it's not the right fit
+
+- Pure e-commerce with no physical footprint
+- B2B or enterprise sales motions
+- Markets outside the United States
+- Buyers looking for impressions, clicks, or influencer-style sponsored posts
+
+## Read more
+
+Eveoy Insights covers the thinking behind the model — https://eveoy.com/insights
 `,
 } as const;
 
