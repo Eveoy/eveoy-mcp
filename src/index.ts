@@ -22,7 +22,7 @@ const SERVER_INSTRUCTIONS =
  */
 export class EveoyMCP extends McpAgent<Env> {
   server = new McpServer(
-    { name: 'eveoy-mcp', version: '1.0.0' },
+    { name: 'eveoy-mcp', version: '1.0.1' },
     { instructions: SERVER_INSTRUCTIONS },
   );
 

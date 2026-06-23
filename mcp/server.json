@@ -3,7 +3,7 @@
   "name": "com.eveoy/mcp",
   "title": "Eveoy — Verified In-Store Foot Traffic ($24.99/customer)",
   "description": "Ask about Eveoy and book pilots — $24.99 per verified in-store customer, auto-refund.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://mcp.eveoy.com",
   "repository": {
     "url": "https://github.com/eveoy/eveoy-mcp",
@@ -56,7 +56,7 @@
       "supportEmail": "support@eveoy.com",
       "docsUrl": "https://mcp.eveoy.com",
       "termsUrl": "https://eveoy.com/terms",
-      "privacyUrl": "https://mcp.eveoy.com/privacy"
+      "privacyUrl": "https://eveoy.com/privacy"
     }
   }
 }
