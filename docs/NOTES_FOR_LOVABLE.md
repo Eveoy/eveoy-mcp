@@ -49,7 +49,7 @@ All tools are **anonymous** today (no OAuth). Writes carry confirm-hint annotati
 | `check_order_status` | none | `/get-order-summary` | masked order lookup |
 | `subscribe_newsletter` | none (write) | `/subscribe-beehiiv` | newsletter opt-in |
 | `claim_business` | none (write) | `/unlock-business` | claim/contact reveal — exact parity, no writeback fn |
-| `start_checkout` | none (write) | `/create-checkout-session` | returns Stripe Checkout URL |
+| `start_checkout` | **OAuth (sign-in handoff)** | `/create-checkout-session` | signed-in → Stripe URL; else returns a sign_in_url |
 
 OAuth discovery URL: **not enabled** (Phase 1 anonymous). If we later gate the
 write tools, the MCP stands up its own AS at
@@ -175,6 +175,23 @@ Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
 
 The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
 All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
+
+## 11b. Authenticated checkout — the sign-in handoff (Phase 2b, LIVE)
+
+`create-checkout-session` now requires a user JWT. The MCP gates ONLY `start_checkout`
+(reads stay anonymous). Flow, using your `/mcp-link` handoff:
+
+1. `start_checkout` (no JWT) returns a `sign_in_url`:
+   `https://eveoy.com/auth?next=%2Fmcp-link%3Fcallback%3D<enc(https://mcp.eveoy.com/link/callback)>%26state%3D<signed>`
+2. User signs in at eveoy.com → you 302 to `https://mcp.eveoy.com/link/callback#access_token=…&state=…`
+3. Our bridge page reads the fragment, POSTs the token to `/link/finish`, which verifies the
+   HMAC-signed `state` (binds to one MCP session) and RPCs the JWT into that session's DO.
+4. Next `start_checkout` call sends `Authorization: Bearer <jwt>` + `apikey: <anon>` to
+   `create-checkout-session`.
+
+**Callback path we use: `https://mcp.eveoy.com/link/callback`** — covered by your existing
+`https://mcp.eveoy.com` callback allowlist (origin match). No new origins needed. The `state`
+round-trips unchanged (we sign+verify it). Tokens never touch our logs or any URL we store.
 
 ## 11. How to change behavior (no Worker redeploy needed)
 
