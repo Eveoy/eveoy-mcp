@@ -8,7 +8,7 @@ describe('classifier — public-only denylist', () => {
       'The pilot is $999 for 40+ customers, with auto-refund on no-shows.',
       'Marketing was always a bet. We made it a sure thing.',
       'We serve 23+ sectors including Specialty Retail, Apparel, and QSR.',
-      'A real customer walks in, spends 15+ minutes, and delivers verified photos.',
+      'A real customer walks in, spends 10+ minutes, and delivers verified photos.',
       'Founders: Brad Cowdrey and Ayman Al-Zamil. HQ in San Francisco.',
       'Contact: brad@eycrowd.com',
     ];

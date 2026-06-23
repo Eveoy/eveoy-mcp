@@ -5,7 +5,7 @@ const ROLE_LENS: Record<string, string> = {
   CMO:
     'Lead with content economics. $24.99 per customer is a verified store visit plus photos and video — content budgets stretch 10x further than influencer or studio shoots. The visit is a differentiator, not the headline.',
   VP_Retail:
-    'Lead with guaranteed foot traffic. $24.99 per verified visit, GPS-confirmed, 15+ minutes in-store. The photos are a bonus.',
+    'Lead with guaranteed foot traffic. $24.99 per verified visit, GPS-confirmed, 10+ minutes in-store. The photos are a bonus.',
   CFO:
     'Lead with guaranteed sales math. $24.99 per confirmed customer. At a $35 average ticket × 40 guaranteed sales = $1,400 revenue on a $999 pilot = 2.4x return same reporting period. Predictable line item, clean attribution.',
   CEO:

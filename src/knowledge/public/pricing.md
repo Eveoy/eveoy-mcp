@@ -13,7 +13,7 @@ You pick:
 - **Locations** — min 1, max 50
 - **Campaign start date** — at least 14 days from today
 
-Every customer also returns **~2 quality-rated UGC photos** (e.g. 40 customers → 80 photos), yours to keep forever.
+Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 customers → 80 photos), yours to keep forever. Brands can add a photo bonus at eveoy.com/order — **+1 photo per +$20, max +3 extra per shopper**. (The "~3 photos per visit" line on the marketing site reflects a typical configured bundle with a small bonus added; the base SKU is 2.)
 
 ## Published tiers
 

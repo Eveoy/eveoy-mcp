@@ -36,7 +36,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 
 ## Company
 
-- **Product:** The Eveoy™ App
+- **Company:** Eveoy, Inc. — The Eveoy™ App
 - **Founder & CEO:** Brad Cowdrey
 - **Offices:** San Francisco, Los Angeles, Denver, Houston
 - **Web:** https://eveoy.com · **Directory:** https://eveoy.com/directory · **Insights:** https://eveoy.com/insights
@@ -122,7 +122,7 @@ You pick:
 - **Locations** — min 1, max 50
 - **Campaign start date** — at least 14 days from today
 
-Every customer also returns **~2 quality-rated UGC photos** (e.g. 40 customers → 80 photos), yours to keep forever.
+Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 customers → 80 photos), yours to keep forever. Brands can add a photo bonus at eveoy.com/order — **+1 photo per +$20, max +3 extra per shopper**. (The "~3 photos per visit" line on the marketing site reflects a typical configured bundle with a small bonus added; the base SKU is 2.)
 
 ## Published tiers
 
@@ -214,7 +214,7 @@ Every $24.99 visit triggers compounding organic effects:
 4. **Algorithmic advantage.** Authentic UGC gets higher engagement, lower CPMs, and better conversion when reused in paid campaigns.
 5. **Local SEO signals.** GPS-verified visits boost Google Maps visibility and local search.
 6. **First-party data.** Each visit creates an opportunity for email capture, loyalty enrollment, and CRM engagement.
-7. **Receipts as trust.** 20,000+ receipts issued and 0 fake clicks billed is a track record competitors can't manufacture.
+7. **Receipts as trust.** 20,247 receipts issued and 0 fake clicks billed is a track record competitors can't manufacture.
 `,
   'sectors': String.raw`# Industries served
 
@@ -268,6 +268,7 @@ The directory is a separate surface from Eveoy's core product (verified in-store
 
 - 20,000+ verified shoppers in the community
 - 10,000+ brand experiences delivered
+- 20,247 receipts issued
 - 0 fake clicks billed
 - 100% refunded on no-shows
 

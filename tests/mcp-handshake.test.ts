@@ -38,6 +38,7 @@ describe('MCP register — end-to-end metadata sanity', () => {
       'claim_business',
       'get_app_link',
       'get_business',
+      'get_case_studies',
       'get_pricing',
       'list_industries',
       'list_metros',

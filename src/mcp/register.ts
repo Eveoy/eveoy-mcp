@@ -7,6 +7,7 @@ import { registerGetAppLink } from './tools/get-app-link';
 import { registerBookDemo } from './tools/book-demo';
 import { registerSearchDirectory } from './tools/search-directory';
 import { registerGetBusiness } from './tools/get-business';
+import { registerGetCaseStudies } from './tools/get-case-studies';
 import { registerCheckOrderStatus } from './tools/check-order-status';
 import { registerSubscribeNewsletter } from './tools/subscribe-newsletter';
 import { registerClaimBusiness } from './tools/claim-business';
@@ -28,6 +29,7 @@ const TOOLS: Registration[] = [
   { name: 'list_metros',          register: registerListMetros },
   { name: 'get_app_link',         register: registerGetAppLink },
   { name: 'book_demo',            register: registerBookDemo },
+  { name: 'get_case_studies',     register: registerGetCaseStudies },  // eveoy.com/newsletter sitemap (links only)
   // Read — Supabase edge fns
   { name: 'search_directory',     register: registerSearchDirectory }, // /directory-query
   { name: 'get_business',         register: registerGetBusiness },     // /directory-business
@@ -37,7 +39,6 @@ const TOOLS: Registration[] = [
   { name: 'claim_business',       register: registerClaimBusiness },       // /unlock-business
   // start_checkout is registered separately in EveoyMCP.init() — it needs the
   // agent instance for per-session JWT state (see src/index.ts).
-  // Pending Lovable: get_case_studies (source TBD)
 ];
 
 const RESOURCE_GROUPS: Registration[] = [

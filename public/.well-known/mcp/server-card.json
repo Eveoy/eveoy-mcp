@@ -4,7 +4,7 @@
     "name": "eveoy-mcp",
     "version": "1.0.1",
     "title": "Eveoy — Verified In-Store Foot Traffic",
-    "vendor": "EyCrowd, Inc.",
+    "vendor": "Eveoy, Inc.",
     "documentation": "https://eveoy.com",
     "icons": [
       { "src": "https://mcp.eveoy.com/icon-512.png", "sizes": "512x512", "mimeType": "image/png" }

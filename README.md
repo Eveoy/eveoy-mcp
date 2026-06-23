@@ -4,7 +4,7 @@
 >
 > Real customers · in real stores · from any AI.
 
-The official Eveoy MCP server — a **native Cloudflare Worker** (`McpAgent` + Durable Objects). You don't pay for tokens. You don't pay for clicks. You don't pay for hope. You pay **$24.99** per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it.
+The official Eveoy MCP server — a **native Cloudflare Worker** (`McpAgent` + Durable Objects). You don't pay for tokens. You don't pay for clicks. You don't pay for hope. You pay **$24.99** per real customer who walked into your store, spent 10 minutes, and brought back the photos to prove it.
 
 **Endpoint** `https://mcp.eveoy.com/mcp` · Streamable HTTP (MCP spec `2025-06-18`)
 
@@ -125,4 +125,4 @@ Submission order and levers: [`docs/REGISTRY_SUBMISSION_CHECKLIST.md`](docs/REGI
 
 ## License
 
-Proprietary. © The Eveoy™ MCP by EyCrowd, Inc.
+Proprietary. © The Eveoy™ MCP by Eveoy, Inc.

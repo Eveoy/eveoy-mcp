@@ -162,6 +162,28 @@ export const AskEveoyOutput = z.object({
   audience: z.string(),
 });
 
+// ─── get_case_studies (newsletter archive on eveoy.com — links only) ─
+
+const CASE_STUDY_KINDS = ['case_study', 'lookbook', 'playbook'] as const;
+
+export const GetCaseStudiesInput = z.object({
+  kind: z.enum(CASE_STUDY_KINDS).optional()
+    .describe('Filter to one kind: case_study, lookbook, or playbook. Omit to return all.'),
+  limit: z.number().int().min(1).max(100).optional()
+    .describe('Max items to return (1–100). Omit to return all.'),
+}).strict();
+
+export const GetCaseStudiesOutput = z.object({
+  archive_url: z.string(),
+  items: z.array(z.object({
+    kind: z.enum(CASE_STUDY_KINDS),
+    slug: z.string(),
+    title: z.string(),
+    url: z.string(),
+  })),
+  note: z.string(),
+});
+
 // ─── Phase 2 — locked spec, not yet wired ──────────────────────────
 // Mirrors the Supabase edge function `create-checkout-session` body
 // shape exactly, plus the contact fields eveoy.com/order currently

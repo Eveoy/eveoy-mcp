@@ -5,7 +5,7 @@ const OBJECTIONS_HINT: Record<string, string> = {
   too_expensive:
     'Compare $24.99 to à la carte ($165–$530+ per equivalent outcome) and to influencer/UGC ($100–$10K with zero guarantee). Lead with the auto-refund.',
   cant_measure:
-    'Anchor on the receipt model: GPS-verified visit, 15+ min in-store, AI-quality-rated content, POS-correlated revenue. 10,247 receipts issued YTD, 0 fake clicks billed.',
+    'Anchor on the receipt model: GPS-verified visit, 10+ min in-store, AI-quality-rated content, POS-correlated revenue. 20,247 receipts issued, 0 fake clicks billed.',
   not_in_my_industry:
     'Run the list_industries tool. 23+ sectors served including specialty retail, apparel, F&B, beauty, pet, hospitality. Mechanics are sector-agnostic.',
   brand_safety:

@@ -4,6 +4,7 @@
 
 - 20,000+ verified shoppers in the community
 - 10,000+ brand experiences delivered
+- 20,247 receipts issued
 - 0 fake clicks billed
 - 100% refunded on no-shows
 

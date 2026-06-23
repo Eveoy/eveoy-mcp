@@ -30,6 +30,14 @@ export const CAPABILITIES: Capability[] = [
     auth: 'none',
   },
   {
+    name: 'get_case_studies',
+    title: 'List case studies & lookbooks',
+    summary: 'List Eveoy case studies and lookbooks — links to the full write-ups on eveoy.com.',
+    group: 'Ask & learn',
+    triggers: ['case studies', 'success stories', 'show me results', 'lookbook'],
+    auth: 'none',
+  },
+  {
     name: 'get_pricing',
     title: 'Get exact pricing',
     summary: 'Calculate the exact pilot price for N shoppers per location across M locations ($24.99 each, $999 Starter floor).',

@@ -189,7 +189,7 @@ Now it also knows the server's own tools:
 - **`mcp.eveoy.com/llms.txt` now lists all 12 tools** (was 5 — stale). If your edge grounds
   on our llms.txt, it'll now see the full surface. `/info.json` tool objects gained a `summary`.
 
-## 11e. ask_eveoy knowledge enrichment + CONFLICTS to reconcile (LIVE)
+## 11e. ask_eveoy KB enrichment, reconciliation (LOCKED), + get_case_studies (LIVE)
 
 I reviewed the internal Eveoy knowledge base and added **only public, site-confirmed**
 supporting context to the MCP's local KB (the fallback path). I held the line strictly:
@@ -205,18 +205,26 @@ the live site is source of truth, and the fail-closed classifier blocks all inte
 - Company facts: Founder & CEO Brad Cowdrey; US offices; **sales email hello@eveoy.com**;
   iOS/Android app links; LinkedIn.
 
-**Conflicts I found (site vs. internal vs. current MCP) — YOUR call to reconcile:**
-1. **Photos per visit.** Your site says **3 photos/visit** ("~1,200 photos / ~400 visits";
-   "3 photos" in the receipt bundle). The MCP pricing tool uses **2/customer** (Starter "80 photos
-   for 40"). These conflict. I did **not** change the pricing math (it must match eveoy.com/order
-   and the create-checkout contract). **Please confirm the correct number on /order** and I'll align
-   `get_pricing` + `/info.json`.
-2. **Legal entity.** Site schema `legalName` = **"Eveoy, Inc."**; internal docs say "EyCrowd, Inc."
-   I removed the entity from the KB to avoid asserting either. Confirm the correct public entity.
-3. **Receipts count.** Your Insights post says **"20,247 receipts."** MCP KB previously said 10,247
-   (stale) — I set it to "20,000+". Confirm the live number if you want it exact.
-4. **Time in store.** Confirmed **10+ minutes** across your homepage, schema FAQ, and llms.txt. (An
-   older internal doc said "15+ min / 60+ sec" — stale. I aligned one MCP line to "10+ minutes".)
+**Conflicts — RECONCILED (locked by Lovable, applied across the MCP):**
+1. **Photos per visit → 2 base, +bonus.** `get_pricing` stays at **2 photos/shopper base**; added a
+   note: "+1 photo per +$20, max +3 extra, at eveoy.com/order." The marketing "3/visit" is a typical
+   configured bundle, not the base SKU. Matches the create-checkout contract.
+2. **Legal entity → "Eveoy, Inc."** Applied everywhere public (KB, server.json vendor, server-card,
+   dxt manifest, README). (Heads-up: you mentioned a stale "EyCrowd, Inc." footer on PilotMarketing.tsx.)
+3. **Receipts → 20,247 exactly** (KB, prompts). Dropped the "20,000+" rounding for the receipts count;
+   "20,000+ verified shoppers" stays (that's the community size, a different metric).
+4. **Time in store → 10+ minutes** everywhere. Purged the last stale "15+ min" refs (two prompts,
+   README, dxt long_description, a test fixture).
+
+**get_case_studies — SHIPPED (per §6.2, built against the real sitemap).**
+Live: returns 28 items (27 case studies + the lookbook). `{ archive_url, items:[{kind,slug,title,url}], note }`.
+- Discovery follows the sitemap **index** → same-host child (`sitemap-pages.xml`); skips the 629k
+  directory sitemap on Supabase; 10-min edge cache.
+- **One spec deviation, by necessity:** the lookbook's canonical sitemap URL is
+  `https://eveoy.com/lookbook/issue-01-real-people` (NOT `/newsletter/lookbook-issue-1`). The tool
+  returns the real sitemap URL so links always resolve. If you'd rather it return `/newsletter/...`,
+  add that to the sitemap (or tell me) and I'll switch — right now I trust the sitemap as truth.
+- `kind:"playbook"` returns `items: []` with a note pointing at the archive (none published yet).
 
 **What I deliberately EXCLUDED (internal — keep these out of public grounding too):**
 financials/burn/raise/margins, CAC figures, man-hours/$ invested, Project Y / Project Coach,
