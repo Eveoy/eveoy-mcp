@@ -58,14 +58,16 @@ This server speaks public Eveoy only. A versioned classifier in [`src/classifier
 mcp.eveoy.com  (Worker Custom Domain)
    │
    ▼  one Worker (src/index.ts)
- ├─ static assets (public/)         landing, /privacy, icons,
- │    served free from the edge       /.well-known/server-card.json,
- │    run_worker_first: /mcp,/sse,/health   robots.txt, sitemap.xml, eveoy.dxt
+ ├─ "/" → proxied to Lovable's mcp-landing edge fn (marketing source of truth)
+ ├─ /info.json            live tool list + pricing + industries (for the landing)
+ ├─ static assets (public/)         /privacy, icons, /.well-known/server-card.json,
+ │    served free from the edge       robots.txt, sitemap.xml, llms.txt, eveoy.dxt
  ├─ EveoyMCP  (McpAgent + Durable Object + SQLite)
  │    wraps the official SDK McpServer; session state + SSE resumability
  │    serve('/mcp') = Streamable HTTP · serveSSE('/sse') = legacy
+ │    start_checkout gated by sign-in handoff (/link/callback, /link/finish)
  ├─ KV (CACHE)            15-min eveoy.com fetch cache (Phase 3)
- ├─ Rate Limit binding    per-IP soft limit (120/60s)
+ ├─ Rate Limit binding    per-IP soft limit (60/60s)
  └─ Phase 2: @cloudflare/workers-oauth-provider for write-tool auth
 ```
 

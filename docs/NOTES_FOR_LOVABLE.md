@@ -176,6 +176,21 @@ Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
 The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
 All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
 
+## 11a. Landing page is yours (proxied) + /info.json for live data (LIVE)
+
+- `GET /` and `/index.html` on `mcp.eveoy.com` now **proxy verbatim** to your
+  `https://…/functions/v1/mcp-landing` edge fn (Cache-Control honored; `cf` edge
+  cache 300s). The Worker forces `Content-Type: text/html` (your fn currently
+  returns `text/plain` — harmless, but you may want to fix the header). `public/index.html`
+  is deleted — the landing is 100% yours now; iterate in Lovable, no Worker change.
+- Everything else stays on the Worker: `/privacy`, `/llms.txt`, `/sitemap.xml`,
+  `/robots.txt`, `/.well-known/*`, `/favicon.png`, `/icon-512.png`, `/wordmark.png`,
+  `/og-image.svg`, `/eveoy.dxt`.
+- **`GET https://mcp.eveoy.com/info.json`** (CORS `*`, cached 5 min) — live snapshot
+  so your landing stays in sync without the MCP handshake:
+  `{ version, endpoint, transports, tools:[{name,title,auth}], prompts, pricing:{unit_usd,tiers}, industries }`.
+  Fetch it server-side in `mcp-landing` to render the tool list / pricing.
+
 ## 11b. Authenticated checkout — the sign-in handoff (Phase 2b, LIVE)
 
 `create-checkout-session` now requires a user JWT. The MCP gates ONLY `start_checkout`

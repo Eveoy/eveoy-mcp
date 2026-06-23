@@ -5,6 +5,7 @@ import { setRuntimeConfig, config } from '@/config';
 import { registerAll } from '@/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '@/mcp/tools/start-checkout';
 import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
+import { buildInfo } from '@/info';
 import { extractIp, hashIp } from '@/lib/ipc';
 import { log } from '@/lib/log';
 
@@ -127,6 +128,35 @@ function withSecurity(resp: Response, origin: string | null): Response {
   return new Response(resp.body, { status: resp.status, statusText: resp.statusText, headers });
 }
 
+const LANDING_UPSTREAM = 'https://ascyiwwrflizprjypxxr.supabase.co/functions/v1/mcp-landing';
+
+/** Proxy the landing page from Lovable's Supabase edge fn (the marketing source of truth). */
+async function proxyLanding(method: string): Promise<Response> {
+  try {
+    const upstream = await fetch(LANDING_UPSTREAM, {
+      method,
+      headers: { Accept: 'text/html' },
+      cf: { cacheTtl: 300, cacheEverything: true },
+    });
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': upstream.headers.get('cache-control') ?? 'public, max-age=300',
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+      },
+    });
+  } catch (err) {
+    log.error('landing.proxy_failed', { error: String(err) });
+    return new Response('Eveoy MCP — https://mcp.eveoy.com/mcp', {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  }
+}
+
 async function softRateLimit(request: Request, env: Env): Promise<boolean> {
   if (!env.MCP_LIMIT) return true; // binding absent (local dev) → allow
   try {
@@ -156,6 +186,18 @@ export default {
       );
     }
 
+    // Public snapshot of the MCP surface (tools, pricing, industries) for the
+    // Lovable landing + any client. Open CORS — it's public discovery data.
+    if (url.pathname === '/info.json') {
+      return new Response(JSON.stringify(buildInfo()), {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'public, max-age=300, s-maxage=3600',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    }
+
     // MCP — Streamable HTTP (current spec)
     if (url.pathname === '/mcp') {
       if (!(await softRateLimit(request, env))) {
@@ -181,7 +223,14 @@ export default {
       return withSecurity(resp, origin);
     }
 
-    // Everything else → static assets (landing, /privacy, icons, /.well-known, etc.)
+    // Landing page is owned by Lovable (Supabase edge fn). Proxy GET/HEAD "/" and
+    // "/index.html" verbatim so marketing/SEO iteration happens in one place.
+    if ((request.method === 'GET' || request.method === 'HEAD') &&
+        (url.pathname === '/' || url.pathname === '/index.html')) {
+      return proxyLanding(request.method);
+    }
+
+    // Everything else → static assets (icons, /privacy, /llms.txt, /.well-known, etc.)
     if (env.ASSETS) return env.ASSETS.fetch(request);
     log.warn('assets.unbound', { path: url.pathname });
     return new Response('Not found', { status: 404 });
