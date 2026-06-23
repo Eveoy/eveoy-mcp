@@ -3,6 +3,8 @@ import { McpAgent } from 'agents/mcp';
 import type { Env } from '../worker-env';
 import { setRuntimeConfig, config } from '@/config';
 import { registerAll } from '@/mcp/register';
+import { registerStartCheckout, type AuthAgent } from '@/mcp/tools/start-checkout';
+import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
 import { extractIp, hashIp } from '@/lib/ipc';
 import { log } from '@/lib/log';
 
@@ -11,26 +13,41 @@ const SERVER_INSTRUCTIONS =
   '($24.99/customer). You don\'t pay for clicks, impressions, or hope. You pay $24.99 per real ' +
   'customer who walked into your store, spent 10 minutes, made a purchase, and brought back the ' +
   'photos to prove it (~2 UGC photos each). Published tiers: Starter $999 (40 customers), ' +
-  'Proof $2,499 (100), Rollout $9,996 (400+). Use ask_eveoy for any question, get_pricing for an ' +
-  'exact quote (inputs mirror eveoy.com/order), list_industries to confirm coverage. Read-only and ' +
-  'anonymous today; write tools (book_demo, claim_business, start_checkout) arrive in Phase 2 behind OAuth 2.1.';
+  'Proof $2,499 (100), Rollout $9,996 (400+). Read tools are anonymous; start_checkout requires ' +
+  'sign-in (it returns a sign_in_url when needed). Use ask_eveoy for any question, get_pricing for ' +
+  'an exact quote, search_directory/list_metros for the business directory.';
+
+/** Per-session state, persisted in this session's Durable Object (SQLite). */
+export interface EveoyState {
+  jwt?: string;
+  jwtExp?: number;
+}
 
 /**
- * McpAgent wraps the official SDK McpServer. Tool/resource/prompt registration
- * is identical to the prior build — registerAll() is unchanged. Session state +
- * SSE resumability are provided by the Durable Object (binding MCP_OBJECT).
+ * McpAgent wraps the official SDK McpServer. Each Mcp-Session-Id maps to its own
+ * Durable Object, so `this.state` is per-session. The sign-in handoff RPCs a
+ * Supabase JWT into this state via setUserJwt(); start_checkout reads it.
  */
-export class EveoyMCP extends McpAgent<Env> {
+export class EveoyMCP extends McpAgent<Env, EveoyState> {
   server = new McpServer(
     { name: 'eveoy-mcp', version: '1.0.1' },
     { instructions: SERVER_INSTRUCTIONS },
   );
+
+  initialState: EveoyState = {};
 
   async init() {
     // Tools run in THIS Durable Object isolate, so config must be set here
     // (the fetch-handler's setRuntimeConfig ran in the separate Worker isolate).
     setRuntimeConfig(this.env);
     registerAll(this.server);
+    // start_checkout needs the agent instance for per-session JWT state.
+    registerStartCheckout(this.server, this as unknown as AuthAgent);
+  }
+
+  /** Called via DO RPC from /link/finish after the user signs in at eveoy.com. */
+  async setUserJwt(jwt: string, exp?: number): Promise<void> {
+    this.setState({ jwt, jwtExp: exp });
   }
 }
 
@@ -67,6 +84,7 @@ function originAllowed(origin: string | null): boolean {
   if (ALLOWED_ORIGINS.has(origin)) return true;
   try {
     const { hostname } = new URL(origin);
+    if (hostname === config().canonicalHost) return true; // same-origin (e.g. /link/finish from the bridge page)
     return hostname === 'localhost' || ALLOWED_ORIGIN_SUFFIXES.some((s) => hostname.endsWith(s));
   } catch {
     return false;
@@ -150,6 +168,16 @@ export default {
     // Legacy SSE transport (older clients)
     if (url.pathname === '/sse' || url.pathname === '/sse/message') {
       const resp = await EveoyMCP.serveSSE('/sse').fetch(request, env, ctx);
+      return withSecurity(resp, origin);
+    }
+
+    // Sign-in handoff (start_checkout): eveoy.com redirects the browser here with
+    // the Supabase JWT in the URL fragment; the bridge page POSTs it to /link/finish.
+    if (url.pathname === '/link/callback') {
+      return handleLinkCallback();
+    }
+    if (url.pathname === '/link/finish' && request.method === 'POST') {
+      const resp = await handleLinkFinish(request, env);
       return withSecurity(resp, origin);
     }
 

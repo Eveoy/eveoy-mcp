@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAll } from '../src/mcp/register';
+import { registerStartCheckout, type AuthAgent } from '../src/mcp/tools/start-checkout';
 
 /**
  * Integration test: register every tool/resource/prompt onto a real
@@ -13,6 +14,10 @@ import { registerAll } from '../src/mcp/register';
 describe('MCP register — end-to-end metadata sanity', () => {
   const server = new McpServer({ name: 'eveoy', version: '1.0.0' });
   registerAll(server);
+  // start_checkout is registered with the agent instance in production (init());
+  // register it here with a mock agent so the full surface is asserted.
+  const mockAgent: AuthAgent = { state: {}, getSessionId: () => 'test-session', setState: () => {} };
+  registerStartCheckout(server, mockAgent);
 
   const internal = server as unknown as {
     _registeredTools: Record<string, { description?: string; inputSchema?: unknown }>;

@@ -20,7 +20,11 @@ export class EdgeError extends Error {
   }
 }
 
-export async function callEdge<T = unknown>(path: string, body: unknown): Promise<T> {
+export async function callEdge<T = unknown>(
+  path: string,
+  body: unknown,
+  authToken?: string,
+): Promise<T> {
   const { supabaseUrl, supabaseAnonKey } = config();
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new EdgeError(503, path, 'backend not configured (SUPABASE_URL / SUPABASE_ANON_KEY missing)');
@@ -31,8 +35,11 @@ export async function callEdge<T = unknown>(path: string, body: unknown): Promis
     r = await fetch(url, {
       method: 'POST',
       headers: {
+        // apikey is always the publishable anon key (Supabase gateway requirement).
+        // Authorization carries the END USER's JWT for authenticated edge fns,
+        // else the anon key for public ones.
         apikey: supabaseAnonKey,
-        Authorization: `Bearer ${supabaseAnonKey}`,
+        Authorization: `Bearer ${authToken ?? supabaseAnonKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),

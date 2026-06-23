@@ -10,7 +10,6 @@ import { registerGetBusiness } from './tools/get-business';
 import { registerCheckOrderStatus } from './tools/check-order-status';
 import { registerSubscribeNewsletter } from './tools/subscribe-newsletter';
 import { registerClaimBusiness } from './tools/claim-business';
-import { registerStartCheckout } from './tools/start-checkout';
 import { registerKbResources } from './resources/kb';
 import { registerPitchForRolePrompt } from './prompts/pitch-for-role';
 import { registerPilotScopeIntakePrompt } from './prompts/pilot-scope-intake';
@@ -36,7 +35,8 @@ const TOOLS: Registration[] = [
   // Write — Supabase edge fns (anon + rate-limited; confirm-hint annotations)
   { name: 'subscribe_newsletter', register: registerSubscribeNewsletter }, // /subscribe-beehiiv
   { name: 'claim_business',       register: registerClaimBusiness },       // /unlock-business
-  { name: 'start_checkout',       register: registerStartCheckout },       // /create-checkout-session
+  // start_checkout is registered separately in EveoyMCP.init() — it needs the
+  // agent instance for per-session JWT state (see src/index.ts).
   // Pending Lovable: get_case_studies (source TBD)
 ];
 
