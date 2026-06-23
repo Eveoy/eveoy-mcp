@@ -8,7 +8,8 @@ dist/
 
 # local secrets (Workers convention) — NEVER commit
 .dev.vars
-.dev.vars.*
+.dev.vars.local
+!.dev.vars.example
 .env
 .env*.local
 

@@ -1,0 +1,12 @@
+# Local dev secrets for `wrangler dev` (Workers convention).
+# Copy to .dev.vars (git-ignored). Production: `wrangler secret put NAME`.
+
+# HMAC salt for hashing client IPs before logging / rate-limit keying. Rotate quarterly.
+IP_HASH_SALT=dev-only-salt-change-me
+
+# Supabase edge-function backend (the "brain"). The anon key is publishable but
+# stored as a secret per Lovable. SUPABASE_URL + SITE_URL are vars in wrangler.jsonc;
+# set the anon key here for local dev.
+SUPABASE_ANON_KEY=eyJ...paste-the-publishable-anon-key-here
+
+# OAuth (Phase 2 write-tool gating, optional) handled by @cloudflare/workers-oauth-provider.

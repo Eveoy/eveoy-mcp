@@ -126,3 +126,62 @@ contract (lead insert + city record + contact reveal + JIT enrichment). Our
 npx @modelcontextprotocol/inspector https://mcp.eveoy.com/mcp
 ```
 Or add `https://mcp.eveoy.com/mcp` as a connector in Claude / Cursor / Lovable to try the 12 tools.
+
+## 9. GitHub — repo map
+
+Repo: **https://github.com/Eveoy/eveoy-mcp** (branch `main`). Base for file links:
+`https://github.com/Eveoy/eveoy-mcp/blob/main/<path>`
+
+| Path | What it is |
+|---|---|
+| `src/index.ts` | Worker entry: McpAgent + fetch gate (Host pin · Origin allowlist · CORS · HSTS), routes `/mcp`, `/sse`, `/health`, static fall-through |
+| `src/integrations/edge.ts` | `callEdge()` Supabase client + `EdgeError` (402/429 surfaced) — the only thing that talks to your edge fns |
+| `src/config.ts` | runtime config from Worker `env` (set in fetch AND in the Durable Object `init()`) |
+| `src/mcp/register.ts` | registers all 12 tools + KB resources + 4 prompts |
+| `src/mcp/schemas.ts` | Zod input/output schemas (mirror eveoy.com/order constraints) |
+| `src/mcp/tools/*.ts` | one file per tool (`ask-eveoy`, `search-directory`, `claim-business`, `start-checkout`, …) |
+| `src/classifier/denylist.ts`, `public-only.ts` | output guard: `assertPublic` (Q&A) / `assertNoSecrets` (directory/contact) |
+| `src/knowledge/` | curated public KB (the `ask_eveoy` fallback) + `kb-content.ts` |
+| `src/lib/pricing.ts` | $24.99 math · Starter/Proof/Rollout · UGC photos |
+| `wrangler.jsonc` | Cloudflare config — bindings, vars, custom domain |
+| `worker-env.d.ts` | `Env` binding types |
+| `public/` | static surface: `index.html`, `privacy/`, `llms.txt`, `robots.txt`, `sitemap.xml`, `.well-known/mcp/server-card.json`, `_headers`, icons |
+| `mcp/server.json` | Official MCP Registry manifest (`com.eveoy/mcp`) |
+| `smithery.yaml`, `dxt/manifest.json` | Smithery + Claude-Desktop `.dxt` metadata |
+| `.github/workflows/ci.yml` | typecheck + 55 tests + descriptor lint + `wrangler --dry-run` on every push |
+| `.github/workflows/publish-mcp.yml` | registry publish (DNS-verified) when `mcp/server.json` changes |
+| `docs/` | `API_CONTRACTS.md`, `CLOUDFLARE_DEPLOY.md`, `WORKING_WITH_LOVABLE.md`, `PLAN_v3.md`, this file |
+
+GitHub Actions secret: `MCP_REGISTRY_DNS_PRIVATE_KEY` (Ed25519 private key matching the apex TXT).
+
+## 10. Cloudflare — resources & dashboard pathways
+
+Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
+
+| Resource | Value | Dashboard path |
+|---|---|---|
+| Worker | `eveoy-mcp` (latest version `5d55cf14…`) | Workers & Pages → **eveoy-mcp** |
+| Custom domain | `mcp.eveoy.com` | eveoy-mcp → Settings → **Domains & Routes** |
+| Logs / metrics | observability enabled | eveoy-mcp → **Observability / Logs** |
+| KV namespace | `CACHE` = `da0dc20e2dad4f01b94a2cad266d6d1a` | Storage & Databases → **KV** |
+| Durable Object | class `EveoyMCP`, binding `MCP_OBJECT` (SQLite) | eveoy-mcp → Settings → Bindings |
+| Rate limit | `MCP_LIMIT` = 60 req / 60 s (per IP) | in `wrangler.jsonc` |
+| Assets | binding `ASSETS` ← `public/` | served from edge |
+| Vars | `MCP_CANONICAL_HOST`, `EVEOY_ORIGIN`, `MCP_CLASSIFIER_STRICT=0`, `SUPABASE_URL`, `SITE_URL` | eveoy-mcp → Settings → Variables |
+| Secrets | `IP_HASH_SALT`, `SUPABASE_ANON_KEY` (publishable) | eveoy-mcp → Settings → Variables and Secrets |
+| Zone | `eveoy.com` id `8d36b1df997c8cec90d73e0f720b9826` | dash → **eveoy.com** |
+| Registry TXT | `eveoy.com` apex: `v=MCPv1; k=ed25519; p=0hazyCQE+4wgltLrzTG3i4CU7ORlNZPJ5xDn5475eqQ=` | eveoy.com → DNS → Records |
+| Registry listing | `com.eveoy/mcp` v1.0.0 | registry.modelcontextprotocol.io |
+
+The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
+All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
+
+## 11. How to change behavior (no Worker redeploy needed)
+
+- **Change what a tool returns / add a field / fix an answer** → edit the edge function in
+  Lovable. The Worker passes through; no Cloudflare deploy. (One source of truth.)
+- **Add/remove a tool, change adapter logic, change CORS/limits** → ping Claude Code → edit
+  the Worker (`src/...`) → `wrangler deploy`. Needs a Cloudflare token (Workers Scripts:Edit;
+  + Zone Workers Routes/DNS only if touching the custom domain).
+- **Change the registry manifest** → edit `mcp/server.json`, push → the publish workflow
+  re-publishes automatically (DNS-verified).
