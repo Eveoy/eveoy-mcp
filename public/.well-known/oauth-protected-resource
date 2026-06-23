@@ -1,0 +1,7 @@
+{
+  "resource": "https://mcp.eveoy.com/mcp",
+  "authorization_servers": ["https://eveoy.com/.well-known/oauth-authorization-server"],
+  "scopes_supported": ["openid", "profile", "email"],
+  "bearer_methods_supported": ["header"],
+  "resource_documentation": "https://eveoy.com/auth.md"
+}

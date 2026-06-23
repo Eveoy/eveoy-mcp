@@ -176,6 +176,33 @@ Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
 The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
 All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
 
+## 11c. Agent-discovery hand-off — items 1–4 + 7 SHIPPED (LIVE)
+
+Per your isitagentready worklist:
+- **1. HTTP `Link:` headers** on `/`, `/index.html`, `/health` (RFC 8288) advertising
+  server-card, oauth-protected-resource, oauth-authorization-server (→ eveoy.com),
+  auth.md, the `/mcp` service, and api-catalog. Static `/.well-known/mcp/server-card.json`
+  also carries a `Link` via `_headers`.
+- **2. server-card.json is now SEP-1649** (`serverInfo` / `transport` / `capabilities` /
+  `auth`) — NO longer the registry-manifest shape. ⚠️ **Please re-mirror it on eveoy.com.**
+  Note: the *registry* manifest (`com.eveoy/mcp`) still lives at `mcp/server.json` in the
+  repo and is a different artifact — don't mirror that one.
+- **3. `/.well-known/oauth-protected-resource`** live on mcp.eveoy.com, deferring to
+  `https://eveoy.com/.well-known/oauth-authorization-server` (single AS source of truth).
+- **4. `WWW-Authenticate: Bearer resource_metadata="…/.well-known/oauth-protected-resource"`**
+  is attached to any 401 the Worker emits (RFC 9728). Note: `/mcp` is intentionally
+  anonymous for reads, so it doesn't blanket-401; `start_checkout` returns a `sign_in_url`
+  in the tool result rather than a transport 401. Discovery still works via the
+  protected-resource metadata + Link header.
+- **7. CORS** `Access-Control-Expose-Headers` now includes `Link` (and `WWW-Authenticate`).
+
+**Deferred (your call — product decisions, not config):**
+- **5. x402** on `/mcp` (agent-native payments) — needs a wallet address + payment policy.
+- **6. MPP `/openapi.json`** with `x-payment-info` — pairs with x402. Ping when you want these scoped.
+
+**User-only (neither of us):** DNS-AID SVCB records (`_index._agents.eveoy.com` → mcp.eveoy.com/mcp)
++ DNSSEC, and the Cloudflare Transform Rule for the eveoy.com homepage `Link:` header.
+
 ## 11a. Landing page is yours (proxied) + /info.json for live data (LIVE)
 
 - `GET /` and `/index.html` on `mcp.eveoy.com` now **proxy verbatim** to your

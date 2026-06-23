@@ -1,62 +1,28 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "com.eveoy/mcp",
-  "title": "Eveoy — Verified In-Store Foot Traffic ($24.99/customer)",
-  "description": "Ask about Eveoy and book pilots — $24.99 per verified in-store customer, auto-refund.",
-  "version": "1.0.0",
-  "websiteUrl": "https://mcp.eveoy.com",
-  "repository": {
-    "url": "https://github.com/eveoy/eveoy-mcp",
-    "source": "github"
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/server-card.json",
+  "serverInfo": {
+    "name": "eveoy-mcp",
+    "version": "1.0.1",
+    "title": "Eveoy — Verified In-Store Foot Traffic",
+    "vendor": "EyCrowd, Inc.",
+    "documentation": "https://eveoy.com",
+    "icons": [
+      { "src": "https://mcp.eveoy.com/icon-512.png", "sizes": "512x512", "mimeType": "image/png" }
+    ]
   },
-  "icons": [
-    {
-      "src": "https://mcp.eveoy.com/icon-512.png",
-      "sizes": ["512x512"],
-      "mimeType": "image/png"
-    },
-    {
-      "src": "https://mcp.eveoy.com/icon.svg",
-      "sizes": ["any"],
-      "mimeType": "image/svg+xml"
-    },
-    {
-      "src": "https://mcp.eveoy.com/icon-dark.svg",
-      "sizes": ["any"],
-      "mimeType": "image/svg+xml",
-      "theme": "dark"
-    }
-  ],
-  "remotes": [
-    {
-      "type": "streamable-http",
-      "url": "https://mcp.eveoy.com/mcp"
-    }
-  ],
-  "_meta": {
-    "io.modelcontextprotocol.registry/publisher-provided": {
-      "vendor": "EyCrowd, Inc.",
-      "categories": ["marketing", "sales", "retail", "advertising", "ecommerce"],
-      "tags": [
-        "eveoy",
-        "eycrowd",
-        "foot-traffic",
-        "in-store",
-        "retail",
-        "marketing",
-        "ugc",
-        "customer-acquisition",
-        "ads",
-        "guaranteed-visits",
-        "pilot",
-        "brand-experiences",
-        "qsr",
-        "hospitality"
-      ],
-      "supportEmail": "support@eveoy.com",
-      "docsUrl": "https://mcp.eveoy.com",
-      "termsUrl": "https://eveoy.com/terms",
-      "privacyUrl": "https://mcp.eveoy.com/privacy"
-    }
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://mcp.eveoy.com/mcp"
+  },
+  "capabilities": {
+    "tools": { "listChanged": true },
+    "resources": { "listChanged": true },
+    "prompts": { "listChanged": true }
+  },
+  "auth": {
+    "type": "oauth2",
+    "required": false,
+    "protected_resource_metadata": "https://mcp.eveoy.com/.well-known/oauth-protected-resource",
+    "description": "Read tools are anonymous. start_checkout requires sign-in; it returns a sign_in_url, and the protected-resource metadata points at eveoy.com's authorization server."
   }
 }

@@ -74,7 +74,19 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 const ALLOWED_HEADERS = 'Authorization,Content-Type,Mcp-Session-Id,MCP-Protocol-Version,Last-Event-ID';
-const EXPOSED_HEADERS = 'Mcp-Session-Id,WWW-Authenticate';
+const EXPOSED_HEADERS = 'Mcp-Session-Id, WWW-Authenticate, Link';
+
+// RFC 8288 discovery links advertised via HTTP headers (agent-discovery / isitagentready).
+const LANDING_LINK_HEADER = [
+  '</.well-known/mcp/server-card.json>; rel="describedby"; type="application/json"',
+  '</.well-known/oauth-protected-resource>; rel="oauth-protected-resource"; type="application/json"',
+  '<https://eveoy.com/.well-known/oauth-authorization-server>; rel="oauth-authorization-server"; type="application/json"',
+  '<https://eveoy.com/auth.md>; rel="author"; type="text/markdown"',
+  '</mcp>; rel="service"; title="MCP Streamable HTTP endpoint"',
+  '<https://eveoy.com/.well-known/api-catalog>; rel="api-catalog"',
+].join(', ');
+
+const WWW_AUTH = `Bearer resource_metadata="https://mcp.eveoy.com/.well-known/oauth-protected-resource"`;
 
 function isLocalOrPreviewHost(host: string): boolean {
   return host.startsWith('localhost') || host.startsWith('127.0.0.1') || host.endsWith('.workers.dev');
@@ -125,6 +137,10 @@ function gate(request: Request, host: string): Response | null {
 function withSecurity(resp: Response, origin: string | null): Response {
   const headers = new Headers(resp.headers);
   for (const [k, v] of Object.entries({ ...corsHeaders(origin), ...SECURITY_HEADERS })) headers.set(k, v);
+  // RFC 9728: a 401 from a protected resource advertises where to find its auth server.
+  if (resp.status === 401 && !headers.has('WWW-Authenticate')) {
+    headers.set('WWW-Authenticate', WWW_AUTH);
+  }
   return new Response(resp.body, { status: resp.status, statusText: resp.statusText, headers });
 }
 
@@ -146,6 +162,7 @@ async function proxyLanding(method: string): Promise<Response> {
         'X-Content-Type-Options': 'nosniff',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+        Link: LANDING_LINK_HEADER,
       },
     });
   } catch (err) {
@@ -181,7 +198,10 @@ export default {
     // Health (liveness + warm probe)
     if (url.pathname === '/health') {
       return withSecurity(
-        Response.json({ ok: true, service: 'eveoy-mcp', ts: new Date().toISOString() }),
+        Response.json(
+          { ok: true, service: 'eveoy-mcp', ts: new Date().toISOString() },
+          { headers: { Link: LANDING_LINK_HEADER } },
+        ),
         origin,
       );
     }
