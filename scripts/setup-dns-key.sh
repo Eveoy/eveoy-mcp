@@ -22,7 +22,7 @@ trap 'rm -f "$KEY"' EXIT INT TERM
 
 openssl genpkey -algorithm Ed25519 -out "$KEY"
 PRIV_HEX=$(openssl pkey -in "$KEY" -noout -text \
-  | grep -A3 'priv:' | tail -n +2 | tr -d ' :\n')
+  | awk '/priv:/{f=1;next}/pub:/{f=0}f' | tr -d ' :\n')
 PUB_B64=$(openssl pkey -in "$KEY" -pubout -outform DER \
   | tail -c 32 | base64)
 

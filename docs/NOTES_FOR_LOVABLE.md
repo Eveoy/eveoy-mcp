@@ -6,22 +6,23 @@ deployed, and smoke-tested against your real edge functions.
 
 ---
 
-## 1. Status + URLs
+## 1. Status + URLs — LIVE
 
 | | URL | State |
 |---|---|---|
-| **Live now (staging)** | `https://eveoy-mcp.eveoy-1782157982.workers.dev/mcp` | ✅ deployed + tested |
-| **Final (production)** | `https://mcp.eveoy.com/mcp` | ⏳ needs the DNS zone move + Worker custom domain |
+| **Production (canonical)** | `https://mcp.eveoy.com/mcp` | ✅ LIVE — custom domain attached, cert active |
+| MCP Registry | `com.eveoy/mcp` v1.0.0 | ✅ published (DNS-verified) |
 
 The Worker is one repo: `github.com/Eveoy/eveoy-mcp` (Cloudflare). It is a thin
 adapter — it calls your Supabase edge fns with the anon key only. It holds NO
 Stripe/Beehiiv/service-role keys.
 
-**Sequencing (matches your "don't flip discovery until it's live" rule):**
-1. Move the `eveoy.com` DNS zone to Cloudflare (your call / Brad's).
-2. We attach `mcp.eveoy.com` as a Worker Custom Domain (one wrangler change).
-3. THEN you flip the discovery wiring below live, pointing at `mcp.eveoy.com`.
-Until step 2, you can test/stage against the `workers.dev` URL.
+The `workers.dev` URL is now **disabled** (custom domain only) — use `mcp.eveoy.com`.
+
+**You're cleared to flip the discovery wiring live** (§4) — `mcp.eveoy.com` resolves
+and the registry listing is published. All six deploy steps are done:
+KV namespace ✅ · IP_HASH_SALT secret ✅ · deploy ✅ · DNS zone on Cloudflare ✅ ·
+mcp.eveoy.com custom domain ✅ · MCP Registry TXT + publish ✅.
 
 ## 2. Transports
 
@@ -119,9 +120,9 @@ No `claim-business` writeback fn. `/unlock-business` is the complete claim
 contract (lead insert + city record + contact reveal + JIT enrichment). Our
 `claim_business` tool mirrors it verbatim — same endpoint, same payload, no branch.
 
-## 8. Test it now (staging)
+## 8. Test it now (production)
 
 ```bash
-npx @modelcontextprotocol/inspector https://eveoy-mcp.eveoy-1782157982.workers.dev/mcp
+npx @modelcontextprotocol/inspector https://mcp.eveoy.com/mcp
 ```
-Or add that URL as a connector in Claude/Cursor/Lovable to try the 12 tools.
+Or add `https://mcp.eveoy.com/mcp` as a connector in Claude / Cursor / Lovable to try the 12 tools.
