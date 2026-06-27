@@ -4,6 +4,7 @@ import type { Env } from '../worker-env';
 import { setRuntimeConfig, config } from '@/config';
 import { registerAll } from '@/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '@/mcp/tools/start-checkout';
+import { registerCaptureProfile, type ProfileAgent } from '@/mcp/tools/capture-profile';
 import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
 import type { CompanyProfile } from '@/integrations/crm';
 import { buildInfo } from '@/info';
@@ -47,6 +48,8 @@ export class EveoyMCP extends McpAgent<Env, EveoyState> {
     registerAll(this.server);
     // start_checkout needs the agent instance for per-session JWT state.
     registerStartCheckout(this.server, this as unknown as AuthAgent);
+    // capture_profile needs the agent instance to persist the profile in session state.
+    registerCaptureProfile(this.server, this as unknown as ProfileAgent);
   }
 
   /** Called via DO RPC from /link/finish after the user signs in at eveoy.com. */

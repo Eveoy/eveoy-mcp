@@ -10,6 +10,7 @@ import { buildInfo } from '../src/info';
 const EXPECTED_TOOLS = [
   'ask_eveoy',
   'book_demo',
+  'capture_profile',
   'check_order_status',
   'claim_business',
   'get_app_link',

@@ -30,6 +30,14 @@ export const CAPABILITIES: Capability[] = [
     auth: 'none',
   },
   {
+    name: 'capture_profile',
+    title: 'Save your company profile',
+    summary: 'Save the company you represent (name, sector, website, contact) so Eveoy tailors recommendations and the team can follow up.',
+    group: 'Pricing & ordering',
+    triggers: ['i represent', 'set up my company', "we're a brand", 'save our details'],
+    auth: 'none',
+  },
+  {
     name: 'get_case_studies',
     title: 'List case studies & lookbooks',
     summary: 'List Eveoy case studies and lookbooks — links to the full write-ups on eveoy.com.',

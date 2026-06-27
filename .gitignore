@@ -22,6 +22,10 @@ dist/
 # testing
 /coverage
 
+# tdd-guard — local enforcement state + machine-specific hook (NEVER commit)
+.claude/tdd-guard/
+.claude/settings.local.json
+
 # misc
 .DS_Store
 *.tsbuildinfo

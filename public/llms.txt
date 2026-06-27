@@ -13,6 +13,7 @@
 ## Tools
 Read-only, anonymous unless noted.
 - ask_eveoy — any question about Eveoy, grounded in the public knowledge base; also describes what this server can do
+- capture_profile — save the company you represent (name, sector, website, contact) so Eveoy tailors recommendations and the team can follow up
 - get_case_studies — list case studies and lookbooks (links to the full write-ups on eveoy.com/newsletter)
 - get_pricing — exact pilot price; inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
 - start_checkout — create a Stripe Checkout link to buy a pilot (requires one-time sign-in)

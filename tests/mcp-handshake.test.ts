@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAll } from '../src/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '../src/mcp/tools/start-checkout';
+import { registerCaptureProfile } from '../src/mcp/tools/capture-profile';
 
 /**
  * Integration test: register every tool/resource/prompt onto a real
@@ -18,6 +19,7 @@ describe('MCP register — end-to-end metadata sanity', () => {
   // register it here with a mock agent so the full surface is asserted.
   const mockAgent: AuthAgent = { state: {}, getSessionId: () => 'test-session', setState: () => {} };
   registerStartCheckout(server, mockAgent);
+  registerCaptureProfile(server, { setProfile: () => {}, getSessionId: () => 'test-session' });
 
   const internal = server as unknown as {
     _registeredTools: Record<string, { description?: string; inputSchema?: unknown }>;
@@ -34,6 +36,7 @@ describe('MCP register — end-to-end metadata sanity', () => {
     expect(toolNames.sort()).toEqual([
       'ask_eveoy',
       'book_demo',
+      'capture_profile',
       'check_order_status',
       'claim_business',
       'get_app_link',

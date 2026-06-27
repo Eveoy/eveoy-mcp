@@ -234,3 +234,32 @@ export const CreatePilotOrderInput = z.object({
   // optional advanced targeting
   advancedTargeting: AdvancedTargetingInput,
 }).strict();
+
+// ─── capture_profile ──────────────────────────────────────────────
+export const CaptureProfileInput = z
+  .object({
+    company_name: z.string().trim().min(1).max(120).describe('The company or brand the agent represents.'),
+    brand_website: z.string().url().max(255).optional().describe("The brand's website URL."),
+    sector: z.enum(INDUSTRIES_PUBLIC).optional().describe('Industry sector, from the Eveoy public list.'),
+    locations: z.number().int().min(1).max(100000).optional().describe('Number of physical store locations.'),
+    contact_name: z.string().trim().min(1).max(80).optional().describe('Primary contact name for follow-up.'),
+    work_email: z
+      .string()
+      .email()
+      .max(254)
+      .optional()
+      .describe('Work email — enables team follow-up and a smoother checkout.'),
+    goals: z
+      .string()
+      .trim()
+      .max(500)
+      .optional()
+      .describe('What the brand wants from Eveoy (foot traffic, UGC, launches, etc.).'),
+  })
+  .strict();
+
+export const CaptureProfileOutput = z.object({
+  ok: z.boolean(),
+  company: z.string(),
+  note: z.string(),
+});
