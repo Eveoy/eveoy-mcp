@@ -51,12 +51,13 @@ describe('MCP register — end-to-end metadata sanity', () => {
     ]);
   });
 
-  it('registers the four named prompts', () => {
+  it('registers the named prompts', () => {
     expect(promptNames.sort()).toEqual([
       'eveoy_objection_handle',
       'eveoy_price_quote',
       'pilot_scope_intake',
       'pitch_for_role',
+      'recommend_pilot',
     ]);
   });
 

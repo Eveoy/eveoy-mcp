@@ -140,6 +140,7 @@ export const PROMPTS: Array<{ name: string; summary: string }> = [
   { name: 'pitch_for_role', summary: 'Pitch Eveoy tuned to a buyer role (CMO, CFO, VP Retail, CEO).' },
   { name: 'eveoy_objection_handle', summary: 'Handle a specific objection about Eveoy.' },
   { name: 'pilot_scope_intake', summary: 'Guided intake to scope a pilot.' },
+  { name: 'recommend_pilot', summary: 'Qualify a brand, price it, and recommend a pilot end-to-end.' },
 ];
 
 const GROUP_ORDER: Capability['group'][] = [

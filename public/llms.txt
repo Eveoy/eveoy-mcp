@@ -28,7 +28,7 @@ Read-only, anonymous unless noted.
 - subscribe_newsletter — subscribe an email to the Eveoy newsletter
 
 ## Prompts
-- /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake
+- /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake, /recommend_pilot
 
 ## Links
 - Site: https://www.eveoy.com

@@ -16,6 +16,7 @@ import { registerPitchForRolePrompt } from './prompts/pitch-for-role';
 import { registerPilotScopeIntakePrompt } from './prompts/pilot-scope-intake';
 import { registerEveoyPriceQuotePrompt } from './prompts/eveoy-price-quote';
 import { registerEveoyObjectionHandlePrompt } from './prompts/eveoy-objection-handle';
+import { registerRecommendPilotPrompt } from './prompts/recommend-pilot';
 import { config } from '@/config';
 import { log } from '@/lib/log';
 
@@ -50,6 +51,7 @@ const PROMPTS: Registration[] = [
   { name: 'pilot_scope_intake',     register: registerPilotScopeIntakePrompt },
   { name: 'eveoy_price_quote',      register: registerEveoyPriceQuotePrompt },
   { name: 'eveoy_objection_handle', register: registerEveoyObjectionHandlePrompt },
+  { name: 'recommend_pilot',        register: registerRecommendPilotPrompt },
 ];
 
 export function registerAll(server: McpServer): void {
