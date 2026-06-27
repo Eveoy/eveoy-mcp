@@ -30,7 +30,7 @@ export function classify(value: unknown, exclude: Set<string> = new Set()): Clas
 // Rules that protect EXTERNAL/PII data. Directory + contact tools return
 // business emails/phones by design, so they run assertNoSecrets (which skips
 // these) rather than the full assertPublic.
-const PII_RULE_IDS = new Set(['pii.foreign_email']);
+export const PII_RULE_IDS = new Set(['pii.foreign_email']);
 
 /**
  * Fail-closed guard. Use at every tool boundary BEFORE returning to client.

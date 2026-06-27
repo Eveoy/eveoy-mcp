@@ -5,6 +5,7 @@ import { setRuntimeConfig, config } from '@/config';
 import { registerAll } from '@/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '@/mcp/tools/start-checkout';
 import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
+import type { CompanyProfile } from '@/integrations/crm';
 import { buildInfo } from '@/info';
 import { extractIp, hashIp } from '@/lib/ipc';
 import { log } from '@/lib/log';
@@ -22,6 +23,8 @@ const SERVER_INSTRUCTIONS =
 export interface EveoyState {
   jwt?: string;
   jwtExp?: number;
+  /** The agent's captured company profile (set by capture_profile), reused by start_checkout. */
+  profile?: CompanyProfile;
 }
 
 /**
@@ -48,7 +51,12 @@ export class EveoyMCP extends McpAgent<Env, EveoyState> {
 
   /** Called via DO RPC from /link/finish after the user signs in at eveoy.com. */
   async setUserJwt(jwt: string, exp?: number): Promise<void> {
-    this.setState({ jwt, jwtExp: exp });
+    this.setState({ ...this.state, jwt, jwtExp: exp });
+  }
+
+  /** Persist the agent's captured company profile for reuse within the session. */
+  setProfile(profile: CompanyProfile): void {
+    this.setState({ ...this.state, profile });
   }
 }
 
