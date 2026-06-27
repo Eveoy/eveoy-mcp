@@ -39,7 +39,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 - **Company:** Eveoy, Inc. — The Eveoy™ App
 - **Founder & CEO:** Brad Cowdrey
 - **Offices:** San Francisco, Los Angeles, Denver, Houston
-- **Web:** https://eveoy.com · **Directory:** https://eveoy.com/directory · **Insights:** https://eveoy.com/insights
+- **Web:** https://www.eveoy.com · **Directory:** https://www.eveoy.com/directory · **Insights:** https://www.eveoy.com/insights
 - **Apps:** iOS https://apps.apple.com/us/app/eveoy/id1641843518 · Android https://play.google.com/store/apps/details?id=com.eveoy.shopper
 - **LinkedIn:** https://www.linkedin.com/company/eveoy
 - **Support:** support@eveoy.com · **Sales:** hello@eveoy.com
@@ -105,7 +105,7 @@ A receipt is the proof bundle from one verified visit: GPS arrival, time in stor
 - **Verified visit** — the single unit Eveoy sells: one real consumer + correct store + 10+ minutes + completed activities + photo/video proof, all confirmed by the app. $24.99.
 - **Shopper** — a real, everyday US consumer who signed up to the Eveoy app and opted into a brand's visit. Compensated per visit for their time and travel. Not an influencer, gig worker, actor, or mystery shopper.
 - **Action IRL** — Eveoy's phrase for buying real-world action instead of digital attention. It maps to "verified in-store visit" — it is not a separate product or tier.
-- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, activities, and any guaranteed-purchase add-on. Created at https://eveoy.com/order.
+- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, activities, and any guaranteed-purchase add-on. Created at https://www.eveoy.com/order.
 `,
   'pricing': String.raw`# Eveoy pricing
 
@@ -243,7 +243,7 @@ Built for every aisle, every shelf, every store.
 `,
   'directory': String.raw`# The Eveoy Directory
 
-A free, live, searchable list of every active consumer brand, store, and business — by dataset. Browse at https://eveoy.com/directory.
+A free, live, searchable list of every active consumer brand, store, and business — by dataset. Browse at https://www.eveoy.com/directory.
 
 ## Two dataset families
 
@@ -306,7 +306,7 @@ Eveoy serves B2C brands with a physical presence in the United States.
 
 ## Read more
 
-Eveoy Insights covers the thinking behind the model — https://eveoy.com/insights
+Eveoy Insights covers the thinking behind the model — https://www.eveoy.com/insights
 `,
 } as const;
 

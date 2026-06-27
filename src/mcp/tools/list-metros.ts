@@ -53,7 +53,7 @@ export function registerListMetros(server: McpServer) {
         'Coming soon:',
         ...COMING.map((m) => `  • ${m.metro} (${m.kind})`),
         '',
-        'Browse: https://eveoy.com/directory',
+        'Browse: https://www.eveoy.com/directory',
       ].join('\n');
       const safe = assertPublic(text, { tool: 'list_metros' });
       return {
@@ -61,7 +61,7 @@ export function registerListMetros(server: McpServer) {
         structuredContent: {
           live: LIVE,
           coming_soon: COMING,
-          directory_url: 'https://eveoy.com/directory',
+          directory_url: 'https://www.eveoy.com/directory',
           notes: 'Free, live directory of active consumer brands and businesses. Los Angeles is live.',
         },
       };

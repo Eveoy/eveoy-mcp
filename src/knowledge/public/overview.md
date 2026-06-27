@@ -32,7 +32,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 - **Company:** Eveoy, Inc. — The Eveoy™ App
 - **Founder & CEO:** Brad Cowdrey
 - **Offices:** San Francisco, Los Angeles, Denver, Houston
-- **Web:** https://eveoy.com · **Directory:** https://eveoy.com/directory · **Insights:** https://eveoy.com/insights
+- **Web:** https://www.eveoy.com · **Directory:** https://www.eveoy.com/directory · **Insights:** https://www.eveoy.com/insights
 - **Apps:** iOS https://apps.apple.com/us/app/eveoy/id1641843518 · Android https://play.google.com/store/apps/details?id=com.eveoy.shopper
 - **LinkedIn:** https://www.linkedin.com/company/eveoy
 - **Support:** support@eveoy.com · **Sales:** hello@eveoy.com

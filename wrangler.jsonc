@@ -36,10 +36,10 @@
 
   "vars": {
     "MCP_CANONICAL_HOST": "mcp.eveoy.com",
-    "EVEOY_ORIGIN": "https://eveoy.com",
+    "EVEOY_ORIGIN": "https://www.eveoy.com",
     "MCP_CLASSIFIER_STRICT": "0",
     "SUPABASE_URL": "https://ascyiwwrflizprjypxxr.supabase.co",
-    "SITE_URL": "https://eveoy.com"
+    "SITE_URL": "https://www.eveoy.com"
   },
 
   // Zone is live on Cloudflare → attach mcp.eveoy.com as a Custom Domain.

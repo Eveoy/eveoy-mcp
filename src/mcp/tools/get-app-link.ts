@@ -28,7 +28,7 @@ export function registerGetAppLink(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
     },
     async () => {
-      const url = 'https://eveoy.com/get-app';
+      const url = 'https://www.eveoy.com/get-app';
       const text = `Download the Eveoy shopper app (iOS & Android): ${url}`;
       const safe = assertPublic(text, { tool: 'get_app_link' });
       return {

@@ -3,7 +3,7 @@ import { __setConfigForTest } from '@/config';
 import { mintLinkState, verifyLinkState, buildSignInUrl } from './link';
 
 describe('link sign-in handoff', () => {
-  __setConfigForTest({ ipHashSalt: 'test-salt-1234567890', canonicalHost: 'mcp.eveoy.com', siteUrl: 'https://eveoy.com' });
+  __setConfigForTest({ ipHashSalt: 'test-salt-1234567890', canonicalHost: 'mcp.eveoy.com', siteUrl: 'https://www.eveoy.com' });
 
   it('mints a state that verifies back to the same session id', () => {
     const s = mintLinkState('streamable-http-abc');
@@ -22,9 +22,9 @@ describe('link sign-in handoff', () => {
     expect(verifyLinkState('a.b.c.d')).toBeNull();
   });
 
-  it('builds the eveoy.com sign-in URL with an encoded callback', () => {
+  it('builds the www.eveoy.com sign-in URL with an encoded callback', () => {
     const url = buildSignInUrl('sid-1');
-    expect(url.startsWith('https://eveoy.com/auth?next=')).toBe(true);
+    expect(url.startsWith('https://www.eveoy.com/auth?next=')).toBe(true);
     // URLSearchParams decodes the `next` param once → the inner callback stays encoded once.
     const next = new URL(url).searchParams.get('next')!;
     expect(next.startsWith('/mcp-link?callback=')).toBe(true);

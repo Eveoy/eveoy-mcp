@@ -35,7 +35,7 @@ export function registerPilotScopeIntakePrompt(server: McpServer) {
               '',
               'When you have shoppers_per_location and locations, call the get_pricing tool to compute',
               'the exact total. Confirm the price with me. Then summarize all collected fields and send',
-              'me to https://eveoy.com/order to complete payment.',
+              'me to https://www.eveoy.com/order to complete payment.',
               '',
               'Do not invent constraints — quote the validation directly from the get_pricing tool',
               'error if I pick something out of range.',

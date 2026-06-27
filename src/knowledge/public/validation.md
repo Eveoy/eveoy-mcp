@@ -42,4 +42,4 @@ Eveoy serves B2C brands with a physical presence in the United States.
 
 ## Read more
 
-Eveoy Insights covers the thinking behind the model — https://eveoy.com/insights
+Eveoy Insights covers the thinking behind the model — https://www.eveoy.com/insights

@@ -30,8 +30,8 @@ Read-only, anonymous unless noted.
 - /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake
 
 ## Links
-- Site: https://eveoy.com
-- Pricing: https://eveoy.com/pricing
-- Order: https://eveoy.com/order
-- Directory: https://eveoy.com/directory
+- Site: https://www.eveoy.com
+- Pricing: https://www.eveoy.com/pricing
+- Order: https://www.eveoy.com/order
+- Directory: https://www.eveoy.com/directory
 - Contact: support@eveoy.com

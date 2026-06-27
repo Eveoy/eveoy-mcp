@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eveoy MCP — real customers, in real stores, from any AI</title>
+  <meta name="description" content="The Eveoy MCP server. Ask about Eveoy and book pilots from Claude, ChatGPT, Lovable, Cursor, or Windsurf. $24.99 per real customer. $999 pilot. 100% refunded for no-shows." />
+  <link rel="canonical" href="https://mcp.eveoy.com" />
+  <link rel="icon" href="/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/icon-512.png" />
+  <meta name="theme-color" content="#FAF8F2" />
+  <meta name="mcp-endpoint" content="https://mcp.eveoy.com/mcp" />
+  <meta name="mcp-server-name" content="com.eveoy/mcp" />
+  <meta name="mcp-transport" content="streamable-http" />
+  <link rel="alternate" type="application/json" title="MCP server-card" href="/.well-known/mcp/server-card.json" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Eveoy MCP" />
+  <meta property="og:title" content="Eveoy MCP — real customers, in real stores, from any AI" />
+  <meta property="og:description" content="$24.99 per real customer. $999 pilot. 100% refunded for no-shows." />
+  <meta property="og:url" content="https://mcp.eveoy.com" />
+  <meta property="og:image" content="https://mcp.eveoy.com/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@eveoyapp" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Eveoy MCP","applicationCategory":"BusinessApplication","applicationSubCategory":"Model Context Protocol server","operatingSystem":"Cross-platform (MCP)","url":"https://mcp.eveoy.com","description":"Ask about Eveoy and book pilots from any AI. $24.99 per verified in-store customer.","offers":{"@type":"Offer","price":"24.99","priceCurrency":"USD","description":"Per verified in-store customer"},"publisher":{"@type":"Organization","name":"EyCrowd, Inc.","url":"https://eveoy.com","email":"support@eveoy.com"}}
+  </script>
+
+  <style>
+    :root{
+      --navy:#212121; --cream:#FAF8F2; --yellow:#FFD900; --coral:#FB5C53;
+      --accent-fg:#121A36; --radius:1rem;
+      --brutal:8px 8px 0 0 var(--navy); --brutal-sm:4px 4px 0 0 var(--navy);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--cream);color:var(--navy);
+      font-family:Manrope,"Proxima Nova",system-ui,-apple-system,sans-serif;
+      font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+    main{max-width:960px;margin:0 auto;padding:48px 24px 96px}
+    h1,h2{font-family:"Archivo Black",system-ui,sans-serif;font-weight:900;letter-spacing:-0.04em;margin:0 0 .4em}
+    a{color:inherit}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:48px}
+    header img{height:44px;width:auto}
+    .mcp-tag{font-family:"Archivo Black",sans-serif;font-size:22px;letter-spacing:-0.04em;color:var(--coral)}
+    .right{margin-left:auto;font-size:14px;opacity:.7}
+    .eyebrow{display:inline-block;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+      background:var(--yellow);color:var(--accent-fg);padding:6px 10px;border:1px solid var(--navy);border-radius:999px}
+    h1{font-size:clamp(40px,7vw,72px);margin-top:20px}
+    .sub{font-size:clamp(18px,2.4vw,22px);max-width:720px;font-weight:600}
+    .lede{font-size:18px;max-width:720px;margin-top:16px}
+    .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+    .cta{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:var(--accent-fg);
+      border:2px solid var(--navy);border-radius:var(--radius);padding:14px 22px;font-weight:700;font-size:16px;
+      box-shadow:var(--brutal-sm);text-decoration:none;transition:transform 80ms,box-shadow 80ms}
+    .cta:hover{transform:translate(2px,2px);box-shadow:0 0 0 0 var(--navy)}
+    .cta.ghost{background:transparent}
+    .fine{font-size:13px;opacity:.7;margin-top:12px}
+    .dot{display:inline-block;width:4px;height:4px;border-radius:999px;background:currentColor;margin:0 8px;vertical-align:middle;opacity:.5}
+    hr{border:0;border-top:2px solid var(--navy);opacity:.1;margin:64px 0}
+    h2.sec{font-size:clamp(28px,4.5vw,44px);margin-top:20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px}
+    .card{background:#fff;border:2px solid var(--navy);border-radius:var(--radius);padding:28px;box-shadow:var(--brutal)}
+    .card .name{font-family:"Archivo Black",sans-serif;font-size:22px;color:var(--coral);letter-spacing:-0.04em;margin-bottom:6px}
+    ul.rows{margin-top:16px;padding:0;list-style:none}
+    ul.rows li{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid rgba(33,33,33,.1)}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .rows code{font-weight:700;color:var(--coral);min-width:220px}
+    .endpoint{background:#0A0E1F;color:var(--yellow);border:2px solid var(--navy);border-radius:var(--radius);
+      padding:18px 22px;font-size:15px;display:block;word-break:break-all}
+    details{padding:14px 0;border-bottom:1px solid rgba(33,33,33,.1)}
+    summary{cursor:pointer;font-weight:700;font-size:17px}
+    details p{margin-top:10px;font-size:15px;opacity:.85}
+    footer{margin-top:96px;padding-top:24px;border-top:2px solid var(--navy);font-size:13px;opacity:.65}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="/wordmark.png" alt="Eveoy" />
+    <span class="mcp-tag">MCP</span>
+    <span class="right"><a href="https://eveoy.com">eveoy.com</a></span>
+  </header>
+
+  <section>
+    <span class="eyebrow">Real customers · in real stores · from any AI</span>
+    <h1>Marketing was always a bet.<br />We made it a sure thing.</h1>
+    <p class="sub">You don&rsquo;t pay for tokens. You don&rsquo;t pay for clicks. You don&rsquo;t pay for hope.</p>
+    <p class="lede">You pay <strong>$24.99</strong> per real customer who walked into your store, spent 15 minutes, and brought back the photos to prove it.</p>
+
+    <div class="ctas">
+      <a class="cta" href="cursor://anysphere.cursor-deeplink/mcp/install?name=Eveoy&config=eyJ1cmwiOiJodHRwczovL21jcC5ldmVveS5jb20vbWNwIn0%3D">Add to Cursor</a>
+      <a class="cta" href="windsurf://windsurf-mcp-registry?serverName=eveoy">Open in Windsurf</a>
+      <a class="cta ghost" href="https://lovable.dev" target="_blank" rel="noreferrer">Add to Lovable</a>
+      <a class="cta ghost" href="https://claude.ai/settings/connectors" target="_blank" rel="noreferrer">Add to Claude</a>
+    </div>
+    <p class="fine">5-minute setup <span class="dot"></span> No contracts <span class="dot"></span> 100% refunded for no-shows</p>
+  </section>
+
+  <hr />
+
+  <section>
+    <span class="eyebrow">Eight things happen. You see three.</span>
+    <h2 class="sec">Three tools. One endpoint. Just receipts.</h2>
+    <div class="cards">
+      <div class="card"><div class="name">ask_eveoy</div><div>Any question about Eveoy. Grounded in the public knowledge base.</div></div>
+      <div class="card"><div class="name">get_pricing</div><div>Exact price for N real customers. $24.99 each. Inputs mirror eveoy.com/order.</div></div>
+      <div class="card"><div class="name">list_industries</div><div>The 23+ sectors Eveoy serves. Built for every aisle, every shelf, every store.</div></div>
+    </div>
+  </section>
+
+  <hr />
+
+  <section>
+    <span class="eyebrow">Slash commands</span>
+    <h2 class="sec">Four prompts. No ramp-up. No guesswork.</h2>
+    <ul class="rows">
+      <li><code>/eveoy_price_quote</code><span>One-line price for a pilot.</span></li>
+      <li><code>/eveoy_objection_handle</code><span>Tight responses to common buyer objections.</span></li>
+      <li><code>/pitch_for_role</code><span>Role-tuned pitch — CMO · CFO · VP Retail · CEO.</span></li>
+      <li><code>/pilot_scope_intake</code><span>Guided pilot-scoping, mirroring the eveoy.com/order fields.</span></li>
+    </ul>
+  </section>
+
+  <hr />
+
+  <section>
+    <span class="eyebrow">Add to your AI</span>
+    <h2 class="sec">Three steps. No hassle. No guesswork.</h2>
+    <p class="endpoint">https://mcp.eveoy.com/mcp</p>
+    <div style="margin-top:16px">
+      <details><summary>Lovable</summary><p>Connectors → Chat connectors → New MCP server → paste the URL → Add &amp; authorize.</p></details>
+      <details><summary>Claude Desktop</summary><p>Add <code>{"mcpServers":{"eveoy":{"url":"https://mcp.eveoy.com/mcp"}}}</code> to claude_desktop_config.json. Restart.</p></details>
+      <details><summary>Claude.ai</summary><p>Settings → Connectors → Add custom connector → paste the URL.</p></details>
+      <details><summary>ChatGPT</summary><p>Settings → Connectors → Add MCP server → paste the URL.</p></details>
+      <details><summary>Cursor</summary><p>Click <em>Add to Cursor</em> above, or Settings → MCP → Add server (HTTP) → paste the URL.</p></details>
+      <details><summary>Windsurf</summary><p>Click <em>Open in Windsurf</em> above, or Settings → MCP Servers → Add → paste the URL.</p></details>
+    </div>
+  </section>
+
+  <hr />
+
+  <section>
+    <span class="eyebrow">These are the receipts</span>
+    <h2 class="sec">20K verified shoppers. 10K brand experiences. Zero fake clicks billed.</h2>
+    <p class="lede">A real customer walks in. Spends 15 minutes. Brings back the photos. $999 entry pilot for 40+ customers. 100% refunded for no-shows.</p>
+    <p style="margin-top:24px">
+      <a class="cta ghost" href="https://eveoy.com" style="margin-right:8px">See pricing on eveoy.com</a>
+      <a class="cta" href="https://eveoy.com/book-demo">Book a demo</a>
+    </p>
+  </section>
+
+  <footer>
+    © <span id="y">2026</span> The Eveoy&trade; MCP by EyCrowd, Inc. <span class="dot"></span> The authentic marketing channel powered by real people.<br />
+    <a href="/privacy">privacy</a> <span class="dot"></span>
+    <a href="/.well-known/mcp/server-card.json">server-card.json</a> <span class="dot"></span>
+    <a href="/sitemap.xml">sitemap</a> <span class="dot"></span>
+    <a href="mailto:support@eveoy.com">support@eveoy.com</a>
+  </footer>
+</main>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>

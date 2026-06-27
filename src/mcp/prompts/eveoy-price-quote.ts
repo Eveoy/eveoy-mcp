@@ -32,7 +32,7 @@ export function registerEveoyPriceQuotePrompt(server: McpServer) {
               '  • the 8-outcome bundle included at this price',
               '  • the 100%-refunded-for-no-shows guarantee',
               '  • a reminder that the campaign start date must be ≥ 14 days from today',
-              '  • the link to complete the order: https://eveoy.com/order',
+              '  • the link to complete the order: https://www.eveoy.com/order',
               '',
               'Do not editorialize. Quote the deterministic tool output.',
             ].join('\n'),

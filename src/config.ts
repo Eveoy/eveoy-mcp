@@ -24,10 +24,10 @@ let current: RuntimeConfig = {
   ipHashSalt: 'dev-only-salt-rotate-in-prod',
   disabledTools: new Set(),
   canonicalHost: 'mcp.eveoy.com',
-  eveoyOrigin: 'https://eveoy.com',
+  eveoyOrigin: 'https://www.eveoy.com',
   supabaseUrl: '',
   supabaseAnonKey: '',
-  siteUrl: 'https://eveoy.com',
+  siteUrl: 'https://www.eveoy.com',
 };
 
 export function setRuntimeConfig(env: {

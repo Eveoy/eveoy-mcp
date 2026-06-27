@@ -71,7 +71,7 @@ export async function callEdge<T = unknown>(
  */
 export function edgeErrorMessage(err: unknown): string {
   if (err instanceof EdgeError) {
-    if (err.status === 401) return 'Sign-in required for this action. Complete it at https://eveoy.com/order (or eveoy.com sign-in).';
+    if (err.status === 401) return 'Sign-in required for this action. Complete it at https://www.eveoy.com/order (or eveoy.com sign-in).';
     if (err.status === 402) return 'That capability is temporarily unavailable (service credits). Please try again later or email support@eveoy.com.';
     if (err.status === 429) return 'Rate limited upstream — please retry in a few seconds.';
     if (err.status === 404) return 'Not found.';

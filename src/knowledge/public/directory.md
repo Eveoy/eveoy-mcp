@@ -1,6 +1,6 @@
 # The Eveoy Directory
 
-A free, live, searchable list of every active consumer brand, store, and business — by dataset. Browse at https://eveoy.com/directory.
+A free, live, searchable list of every active consumer brand, store, and business — by dataset. Browse at https://www.eveoy.com/directory.
 
 ## Two dataset families
 

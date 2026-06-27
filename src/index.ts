@@ -80,10 +80,10 @@ const EXPOSED_HEADERS = 'Mcp-Session-Id, WWW-Authenticate, Link';
 const LANDING_LINK_HEADER = [
   '</.well-known/mcp/server-card.json>; rel="describedby"; type="application/json"',
   '</.well-known/oauth-protected-resource>; rel="oauth-protected-resource"; type="application/json"',
-  '<https://eveoy.com/.well-known/oauth-authorization-server>; rel="oauth-authorization-server"; type="application/json"',
-  '<https://eveoy.com/auth.md>; rel="author"; type="text/markdown"',
+  '<https://www.eveoy.com/.well-known/oauth-authorization-server>; rel="oauth-authorization-server"; type="application/json"',
+  '<https://www.eveoy.com/auth.md>; rel="author"; type="text/markdown"',
   '</mcp>; rel="service"; title="MCP Streamable HTTP endpoint"',
-  '<https://eveoy.com/.well-known/api-catalog>; rel="api-catalog"',
+  '<https://www.eveoy.com/.well-known/api-catalog>; rel="api-catalog"',
 ].join(', ');
 
 const WWW_AUTH = `Bearer resource_metadata="https://mcp.eveoy.com/.well-known/oauth-protected-resource"`;
