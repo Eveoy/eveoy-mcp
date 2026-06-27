@@ -8,7 +8,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-KEYS=(overview product pricing comparison why-now ugc-ripple sectors directory validation)
+KEYS=(overview product pricing comparison why-now ugc-ripple sectors directory validation for-agents)
 
 {
   echo '/**'

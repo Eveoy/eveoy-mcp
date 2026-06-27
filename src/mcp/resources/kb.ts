@@ -12,6 +12,7 @@ const TITLES: Record<KbKey, string> = {
   sectors:    'Eveoy — Industries served',
   directory:  'Eveoy — Business directory',
   validation: 'Eveoy — Proof, validation, and fit',
+  'for-agents':'Eveoy — How to use this server (agent guide)',
 };
 
 export function registerKbResources(server: McpServer) {

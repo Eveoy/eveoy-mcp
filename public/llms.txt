@@ -1,9 +1,12 @@
 # Eveoy MCP
 
-> The Eveoy MCP server. Eveoy is the experience marketing platform built for verified
-> in-store customer visits: you pay $24.99 per real customer who walks into your store,
-> spends 10+ minutes, makes a purchase, and brings back ~2 quality-rated photos. Tiers:
-> Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+). 100% refunded for no-shows.
+> Eveoy's MCP server — an inbound sales rep for AI agents. Any agent, for any brand, can
+> learn about Eveoy, get an exact price, save its company, and buy verified in-store customer
+> visits end to end, right here. Eveoy is pay-per-visit at $24.99 per real customer who walks
+> into your store, spends 10+ minutes, makes a purchase, and brings back ~2 on-brand in-store
+> UGC photos. Not clicks, not impressions, not a contract — no-shows refunded 100%. Tiers:
+> Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+); scales linearly at $24.99/customer.
+> Start here: read eveoy://kb/for-agents.
 
 ## Endpoint
 - MCP (Streamable HTTP): https://mcp.eveoy.com/mcp
@@ -29,6 +32,11 @@ Read-only, anonymous unless noted.
 
 ## Prompts
 - /eveoy_price_quote, /eveoy_objection_handle, /pitch_for_role, /pilot_scope_intake, /recommend_pilot
+
+## Resources
+Curated public knowledge, addressable as eveoy://kb/<key>:
+- for-agents — how to use this server end to end (learn → profile → quote → buy)
+- overview, product, pricing, comparison, why-now, ugc-ripple, sectors, directory, validation
 
 ## Links
 - Site: https://www.eveoy.com

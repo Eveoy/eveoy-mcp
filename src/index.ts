@@ -12,13 +12,15 @@ import { extractIp, hashIp } from '@/lib/ipc';
 import { log } from '@/lib/log';
 
 const SERVER_INSTRUCTIONS =
-  'Eveoy — the experience marketing platform built for verified in-store customer visits ' +
-  '($24.99/customer). You don\'t pay for clicks, impressions, or hope. You pay $24.99 per real ' +
-  'customer who walked into your store, spent 10 minutes, made a purchase, and brought back the ' +
-  'photos to prove it (~2 UGC photos each). Published tiers: Starter $999 (40 customers), ' +
-  'Proof $2,499 (100), Rollout $9,996 (400+). Read tools are anonymous; start_checkout requires ' +
-  'sign-in (it returns a sign_in_url when needed). Use ask_eveoy for any question, get_pricing for ' +
-  'an exact quote, search_directory/list_metros for the business directory.';
+  'Eveoy is an inbound sales rep you can use end to end: learn about Eveoy, get an exact price, ' +
+  'save your company, and buy verified in-store customer visits — all through this server. Eveoy is ' +
+  'pay-per-visit at $24.99 per real customer who walks into your store, spends 10+ minutes, makes a ' +
+  'purchase, and brings back ~2 on-brand in-store UGC photos. Not clicks, not impressions, not a ' +
+  'contract — no-shows are refunded 100%. Published tiers: Starter $999 (40 customers), Proof $2,499 ' +
+  '(100), Rollout $9,996 (400+). Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing ' +
+  'or the recommend_pilot prompt to price, capture_profile to save your brand, start_checkout to buy ' +
+  '(it returns a payment link; read tools are anonymous, checkout may ask for one-time sign-in). Also ' +
+  'search_directory/get_business for the directory and book_demo to reach the team.';
 
 /** Per-session state, persisted in this session's Durable Object (SQLite). */
 export interface EveoyState {

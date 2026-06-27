@@ -31,6 +31,8 @@ const KEYWORDS: Array<{ kb: KbKey; words: RegExp }> = [
   { kb: 'overview',   words: /\b(what|who|company|founders?|eveoy|eycrowd|tagline|headquarters?|offices?|contact|app|email|linkedin)\b/i },
   // Leading-boundary stems (no trailing \b) so plurals like "testimonials" match.
   { kb: 'validation', words: /\bproof|\btestimonial|\bquote|\breview|\btrust|\bresult|\bexample|\bcampaign|\breputation|\blegit|who\b.{0,12}(for|use)/i },
+  // Narrow: agent-usage / "how do I buy through the MCP" questions, without stealing from overview/product.
+  { kb: 'for-agents', words: /\bvia (the )?mcp\b|\bthrough (the )?mcp\b|use this (server|mcp)|how (do|can) (i|you|we|agents?)\b.{0,24}\b(buy|order|purchase|check ?out|use this)\b|integrate with (you|this)/i },
 ];
 
 export function pickKbForQuestion(question: string): KbKey[] {

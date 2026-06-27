@@ -27,6 +27,12 @@ describe('pickKbForQuestion — keyword routing', () => {
     expect(pickKbForQuestion('show me proof it works')).toContain('validation');
   });
 
+  it('routes agent-usage questions to the for-agents KB', () => {
+    expect(pickKbForQuestion('how do I buy through the MCP?')).toContain('for-agents');
+    expect(pickKbForQuestion('how can an agent purchase via the MCP?')).toContain('for-agents');
+    expect(pickKbForQuestion('what is the pilot price?')).not.toContain('for-agents');
+  });
+
   it('no KB file trips the public-only classifier (no internal data leaks)', () => {
     for (const k of KB_KEYS) {
       const result = classify(loadKb(k));
