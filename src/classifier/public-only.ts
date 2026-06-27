@@ -30,7 +30,7 @@ export function classify(value: unknown, exclude: Set<string> = new Set()): Clas
 // Rules that protect EXTERNAL/PII data. Directory + contact tools return
 // business emails/phones by design, so they run assertNoSecrets (which skips
 // these) rather than the full assertPublic.
-export const PII_RULE_IDS = new Set(['pii.foreign_email']);
+const PII_RULE_IDS = new Set(['pii.foreign_email']);
 
 /**
  * Fail-closed guard. Use at every tool boundary BEFORE returning to client.
@@ -51,6 +51,19 @@ export function assertPublic<T>(value: T, context: { tool?: string; resource?: s
  */
 export function assertNoSecrets<T>(value: T, context: { tool?: string; resource?: string } = {}): T {
   return guard(value, PII_RULE_IDS, context);
+}
+
+/**
+ * Classify a payload that is built FROM THE AGENT'S OWN INPUT and bound for our own
+ * CRM (Zoho, via crm-log). We guard ONLY against real credentials/secrets being stored
+ * (`secret.*` rules) — NOT Eveoy-internal-knowledge terms. Those internal rules exist to
+ * stop the MCP from REVEALING internals in OUTPUTS; a customer's free-text goal that says
+ * "extend our store runway" is not a secret leak, and blocking it would silently drop a
+ * legitimate lead. Outputs to the agent still get the full ruleset via assertPublic.
+ */
+export function classifyForCrm(value: unknown): ClassifierResult {
+  const exclude = new Set(DENY_RULES.filter((r) => !r.id.startsWith('secret.')).map((r) => r.id));
+  return classify(value, exclude);
 }
 
 function guard<T>(value: T, exclude: Set<string>, context: { tool?: string; resource?: string }): T {
