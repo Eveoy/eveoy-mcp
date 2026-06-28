@@ -4,6 +4,8 @@ import { loadKb, pickKbForQuestion } from '@/knowledge/kb-loader';
 import { capabilitiesHint, capabilitiesMarkdown, isCapabilityQuestion } from '@/mcp/capabilities';
 import { callEdge } from '@/integrations/edge';
 import { assertPublic } from '@/classifier/public-only';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { log } from '@/lib/log';
 
 const AUDIENCE_LENS: Record<string, string> = {
@@ -34,7 +36,7 @@ Do NOT use this for: an exact price (use get_pricing), the industry list (use li
 
 Cost: free. Latency: 1–3s. Read-only.`;
 
-export function registerAskEveoy(server: McpServer) {
+export function registerAskEveoy(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'ask_eveoy',
     {
@@ -46,6 +48,15 @@ export function registerAskEveoy(server: McpServer) {
     },
     async ({ question, audience }) => {
       const lens = AUDIENCE_LENS[audience] ?? AUDIENCE_LENS.general;
+
+      // Best-effort low-intent activity log (fire-and-forget; crm-log's volume guard
+      // keeps these in mcp_events, not Zoho Tasks). Never blocks the answer.
+      void logEvent({
+        event_type: 'qa',
+        session_id: agent.getSessionId(),
+        tool: 'ask_eveoy',
+        summary: `Q&A: ${question.slice(0, 140)}`,
+      });
 
       // Meta path: "what can you do?" → answer deterministically from the tool
       // manifest, so capability discovery never depends on the edge or the KB.

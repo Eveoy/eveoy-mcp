@@ -49,7 +49,7 @@ export class EveoyMCP extends McpAgent<Env, EveoyState> {
     // Tools run in THIS Durable Object isolate, so config must be set here
     // (the fetch-handler's setRuntimeConfig ran in the separate Worker isolate).
     setRuntimeConfig(this.env);
-    registerAll(this.server);
+    registerAll(this.server, this);
     // start_checkout needs the agent instance for per-session JWT state.
     registerStartCheckout(this.server, this as unknown as AuthAgent);
     // capture_profile needs the agent instance to persist the profile in session state.

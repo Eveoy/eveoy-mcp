@@ -18,8 +18,11 @@ import { registerEveoyObjectionHandlePrompt } from './prompts/eveoy-objection-ha
 import { registerRecommendPilotPrompt } from './prompts/recommend-pilot';
 import { config } from '@/config';
 import { log } from '@/lib/log';
+import type { ToolAgent } from './tool-agent';
 
-type Registration = { name: string; register: (s: McpServer) => void };
+// Every register fn receives the session agent so any tool can log activity; tools
+// that don't log simply ignore it (a (server)-only fn is assignable to this type).
+type Registration = { name: string; register: (s: McpServer, agent: ToolAgent) => void };
 
 const TOOLS: Registration[] = [
   // Read — static / local
@@ -52,17 +55,17 @@ const PROMPTS: Registration[] = [
   { name: 'recommend_pilot',        register: registerRecommendPilotPrompt },
 ];
 
-export function registerAll(server: McpServer): void {
+export function registerAll(server: McpServer, agent: ToolAgent): void {
   const disabled = config().disabledTools;
   for (const t of TOOLS) {
     if (disabled.has(t.name)) {
       log.warn('tool.disabled', { tool: t.name });
       continue;
     }
-    t.register(server);
+    t.register(server, agent);
   }
-  for (const r of RESOURCE_GROUPS) r.register(server);
-  for (const p of PROMPTS) p.register(server);
+  for (const r of RESOURCE_GROUPS) r.register(server, agent);
+  for (const p of PROMPTS) p.register(server, agent);
   log.info('mcp.registered', {
     tools: TOOLS.filter((t) => !disabled.has(t.name)).map((t) => t.name).join(','),
     prompts: PROMPTS.map((p) => p.name).join(','),

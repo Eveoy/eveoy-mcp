@@ -15,7 +15,7 @@ import { registerBookDemo } from '../src/mcp/tools/book-demo';
  */
 describe('MCP register — end-to-end metadata sanity', () => {
   const server = new McpServer({ name: 'eveoy', version: '1.0.0' });
-  registerAll(server);
+  registerAll(server, { getSessionId: () => 'test-session' });
   // start_checkout is registered with the agent instance in production (init());
   // register it here with a mock agent so the full surface is asserted.
   const mockAgent: AuthAgent = { state: {}, getSessionId: () => 'test-session', setState: () => {} };
