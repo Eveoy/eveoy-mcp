@@ -29,8 +29,8 @@ describe('capabilities manifest — single source of truth', () => {
     expect(CAPABILITIES.map((c) => c.name).sort()).toEqual(EXPECTED_TOOLS);
   });
 
-  it('only start_checkout is auth-gated', () => {
-    expect(CAPABILITIES.filter((c) => c.auth === 'oauth').map((c) => c.name)).toEqual(['start_checkout']);
+  it('no tools are auth-gated — the full funnel (incl. start_checkout) is anonymous for agents', () => {
+    expect(CAPABILITIES.filter((c) => c.auth === 'oauth').map((c) => c.name)).toEqual([]);
   });
 
   it('/info.json tool list derives from the manifest', () => {

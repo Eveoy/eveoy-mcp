@@ -56,10 +56,10 @@ export const CAPABILITIES: Capability[] = [
   {
     name: 'start_checkout',
     title: 'Start a checkout',
-    summary: 'Create a Stripe Checkout link to buy a pilot. Requires a one-time sign-in.',
+    summary: 'Create a Stripe checkout link to buy a pilot — works for agents directly, no sign-in (provide contact + campaign date, or call capture_profile first).',
     group: 'Pricing & ordering',
     triggers: ['buy a pilot', 'check out', 'place an order', 'pay'],
-    auth: 'oauth',
+    auth: 'none',
   },
   {
     name: 'book_demo',

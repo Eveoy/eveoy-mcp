@@ -121,6 +121,22 @@ export const StartCheckoutInput = z.object({
     .describe(`Verified customers per store (${MIN_CUSTOMERS_PER_LOCATION}–${MAX_CUSTOMERS_PER_LOCATION}); mirrors eveoy.com/order.`),
   locations: z.number().int().min(MIN_LOCATIONS).max(MAX_LOCATIONS).default(DEFAULT_LOCATIONS)
     .describe(`Number of store locations (${MIN_LOCATIONS}–${MAX_LOCATIONS}).`),
+  // Contact fields for the no-JWT agent checkout path. Optional here — start_checkout
+  // falls back to the company profile saved by capture_profile. Ignored on the signed-in path.
+  your_name: z.string().trim().min(2).max(80).optional()
+    .describe('Your name. Optional if saved via capture_profile.'),
+  work_email: z.string().email().max(254).optional()
+    .describe('Work email. Optional if saved via capture_profile.'),
+  brand_website: z.string().url().max(255).optional()
+    .describe('Brand website URL. Optional if saved via capture_profile.'),
+  phone: z.string().trim().min(7).max(30).regex(/^[+\d][\d\s().-]*$/).optional()
+    .describe('Phone (optional).'),
+  campaign_start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD')
+    .refine((s) => s >= earliestStartDate(), {
+      message: `Campaign start must be at least ${CAMPAIGN_START_LEAD_DAYS} days from today.`,
+    })
+    .optional()
+    .describe(`Campaign start date (YYYY-MM-DD, ≥ ${CAMPAIGN_START_LEAD_DAYS} days out). Required to check out without signing in.`),
   advancedTargeting: AdvancedTargetingInput,
 }).strict();
 

@@ -19,7 +19,7 @@ Read-only, anonymous unless noted.
 - capture_profile — save the company you represent (name, sector, website, contact) so Eveoy tailors recommendations and the team can follow up
 - get_case_studies — list case studies and lookbooks (links to the full write-ups on eveoy.com/newsletter)
 - get_pricing — exact pilot price; inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
-- start_checkout — create a Stripe Checkout link to buy a pilot (requires one-time sign-in)
+- start_checkout — create a Stripe checkout link to buy a pilot (works for agents directly, no sign-in; provide contact + campaign date or call capture_profile first)
 - book_demo — link to book a live Eveoy demo or talk to the team
 - check_order_status — look up the status of an existing order by reference
 - search_directory — search the Eveoy business directory by name, city, or category
