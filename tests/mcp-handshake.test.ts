@@ -3,6 +3,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAll } from '../src/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '../src/mcp/tools/start-checkout';
 import { registerCaptureProfile } from '../src/mcp/tools/capture-profile';
+import { registerBookDemo } from '../src/mcp/tools/book-demo';
 
 /**
  * Integration test: register every tool/resource/prompt onto a real
@@ -20,6 +21,7 @@ describe('MCP register — end-to-end metadata sanity', () => {
   const mockAgent: AuthAgent = { state: {}, getSessionId: () => 'test-session', setState: () => {} };
   registerStartCheckout(server, mockAgent);
   registerCaptureProfile(server, { setProfile: () => {}, getSessionId: () => 'test-session' });
+  registerBookDemo(server, { getSessionId: () => 'test-session', state: {} });
 
   const internal = server as unknown as {
     _registeredTools: Record<string, { description?: string; inputSchema?: unknown }>;

@@ -4,7 +4,6 @@ import { registerGetPricing } from './tools/get-pricing';
 import { registerListIndustries } from './tools/list-industries';
 import { registerListMetros } from './tools/list-metros';
 import { registerGetAppLink } from './tools/get-app-link';
-import { registerBookDemo } from './tools/book-demo';
 import { registerSearchDirectory } from './tools/search-directory';
 import { registerGetBusiness } from './tools/get-business';
 import { registerGetCaseStudies } from './tools/get-case-studies';
@@ -29,7 +28,6 @@ const TOOLS: Registration[] = [
   { name: 'list_industries',      register: registerListIndustries },
   { name: 'list_metros',          register: registerListMetros },
   { name: 'get_app_link',         register: registerGetAppLink },
-  { name: 'book_demo',            register: registerBookDemo },
   { name: 'get_case_studies',     register: registerGetCaseStudies },  // eveoy.com/newsletter sitemap (links only)
   // Read — Supabase edge fns
   { name: 'search_directory',     register: registerSearchDirectory }, // /directory-query
@@ -38,8 +36,8 @@ const TOOLS: Registration[] = [
   // Write — Supabase edge fns (anon + rate-limited; confirm-hint annotations)
   { name: 'subscribe_newsletter', register: registerSubscribeNewsletter }, // /subscribe-beehiiv
   { name: 'claim_business',       register: registerClaimBusiness },       // /unlock-business
-  // start_checkout is registered separately in EveoyMCP.init() — it needs the
-  // agent instance for per-session JWT state (see src/index.ts).
+  // start_checkout, capture_profile, and book_demo are registered separately in
+  // EveoyMCP.init() — they need the agent instance (per-session JWT / profile / logging).
 ];
 
 const RESOURCE_GROUPS: Registration[] = [
