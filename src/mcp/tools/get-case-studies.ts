@@ -1,6 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { GetCaseStudiesInput, GetCaseStudiesOutput } from '@/mcp/schemas';
 import { config } from '@/config';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertPublic } from '@/classifier/public-only';
 import { log } from '@/lib/log';
 
@@ -127,7 +129,7 @@ Do NOT use this for: pricing (use get_pricing), general questions (use ask_eveoy
 
 Cost: free. Latency: 1–2s (sitemap, cached 10 min). Read-only. Idempotent.`;
 
-export function registerGetCaseStudies(server: McpServer) {
+export function registerGetCaseStudies(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'get_case_studies',
     {
@@ -138,6 +140,7 @@ export function registerGetCaseStudies(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: true, idempotentHint: true },
     },
     async ({ kind, limit }) => {
+      void logEvent({ event_type: 'qa', session_id: agent.getSessionId(), tool: 'get_case_studies', summary: 'Case studies requested' });
       const siteUrl = config().siteUrl;
       const archive_url = `${siteUrl}/newsletter`;
 

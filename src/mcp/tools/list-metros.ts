@@ -1,5 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListMetrosInput, ListMetrosOutput } from '@/mcp/schemas';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertPublic } from '@/classifier/public-only';
 
 // Eveoy Directory coverage, from eveoy.com/directory (verified 2026-06-22).
@@ -33,7 +35,7 @@ Do NOT use this for: pricing (use get_pricing), general Eveoy questions (use ask
 
 Cost: free. Latency: <100ms. Read-only. Idempotent.`;
 
-export function registerListMetros(server: McpServer) {
+export function registerListMetros(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'list_metros',
     {
@@ -44,6 +46,7 @@ export function registerListMetros(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
     },
     async () => {
+      void logEvent({ event_type: 'directory', session_id: agent.getSessionId(), tool: 'list_metros', summary: 'Directory metro coverage requested' });
       const text = [
         'Eveoy business directory coverage:',
         '',

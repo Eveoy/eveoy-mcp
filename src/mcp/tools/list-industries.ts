@@ -1,6 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ListIndustriesInput, ListIndustriesOutput } from '@/mcp/schemas';
 import { INDUSTRIES_PUBLIC } from '@/industries';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertPublic } from '@/classifier/public-only';
 
 const DESCRIPTION = `Return the list of industries Eveoy serves — 23+ B2C sectors across retail, food, beauty, hospitality, pets, and more.
@@ -18,7 +20,7 @@ Do NOT use this for: pricing (use get_pricing) or general Eveoy questions (use a
 
 Cost: free. Latency: <100ms. Read-only. Cacheable. Deterministic.`;
 
-export function registerListIndustries(server: McpServer) {
+export function registerListIndustries(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'list_industries',
     {
@@ -33,6 +35,7 @@ export function registerListIndustries(server: McpServer) {
       },
     },
     async () => {
+      void logEvent({ event_type: 'qa', session_id: agent.getSessionId(), tool: 'list_industries', summary: 'Industries list requested' });
       const industries = [...INDUSTRIES_PUBLIC];
       const text = [
         'Eveoy serves 23+ sectors. Public sector list:',

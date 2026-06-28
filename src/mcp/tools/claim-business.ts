@@ -2,6 +2,8 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ClaimBusinessInput } from '@/mcp/schemas';
 import { config } from '@/config';
 import { callEdge, edgeErrorMessage } from '@/integrations/edge';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertNoSecrets } from '@/classifier/public-only';
 
 // Parity rule (Lovable CLAUDE_CODE_INSTRUCTIONS §4.4): this tool MUST mirror the
@@ -26,7 +28,7 @@ Do NOT use this for: browsing (use search_directory) or public details only (use
 
 Cost: free. Latency: up to ~12s if a just-in-time lookup runs. Writes data (lead capture). Confirm first.`;
 
-export function registerClaimBusiness(server: McpServer) {
+export function registerClaimBusiness(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'claim_business',
     {
@@ -36,6 +38,7 @@ export function registerClaimBusiness(server: McpServer) {
       annotations: { readOnlyHint: false, openWorldHint: true, idempotentHint: false },
     },
     async ({ email, full_slug }) => {
+      void logEvent({ event_type: 'directory', session_id: agent.getSessionId(), tool: 'claim_business', summary: `Directory listing claimed: ${(full_slug ?? '').toString().slice(0, 80)}` });
       try {
         // Mirror the site's payload exactly. No extra logic — the edge fn owns everything.
         const data = await callEdge('/unlock-business', {

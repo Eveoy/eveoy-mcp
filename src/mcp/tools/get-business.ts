@@ -1,6 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { GetBusinessInput } from '@/mcp/schemas';
 import { callEdge, edgeErrorMessage } from '@/integrations/edge';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertNoSecrets } from '@/classifier/public-only';
 
 const DESCRIPTION = `Fetch a single business from the Eveoy directory by slug or id.
@@ -18,7 +20,7 @@ Do NOT use this for: searching/browsing (use search_directory) or general Eveoy 
 
 Cost: free. Latency: fast. Read-only. Idempotent.`;
 
-export function registerGetBusiness(server: McpServer) {
+export function registerGetBusiness(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'get_business',
     {
@@ -28,6 +30,7 @@ export function registerGetBusiness(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: true, idempotentHint: true },
     },
     async ({ slug, id }) => {
+      void logEvent({ event_type: 'directory', session_id: agent.getSessionId(), tool: 'get_business', summary: `Directory business: ${(slug ?? id ?? '').toString().slice(0, 80)}` });
       if (!slug && !id) {
         return { content: [{ type: 'text', text: 'Provide a business slug or id.' }], isError: true };
       }
