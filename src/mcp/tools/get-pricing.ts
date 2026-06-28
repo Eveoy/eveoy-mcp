@@ -1,5 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { GetPricingInput, GetPricingOutput } from '@/mcp/schemas';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import {
   priceFor,
   pricingExamples,
@@ -31,7 +33,7 @@ Do NOT use this for:
 
 Cost: free. Latency: <100ms. Read-only. Idempotent. Deterministic.`;
 
-export function registerGetPricing(server: McpServer) {
+export function registerGetPricing(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'get_pricing',
     {
@@ -46,6 +48,12 @@ export function registerGetPricing(server: McpServer) {
       },
     },
     async ({ customers_per_location, locations }) => {
+      void logEvent({
+        event_type: 'pricing',
+        session_id: agent.getSessionId(),
+        tool: 'get_pricing',
+        summary: `Pricing: ${customers_per_location} customers x ${locations} locations`,
+      });
       const p = priceFor({ customersPerLocation: customers_per_location, locations });
 
       const lines = [

@@ -1,5 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { GetAppLinkInput, GetAppLinkOutput } from '@/mcp/schemas';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertPublic } from '@/classifier/public-only';
 
 const DESCRIPTION = `Get the link to download the Eveoy shopper app (iOS / Android).
@@ -17,7 +19,7 @@ Do NOT use this for: brand/business questions (use ask_eveoy) or pricing (use ge
 
 Cost: free. Latency: <50ms. Read-only. Idempotent.`;
 
-export function registerGetAppLink(server: McpServer) {
+export function registerGetAppLink(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'get_app_link',
     {
@@ -28,6 +30,12 @@ export function registerGetAppLink(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
     },
     async () => {
+      void logEvent({
+        event_type: 'app_link',
+        session_id: agent.getSessionId(),
+        tool: 'get_app_link',
+        summary: 'Shopper app link requested',
+      });
       const url = 'https://www.eveoy.com/get-app';
       const text = `Download the Eveoy shopper app (iOS & Android): ${url}`;
       const safe = assertPublic(text, { tool: 'get_app_link' });

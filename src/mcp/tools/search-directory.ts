@@ -1,6 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { SearchDirectoryInput } from '@/mcp/schemas';
 import { callEdge, edgeErrorMessage } from '@/integrations/edge';
+import { logEvent } from '@/integrations/crm';
+import type { ToolAgent } from '@/mcp/tool-agent';
 import { assertNoSecrets } from '@/classifier/public-only';
 
 const DESCRIPTION = `Search the Eveoy business directory — real consumer brands, stores, and businesses by city, name, or NAICS code. Currently Los Angeles is live.
@@ -19,7 +21,7 @@ Do NOT use this for: a single known business (use get_business), pricing (use ge
 
 Cost: free. Latency: fast. Read-only. Idempotent.`;
 
-export function registerSearchDirectory(server: McpServer) {
+export function registerSearchDirectory(server: McpServer, agent: ToolAgent) {
   server.registerTool(
     'search_directory',
     {
@@ -29,6 +31,12 @@ export function registerSearchDirectory(server: McpServer) {
       annotations: { readOnlyHint: true, openWorldHint: true, idempotentHint: true },
     },
     async ({ q, metro, naics, limit, after }) => {
+      void logEvent({
+        event_type: 'directory',
+        session_id: agent.getSessionId(),
+        tool: 'search_directory',
+        summary: `Directory search: ${(q ?? metro ?? naics ?? 'all').toString().slice(0, 80)}`,
+      });
       try {
         const data = await callEdge<{ items: unknown[]; nextCursor: string | null }>(
           '/directory-query',
