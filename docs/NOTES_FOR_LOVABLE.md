@@ -47,8 +47,10 @@ to return a payment link directly instead of the sign-in handoff (§11b).
 
 **3. Stripe webhook** — on `checkout.session.completed`: Zoho Deal → **Won** + Cliq "order paid".
 
-**What we need back from you:** the Zoho **Lead / Deal / Activity** field maps + the **Cliq**
-channel/webhook target.
+**What we need back from you:** ✅ RESOLVED — `Web_MCP_*` fields created, Zoho auth via the
+gateway connector, and the Cliq channel `#mcpleads` webhook is live + tested (HTTP 204). Full
+field maps + contracts are in the build spec below. `ZOHO_CLIQ_WEBHOOK_URL` is delivered
+**separately as a secret** (it carries a zapikey token — never in this repo).
 
 ### 🟡 Cloudflare / DNS — one standing note
 MCP-registry publishing depends on the apex `eveoy.com` **TXT** record
@@ -57,6 +59,99 @@ MCP-registry publishing depends on the apex `eveoy.com` **TXT** record
 or re-pointed, carry that TXT record over** — without it, registry publishes fail at DNS login.
 Nothing to do otherwise: future republishes are just a version bump in `mcp/server.json` + push;
 CI signs with the matching GitHub secret. (`mcp.eveoy.com` custom domain is unchanged.)
+
+### Full Zoho/Stripe build spec — field mappings, Cliq, edge cases
+
+**`crm-log` behavior:** insert into `mcp_events` (unique `event_id`; duplicate → return 202 and
+stop), return **202**, then in `EdgeRuntime.waitUntil`: always create a Zoho **Task**; if `profile`
+is present upsert a **Lead**; if high-intent, post **Cliq**. Payload shape is in the P0 block above.
+`event_type` enum (10): `qa, pricing, directory, app_link, newsletter, profile_captured,
+demo_booked, checkout_started, order_paid, human_requested` — build for the full enum; today only
+`profile_captured` fires.
+
+**Lead mapping** (when `profile` present):
+
+| Zoho field | Source | Notes |
+|---|---|---|
+| `Company` | `profile.company_name` | |
+| `Website` | `profile.brand_website` | |
+| `Industry` | `profile.sector` | add the 16 values to the picklist; else use `Web_MCP_Sector` |
+| `Last_Name` | `profile.contact_name` | split on first space → First/Last; **if absent, `Last_Name = company_name`** |
+| `First_Name` | first token of `contact_name` | only if it splits |
+| `Email` | `profile.work_email` | upsert key; **if absent, match/create by `Company`** |
+| `Description` | `profile.goals` | |
+| `Lead_Source` | `"MCP Agent"` (constant) | |
+| `Web_MCP_Locations` | `profile.locations` | |
+| `Web_MCP_Session_Id` | `session_id` | |
+| `Web_MCP_Agent_Id` | `agent_id ?? session_id` | agent_id usually absent today |
+
+**Activity (Task) mapping** (every event): `Subject ← event_type`, `Description ← summary`,
+`Web_MCP_Event_Id ← event_id` (Unique), `Web_MCP_Event_Type ← event_type`, `Web_MCP_Tool ← tool`,
+`Web_MCP_Session_Id ← session_id`, `Web_MCP_Agent_Id ← agent_id ?? session_id`.
+> Volume guard (later): when read-tool logging is wired, only mirror `profile_captured` /
+> `demo_booked` / `checkout_started` / `order_paid` / `human_requested` to Zoho Tasks; keep
+> low-intent (`qa`/`pricing`/`directory`/`app_link`/`newsletter`) in `mcp_events` only.
+
+**`create-checkout-session` no-JWT agent path** — input
+`{ your_name, work_email, brand_website, campaign_start_date, locations, customers_per_location,
+idempotency_key, session_id, phone?, agent_id? }` (NO JWT; **`phone` is optional**). Output
+`{ url, sessionId }`. Rate-limit 10/min/IP. Deal mapping on create:
+
+| Zoho field | Source |
+|---|---|
+| `Deal_Name` | `"{company or email} — MCP pilot ({total customers} visits)"` |
+| `Amount` | the **Stripe checkout total** (don't recompute) |
+| `Stage` | `"Qualification"` (→ `"Closed Won"` on paid) |
+| `Closing_Date` | `campaign_start_date` |
+| `Lead_Source` | `"MCP Agent"` |
+| contact link | by `work_email` |
+| `Web_MCP_Idempotency_Key` | `idempotency_key` |
+| `Web_MCP_Session_Id` | `session_id` |
+| `Web_MCP_Agent_Id` | `agent_id ?? session_id` |
+| `Web_MCP_Checkout_Session_Id` | Stripe `sessionId` |
+
+(total customers = `customers_per_location × locations`.)
+
+**`stripe-webhook`** — on `checkout.session.completed`: find the Deal by
+`Web_MCP_Checkout_Session_Id`, set `Stage = "Closed Won"`, post Cliq `order_paid`.
+
+**Cliq — fire from exactly ONE place per event (no double-pings):**
+
+| Event | Fired by |
+|---|---|
+| `profile_captured`, `demo_booked`, `checkout_started`, `human_requested` | `crm-log` |
+| `order_paid` | `stripe-webhook` |
+| (Deal creation) | `create-checkout-session` posts **no** Cliq |
+
+**`Web_MCP_*` custom fields (created in Zoho):**
+
+| Field | Type | Module(s) |
+|---|---|---|
+| `Web_MCP_Event_Id` | Single Line (Unique) | Tasks |
+| `Web_MCP_Event_Type` | Picklist | Tasks |
+| `Web_MCP_Tool` | Single Line | Tasks |
+| `Web_MCP_Session_Id` | Single Line | Tasks, Leads, Deals |
+| `Web_MCP_Agent_Id` | Single Line | Tasks, Leads, Deals |
+| `Web_MCP_Locations` | Number | Leads |
+| `Web_MCP_Sector` | Picklist | Leads (only if not using standard `Industry`) |
+| `Web_MCP_Idempotency_Key` | Single Line | Deals |
+| `Web_MCP_Checkout_Session_Id` | Single Line | Deals |
+
+**`Industry` / `Web_MCP_Sector` picklist values (16):** Specialty Retail, Apparel, Footwear,
+Health and Beauty, Food and Beverage, Health and Wellness, Pet Care, Personal Care, Baby Care,
+Department Stores, Discount Stores, Grocery and Food, Home Goods, Quick-Service Restaurants,
+Hospitality, Other B2C.
+
+**`Web_MCP_Event_Type` picklist values (10):** qa, pricing, directory, app_link, newsletter,
+profile_captured, demo_booked, checkout_started, order_paid, human_requested.
+
+**Edge cases (will bite if missed):**
+1. `contact_name` is one optional field, not First/Last — split on first space; fallback
+   `Last_Name = company_name` if absent.
+2. `work_email` is optional → upsert the Lead by Company when absent (don't drop/dupe).
+3. `phone` is optional on the agent checkout path — never require it.
+4. `Web_MCP_Agent_Id` defaults to `session_id` today (no per-caller identity yet).
+5. Deal `Amount` = the Stripe total, never recomputed.
 
 ---
 
