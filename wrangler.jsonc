@@ -36,6 +36,9 @@
 
   "vars": {
     "MCP_CANONICAL_HOST": "mcp.eveoy.com",
+    // Directory capabilities hidden for now (reversible): delete this var — or remove names
+    // from it — and redeploy to reactivate search_directory/get_business/claim_business/list_metros.
+    "MCP_DISABLE_TOOL": "search_directory,get_business,claim_business,list_metros",
     "EVEOY_ORIGIN": "https://www.eveoy.com",
     "MCP_CLASSIFIER_STRICT": "0",
     "SUPABASE_URL": "https://ascyiwwrflizprjypxxr.supabase.co",

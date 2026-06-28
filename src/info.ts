@@ -1,4 +1,4 @@
-import { CAPABILITIES, PROMPTS } from '@/mcp/capabilities';
+import { PROMPTS, enabledCapabilities } from '@/mcp/capabilities';
 import { pricingExamples, UNIT_PRICE_CENTS } from '@/lib/pricing';
 import { INDUSTRIES_PUBLIC } from '@/industries';
 
@@ -15,7 +15,7 @@ export function buildInfo() {
     version: MCP_VERSION,
     endpoint: 'https://mcp.eveoy.com/mcp',
     transports: ['streamable-http', 'sse'],
-    tools: CAPABILITIES.map((c) => ({ name: c.name, title: c.title, summary: c.summary, auth: c.auth })),
+    tools: enabledCapabilities().map((c) => ({ name: c.name, title: c.title, summary: c.summary, auth: c.auth })),
     prompts: PROMPTS.map((p) => p.name),
     pricing: {
       unit_usd: UNIT_PRICE_CENTS / 100,

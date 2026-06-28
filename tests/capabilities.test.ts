@@ -47,10 +47,20 @@ describe('capabilities manifest — single source of truth', () => {
     for (const name of EXPECTED_TOOLS) expect(hint, `hint missing ${name}`).toContain(name);
   });
 
-  it('public/llms.txt advertises every tool (no drift)', async () => {
+  // Directory tools are hidden for now via MCP_DISABLE_TOOL (wrangler.jsonc). Keep this
+  // list in sync with that var; on reactivation, restore the lines to public/llms.txt.
+  const HIDDEN_TOOLS = ['search_directory', 'get_business', 'claim_business', 'list_metros'];
+
+  it('public/llms.txt advertises every enabled tool (no drift) and omits hidden ones', async () => {
     const fs = await import('node:fs/promises');
     const txt = await fs.readFile('public/llms.txt', 'utf8');
-    for (const name of EXPECTED_TOOLS) expect(txt, `llms.txt missing ${name}`).toContain(name);
+    for (const name of EXPECTED_TOOLS) {
+      if (HIDDEN_TOOLS.includes(name)) {
+        expect(txt, `llms.txt should not list hidden ${name}`).not.toContain(name);
+      } else {
+        expect(txt, `llms.txt missing ${name}`).toContain(name);
+      }
+    }
   });
 
   it('the manifest answer carries no banned anti-slop tokens', () => {

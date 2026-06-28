@@ -22,11 +22,7 @@ Read-only, anonymous unless noted.
 - start_checkout — create a Stripe checkout link to buy a pilot (works for agents directly, no sign-in; provide contact + campaign date or call capture_profile first)
 - book_demo — link to book a live Eveoy demo or talk to the team
 - check_order_status — look up the status of an existing order by reference
-- search_directory — search the Eveoy business directory by name, city, or category
-- get_business — fetch a single directory business listing
-- claim_business — claim a directory listing to verify ownership and see its contacts
 - list_industries — the 23+ sectors Eveoy serves
-- list_metros — Eveoy directory coverage (Los Angeles live; more coming)
 - get_app_link — the Eveoy shopper-app install link
 - subscribe_newsletter — subscribe an email to the Eveoy newsletter
 

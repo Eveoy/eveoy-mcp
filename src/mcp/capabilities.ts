@@ -5,9 +5,11 @@
  *   - /info.json       → live snapshot for the Lovable landing
  *   - public/llms.txt  → keep in sync (a test asserts every name appears there)
  *
- * When you add/rename/remove a tool, edit THIS file. Pure (no fs / no imports)
- * so it runs in the Worker isolate.
+ * When you add/rename/remove a tool, edit THIS file. No fs; the only import is the
+ * lightweight config singleton, read to honor MCP_DISABLE_TOOL. Runs in the Worker isolate.
  */
+import { config } from '@/config';
+
 export type Auth = 'none' | 'oauth';
 
 export interface Capability {
@@ -151,11 +153,17 @@ const GROUP_ORDER: Capability['group'][] = [
   'More',
 ];
 
+/** The tool surface minus anything disabled via MCP_DISABLE_TOOL (reversible kill-switch). */
+export function enabledCapabilities(): Capability[] {
+  const disabled = config().disabledTools;
+  return CAPABILITIES.filter((c) => !disabled.has(c.name));
+}
+
 /** Markdown the assistant returns when asked "what can you do?". */
 export function capabilitiesMarkdown(): string {
   const lines: string[] = ['Eveoy MCP — here is everything I can do for you:', ''];
   for (const group of GROUP_ORDER) {
-    const items = CAPABILITIES.filter((c) => c.group === group);
+    const items = enabledCapabilities().filter((c) => c.group === group);
     if (!items.length) continue;
     lines.push(`**${group}**`);
     for (const c of items) {
@@ -174,7 +182,7 @@ export function capabilitiesMarkdown(): string {
 export function capabilitiesHint(): string {
   return (
     'Tools available via this Eveoy MCP: ' +
-    CAPABILITIES.map((c) => `${c.name} (${c.summary.replace(/\.$/, '')})`).join('; ') +
+    enabledCapabilities().map((c) => `${c.name} (${c.summary.replace(/\.$/, '')})`).join('; ') +
     '. If the user asks what you can do, or asks to take an action (price, buy, book a demo, ' +
     'search the directory, check an order), point them to the matching tool. Otherwise answer normally.'
   );
