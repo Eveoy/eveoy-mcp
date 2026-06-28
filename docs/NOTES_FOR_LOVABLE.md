@@ -1,5 +1,65 @@
 # Notes for Lovable — Eveoy MCP is live
 
+## ⚡ 2026-06-28 — Sales-rep upgrade is LIVE (v1.1.0). Read this first.
+
+The MCP is now an **inbound sales rep**: agents can learn → profile → quote → buy end to
+end. Shipped + live on `mcp.eveoy.com`; registry republished to **`com.eveoy/mcp` v1.1.0**.
+Numbers in the older sections below predate this (they say v1.0.0 / 12 tools / 4 prompts —
+it is now **14 tools, 5 prompts, 10 KB resources, v1.1.0**).
+
+**New since v1.0.x (all live, anonymous):**
+- `capture_profile` (write) — the agent saves the company it represents → session state + a
+  `profile_captured` CRM event (Zoho Lead + Cliq once `crm-log` exists; today it no-ops
+  gracefully and the tool still confirms in-session).
+- `recommend_pilot` (prompt) — qualify (sector / #stores / goal) → `get_pricing` → explain
+  $24.99/visit (10+ min, a purchase, ~2 on-brand in-store UGC photos, no-shows 100% refunded)
+  → offer `capture_profile` + `start_checkout`.
+- `eveoy://kb/for-agents` (resource) — the end-to-end "how to use this server" guide for agents.
+- Reframed positioning across server-card, `llms.txt`, `mcp/server.json`, `dxt/manifest.json`,
+  and SERVER_INSTRUCTIONS ("inbound sales rep for AI agents").
+
+### 🔴 P0 — two edge fns we need from you (this upgrade stays dark until these land)
+
+The MCP side is built and waiting; these are the only blockers.
+
+**1. `crm-log`** — fast-ack logging fn. The MCP already POSTs this EXACT shape:
+```
+POST /functions/v1/crm-log    (apikey: anon; NO user JWT)
+{ "event_type": "profile_captured|demo_booked|checkout_started|order_paid|qa|pricing|directory|app_link|newsletter|human_requested",
+  "session_id": "string", "tool": "string", "summary": "string",
+  "event_id": "string (idempotency / dedup key)",
+  "agent_id": "string?",
+  "profile": { "company_name", "brand_website?", "sector?", "locations?", "contact_name?", "work_email?", "goals?" }?,
+  "metadata": {}? }
+```
+Return **202 immediately**, then in the background: write a Zoho **Activity**; upsert a **Lead**
+when `profile` is present; fire **Cliq** only on high-intent types (`profile_captured`,
+`demo_booked`, `checkout_started`, `order_paid`, `human_requested`). **Idempotent on `event_id`**
+(the MCP retries high-intent events once). Hold the Zoho refresh token as a Supabase secret.
+No MCP redeploy needed — logging lights up the moment this returns 202 instead of 404.
+
+**2. `create-checkout-session` — add a no-JWT agent path.** Accept the 5 contact fields
+(`your_name`, `work_email`, `brand_website`, `phone`, `campaign_start_date`) + `locations` +
+`customers_per_location` **without a user JWT**; support an `idempotency_key`; create/attach a
+Zoho **Deal** (in a `created` stage); return `{ url, sessionId }`. Soft-validate
+`work_email`/`brand_website` + rate-limit server-side. This unblocks reworking `start_checkout`
+to return a payment link directly instead of the sign-in handoff (§11b).
+
+**3. Stripe webhook** — on `checkout.session.completed`: Zoho Deal → **Won** + Cliq "order paid".
+
+**What we need back from you:** the Zoho **Lead / Deal / Activity** field maps + the **Cliq**
+channel/webhook target.
+
+### 🟡 Cloudflare / DNS — one standing note
+MCP-registry publishing depends on the apex `eveoy.com` **TXT** record
+`v=MCPv1; k=ed25519; p=0hazy…` — it lives in **your Cloudflare zone** (nameservers `simon`/
+`stella.ns.cloudflare.com`), not in anything we control. **If `eveoy.com` DNS is ever migrated
+or re-pointed, carry that TXT record over** — without it, registry publishes fail at DNS login.
+Nothing to do otherwise: future republishes are just a version bump in `mcp/server.json` + push;
+CI signs with the matching GitHub secret. (`mcp.eveoy.com` custom domain is unchanged.)
+
+---
+
 Everything you need to wire eveoy.com's discovery surfaces to the MCP, plus the
 final tool list and the few items still on your side. The Worker is built,
 deployed, and smoke-tested against your real edge functions.
@@ -11,7 +71,7 @@ deployed, and smoke-tested against your real edge functions.
 | | URL | State |
 |---|---|---|
 | **Production (canonical)** | `https://mcp.eveoy.com/mcp` | ✅ LIVE — custom domain attached, cert active |
-| MCP Registry | `com.eveoy/mcp` v1.0.0 | ✅ published (DNS-verified) |
+| MCP Registry | `com.eveoy/mcp` v1.1.0 | ✅ published (DNS-verified) |
 
 The Worker is one repo: `github.com/Eveoy/eveoy-mcp` (Cloudflare). It is a thin
 adapter — it calls your Supabase edge fns with the anon key only. It holds NO
@@ -171,7 +231,7 @@ Account: **Admin@eveoy.com** · id `7417c643ff74250fc2616be55d53ebd0`
 | Secrets | `IP_HASH_SALT`, `SUPABASE_ANON_KEY` (publishable) | eveoy-mcp → Settings → Variables and Secrets |
 | Zone | `eveoy.com` id `8d36b1df997c8cec90d73e0f720b9826` | dash → **eveoy.com** |
 | Registry TXT | `eveoy.com` apex: `v=MCPv1; k=ed25519; p=0hazyCQE+4wgltLrzTG3i4CU7ORlNZPJ5xDn5475eqQ=` | eveoy.com → DNS → Records |
-| Registry listing | `com.eveoy/mcp` v1.0.0 | registry.modelcontextprotocol.io |
+| Registry listing | `com.eveoy/mcp` v1.1.0 | registry.modelcontextprotocol.io |
 
 The Worker holds **no** backend secrets beyond `SUPABASE_ANON_KEY` (publishable) + `IP_HASH_SALT`.
 All Stripe/Beehiiv/service-role/Lovable keys stay in your edge functions.
