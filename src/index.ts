@@ -37,7 +37,7 @@ export interface EveoyState {
  */
 export class EveoyMCP extends McpAgent<Env, EveoyState> {
   server = new McpServer(
-    { name: 'eveoy-mcp', version: '1.0.1' },
+    { name: 'eveoy-mcp', version: '1.1.0' },
     { instructions: SERVER_INSTRUCTIONS },
   );
 

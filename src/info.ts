@@ -2,7 +2,7 @@ import { CAPABILITIES, PROMPTS } from '@/mcp/capabilities';
 import { pricingExamples, UNIT_PRICE_CENTS } from '@/lib/pricing';
 import { INDUSTRIES_PUBLIC } from '@/industries';
 
-export const MCP_VERSION = '1.0.1';
+export const MCP_VERSION = '1.1.0';
 
 /**
  * Public, dependency-free snapshot of the MCP surface, for the Lovable landing

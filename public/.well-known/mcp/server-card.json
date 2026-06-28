@@ -2,7 +2,7 @@
   "$schema": "https://modelcontextprotocol.io/schemas/draft/server-card.json",
   "serverInfo": {
     "name": "eveoy-mcp",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "title": "Eveoy — Verified In-Store Foot Traffic",
     "description": "An inbound sales rep for AI agents: learn about Eveoy, get an exact price, save your company, and buy verified in-store customer visits ($24.99 each, ~2 on-brand UGC photos) end to end. Start with the eveoy://kb/for-agents resource.",
     "vendor": "Eveoy, Inc.",
