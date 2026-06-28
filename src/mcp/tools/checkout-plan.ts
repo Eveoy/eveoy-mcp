@@ -1,4 +1,5 @@
 import type { CompanyProfile } from '@/integrations/crm';
+import { stableId } from '@/lib/hash';
 
 /** The checkout inputs relevant to resolving the no-JWT agent path. */
 export interface AgentCheckoutInput {
@@ -8,6 +9,8 @@ export interface AgentCheckoutInput {
   work_email?: string;
   brand_website?: string;
   campaign_start_date?: string;
+  /** Paid, order-shaping targeting — folded into the idempotency identity. */
+  advancedTargeting?: unknown;
 }
 
 export interface ResolvedAgentCheckout {
@@ -17,7 +20,7 @@ export interface ResolvedAgentCheckout {
   campaign_start_date?: string;
   /** Required agent-path fields still absent after the profile fallback. */
   missing: string[];
-  /** Deterministic per (session × checkout config) so retries dedup the order + the CRM event. */
+  /** Deterministic + bounded; varies with every order-shaping input (size, date, targeting, buyer). */
   idempotencyKey: string;
 }
 
@@ -25,7 +28,11 @@ export interface ResolvedAgentCheckout {
  * Resolve the contact fields for the no-JWT agent checkout path: take them from the
  * tool input, falling back to the company profile saved by capture_profile. Reports
  * which required fields are still missing and builds a content-stable idempotency key.
- * Pure (no I/O) so it is fully unit-tested.
+ *
+ * The key hashes EVERY order-shaping input — customers/locations/date, the resolved buyer
+ * email, and advancedTargeting — so a retry with identical inputs dedups, while a change
+ * to targeting or a different buyer in the same session produces a distinct order (no
+ * accidental dedup onto someone else's / a stale checkout). Pure (no I/O) → fully tested.
  */
 export function resolveAgentCheckout(
   input: AgentCheckoutInput,
@@ -43,7 +50,16 @@ export function resolveAgentCheckout(
   if (!brand_website) missing.push('brand_website');
   if (!campaign_start_date) missing.push('campaign_start_date');
 
-  const idempotencyKey = `${sessionId}:checkout:${input.customers_per_location}x${input.locations}:${campaign_start_date ?? 'na'}`;
+  const identity = stableId(
+    JSON.stringify({
+      customers_per_location: input.customers_per_location,
+      locations: input.locations,
+      campaign_start_date: campaign_start_date ?? null,
+      work_email: work_email ?? null,
+      advancedTargeting: input.advancedTargeting ?? null,
+    }),
+  );
+  const idempotencyKey = `${sessionId}:checkout:${identity}`;
 
   return { your_name, work_email, brand_website, campaign_start_date, missing, idempotencyKey };
 }

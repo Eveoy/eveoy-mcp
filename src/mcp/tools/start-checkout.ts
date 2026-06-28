@@ -4,6 +4,7 @@ import { priceFor } from '@/lib/pricing';
 import { callEdge, edgeErrorMessage, EdgeError } from '@/integrations/edge';
 import { logEvent, type CompanyProfile } from '@/integrations/crm';
 import { resolveAgentCheckout } from './checkout-plan';
+import { log } from '@/lib/log';
 
 /**
  * Agent-native checkout. Primary path needs NO sign-in: the agent supplies contact
@@ -71,6 +72,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
                 text: 'Your sign-in expired. Ask me to start checkout again and I can proceed without sign-in — ' +
                   'have your work email and a campaign start date (at least 14 days out) ready, or call capture_profile first.',
               }],
+              isError: true,
             };
           }
           return { content: [{ type: 'text', text: edgeErrorMessage(err) }], isError: true };
@@ -116,6 +118,23 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
       }
 
       if (!data || typeof data.url !== 'string') {
+        // Partial success: a session (and Zoho Deal) exist but the payment link is missing
+        // (idempotency hit / Stripe URL retrieval failure). Retrying dedups to the same dead
+        // end, so steer the user to recover by reference — and make it observable.
+        if (data?.sessionId) {
+          log.error('checkout.url_missing_session_exists', { session, sessionId: data.sessionId });
+          return {
+            content: [{
+              type: 'text',
+              text: `Your checkout session was created (reference ${data.sessionId}) but the secure payment link ` +
+                `could not be retrieved. Do not start over — that would not create a new order. Email ` +
+                `support@eveoy.com with that reference to get your payment link.`,
+            }],
+            structuredContent: { session_id: data.sessionId, url_unavailable: true },
+            isError: true,
+          };
+        }
+        log.error('checkout.empty_response', { session });
         return { content: [{ type: 'text', text: 'Checkout could not be created. Please try again.' }], isError: true };
       }
       return {

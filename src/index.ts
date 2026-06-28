@@ -19,7 +19,8 @@ const SERVER_INSTRUCTIONS =
   'contract — no-shows are refunded 100%. Published tiers: Starter $999 (40 customers), Proof $2,499 ' +
   '(100), Rollout $9,996 (400+). Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing ' +
   'or the recommend_pilot prompt to price, capture_profile to save your brand, start_checkout to buy ' +
-  '(it returns a payment link; read tools are anonymous, checkout may ask for one-time sign-in). Also ' +
+  '(it returns a payment link directly — no sign-in; provide contact + a campaign start date, or call ' +
+  'capture_profile first). Read tools are anonymous. Also ' +
   'search_directory/get_business for the directory and book_demo to reach the team.';
 
 /** Per-session state, persisted in this session's Durable Object (SQLite). */
