@@ -235,9 +235,9 @@ Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-stor
 - Discount Stores
 - Grocery and Food
 - Home Goods
-- Quick-Service Restaurants (QSR)
+- QSR
 - Hospitality
-- All other B2C brands
+- All B2C Brands
 
 Built for every aisle, every shelf, every store.
 `,

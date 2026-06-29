@@ -139,8 +139,8 @@ idempotency_key, session_id, phone?, agent_id? }` (NO JWT; **`phone` is optional
 
 **`Industry` / `Web_MCP_Sector` picklist values (16):** Specialty Retail, Apparel, Footwear,
 Health and Beauty, Food and Beverage, Health and Wellness, Pet Care, Personal Care, Baby Care,
-Department Stores, Discount Stores, Grocery and Food, Home Goods, Quick-Service Restaurants,
-Hospitality, Other B2C.
+Department Stores, Discount Stores, Grocery and Food, Home Goods, QSR,
+Hospitality, All B2C Brands. (Updated: was "Quick-Service Restaurants" / "Other B2C".)
 
 **`Web_MCP_Event_Type` picklist values (10):** qa, pricing, directory, app_link, newsletter,
 profile_captured, demo_booked, checkout_started, order_paid, human_requested.

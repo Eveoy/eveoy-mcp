@@ -17,9 +17,9 @@ export const INDUSTRIES_PUBLIC = [
   'Discount Stores',
   'Grocery and Food',
   'Home Goods',
-  'Quick-Service Restaurants',
+  'QSR',
   'Hospitality',
-  'Other B2C',
+  'All B2C Brands',
 ] as const;
 
 export type IndustryPublic = (typeof INDUSTRIES_PUBLIC)[number];
