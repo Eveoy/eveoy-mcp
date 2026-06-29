@@ -10,6 +10,7 @@ import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
 import type { CompanyProfile } from '@/integrations/crm';
 import { buildInfo } from '@/info';
 import { extractIp, hashIp } from '@/lib/ipc';
+import { checkRateLimits } from '@/lib/ratelimit';
 import { log } from '@/lib/log';
 
 const SERVER_INSTRUCTIONS =
@@ -192,14 +193,12 @@ async function proxyLanding(method: string): Promise<Response> {
 }
 
 async function softRateLimit(request: Request, env: Env): Promise<boolean> {
-  if (!env.MCP_LIMIT) return true; // binding absent (local dev) → allow
-  try {
-    const key = hashIp(extractIp(request.headers));
-    const { success } = await env.MCP_LIMIT.limit({ key });
-    return success;
-  } catch {
-    return true; // fail-open on limiter error
-  }
+  // Per-IP backstop + per-session limit (keyed by Mcp-Session-Id when present).
+  return checkRateLimits(
+    env.MCP_LIMIT,
+    hashIp(extractIp(request.headers)),
+    request.headers.get('mcp-session-id'),
+  );
 }
 
 export default {
