@@ -10,3 +10,8 @@ IP_HASH_SALT=dev-only-salt-change-me
 SUPABASE_ANON_KEY=eyJ...paste-the-publishable-anon-key-here
 
 # OAuth (Phase 2 write-tool gating, optional) handled by @cloudflare/workers-oauth-provider.
+
+# Opt-in Receipt Required gate on start_checkout (off by default — see README).
+# RECEIPT_REQUIRED=1 turns it on. In production also pin trusted issuer keys.
+# RECEIPT_REQUIRED=1
+# RECEIPT_TRUSTED_KEYS=<base64url-spki>,<base64url-spki>
