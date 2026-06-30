@@ -4,10 +4,10 @@ startCommand:
 
 metadata:
   displayName: Eveoy
-  description: Ask about Eveoy and book pilots — $24.99 per verified in-store customer.
+  description: Inbound sales rep for AI agents — learn, get a quote, and buy $24.99 verified in-store customer visits via MCP.
   homepage: https://mcp.eveoy.com
   icon: https://mcp.eveoy.com/icon-512.png
-  categories: [marketing, sales, retail, advertising]
+  categories: [marketing, sales, retail, advertising, ecommerce]
   tags:
     - eveoy
     - eycrowd
@@ -15,8 +15,11 @@ metadata:
     - in-store
     - retail
     - marketing
+    - ugc
+    - customer-acquisition
     - guaranteed-visits
     - brand-experiences
+    - inbound-sales
 
 configSchema:
   type: object
