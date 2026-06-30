@@ -24,23 +24,24 @@ some you'll **claim an existing crawl** rather than submit fresh.
 | Surface | **11 tools · 5 prompts · 10 resources** |
 | Vendor / contact | Eveoy, Inc. · `support@eveoy.com` |
 | Categories | `marketing, sales, retail, advertising, ecommerce` |
-| Tags | `eveoy, foot-traffic, in-store, retail, marketing, ugc, customer-acquisition, guaranteed-visits, brand-experiences, inbound-sales` |
+| Tags | `eveoy, foot-traffic, in-store, retail, marketing, ugc, customer-acquisition, guaranteed-visits, brand-experiences, expert-associate` |
 
 **One-liner (≤100 chars):**
-> Inbound sales rep for AI agents: learn, get a quote, and buy $24.99 verified in-store visits via MCP.
+> Your Eveoy expert in any AI — learn how it works, get a price, and order real in-store visits.
 
 **One-sentence capability:**
-> Any agent can learn about Eveoy, get an exact quote, save its company, and buy verified in-store
-> customer visits (each visit = ~2 on-brand in-store UGC photos) end to end — no sign-in.
+> A helpful Eveoy expert inside any AI: learn about Eveoy, get an exact quote, save your company,
+> and — when ready — order verified in-store customer visits (each = ~2 on-brand UGC photos), no sign-in.
 
 **Paragraph (for listings that want a description body):**
-> Eveoy MCP turns any AI agent into an Eveoy buyer. Eveoy is pay-per-visit experience marketing:
-> $24.99 per real customer who walks into your store, spends 10+ minutes, makes a purchase, and
-> brings back ~2 on-brand in-store UGC photos — not clicks, not impressions, not a contract, and
-> no-shows are 100% refunded. Through this server an agent can ask questions (`ask_eveoy`), get an
-> exact quote (`get_pricing` / `recommend_pilot`), save the brand it represents (`capture_profile`),
-> buy a pilot with a Stripe link (`start_checkout`), book a demo (`book_demo`), or reach a human
-> (`request_human`) — all anonymously, with every interaction logged to the team's CRM.
+> Eveoy MCP is a knowledgeable Eveoy expert associate inside any AI — here to help and educate, not
+> to sell. Eveoy is pay-per-visit experience marketing: $24.99 per real customer who walks into your
+> store, spends 10+ minutes, makes a purchase, and brings back ~2 on-brand in-store UGC photos — not
+> clicks, not impressions, not a contract, and no-shows are 100% refunded. Through this server an agent
+> can ask questions (`ask_eveoy`), get an exact quote (`get_pricing` / `recommend_pilot`), save the
+> brand it represents (`capture_profile`), and — when ready — place an order with a Stripe link
+> (`start_checkout`), book a demo (`book_demo`), or reach a person (`request_human`) — all anonymously,
+> with every interaction logged to the team's CRM.
 
 ---
 
@@ -70,9 +71,9 @@ Tools: 11  |  Prompts: 5  |  Resources: 10
 Registry: com.eveoy/mcp (v1.1.0, official MCP registry)
 Categories: marketing, sales, retail, advertising, ecommerce
 
-One-liner: Inbound sales rep for AI agents — learn, get a quote, and buy $24.99 verified
-in-store customer visits via MCP. Anonymous (no sign-in). Each visit includes ~2 on-brand
-in-store UGC photos; no-shows 100% refunded.
+One-liner: A helpful Eveoy expert inside any AI — learn how Eveoy works, get a quote, and (when
+ready) order $24.99 verified in-store customer visits. Anonymous (no sign-in). Each visit includes
+~2 on-brand in-store UGC photos; no-shows 100% refunded. Here to help and educate, not sell.
 ```
 
 ---
@@ -88,7 +89,7 @@ by `owner/repo`** under `🎯 Marketing` → PR.
 **Entry line** (legend: `📇` TypeScript · `☁️` Cloud/remote · `🎖️` official implementation. Omit a
 Glama score badge until Glama indexes us — don't fabricate the badge URL):
 ```
-- [Eveoy/eveoy-mcp](https://github.com/Eveoy/eveoy-mcp) 📇 ☁️ 🎖️ - Inbound sales rep: an agent can learn, get a quote, and buy $24.99 verified in-store customer visits (with on-brand UGC photos) end to end via MCP.
+- [Eveoy/eveoy-mcp](https://github.com/Eveoy/eveoy-mcp) 📇 ☁️ - Eveoy's expert associate inside any AI: learn how Eveoy brings real customers into real stores, get an exact quote, and (when ready) order $24.99 verified in-store visits with on-brand photos.
 ```
 
 **PR title** (the maintainer's automated-agent fast-track — the literal `🤖🤖🤖` opts in):

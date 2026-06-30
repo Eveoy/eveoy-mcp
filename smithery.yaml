@@ -4,7 +4,7 @@ startCommand:
 
 metadata:
   displayName: Eveoy
-  description: Inbound sales rep for AI agents — learn, get a quote, and buy $24.99 verified in-store customer visits via MCP.
+  description: Your Eveoy expert associate inside any AI — learn how Eveoy works, get a quote, and (when ready) order $24.99 verified in-store visits. Here to help, not sell.
   homepage: https://mcp.eveoy.com
   icon: https://mcp.eveoy.com/icon-512.png
   categories: [marketing, sales, retail, advertising, ecommerce]
@@ -19,7 +19,7 @@ metadata:
     - customer-acquisition
     - guaranteed-visits
     - brand-experiences
-    - inbound-sales
+    - expert-associate
 
 configSchema:
   type: object

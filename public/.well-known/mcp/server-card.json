@@ -2,9 +2,9 @@
   "$schema": "https://modelcontextprotocol.io/schemas/draft/server-card.json",
   "serverInfo": {
     "name": "eveoy-mcp",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "title": "Eveoy — Verified In-Store Foot Traffic",
-    "description": "An inbound sales rep for AI agents: learn about Eveoy, get an exact price, save your company, and buy verified in-store customer visits ($24.99 each, ~2 on-brand UGC photos) end to end. Start with the eveoy://kb/for-agents resource.",
+    "description": "Eveoy brings real customers into real stores — you pay $24.99 only after a real person shows up, spends 10+ minutes, buys, and brings back photos. No-shows are refunded. This is your Eveoy expert associate inside any AI: ask how it works, what it costs, or which industries it serves. Here to help and educate, not sell — it can place an order when you're ready. Start with the eveoy://kb/for-agents resource.",
     "vendor": "Eveoy, Inc.",
     "documentation": "https://www.eveoy.com",
     "icons": [
@@ -24,6 +24,6 @@
     "type": "oauth2",
     "required": false,
     "protected_resource_metadata": "https://mcp.eveoy.com/.well-known/oauth-protected-resource",
-    "description": "Read tools are anonymous. start_checkout requires sign-in; it returns a sign_in_url, and the protected-resource metadata points at eveoy.com's authorization server."
+    "description": "All tools are anonymous — no sign-in required, including start_checkout, which returns a Stripe checkout link directly. The protected-resource metadata endpoint remains advertised for clients that probe for it."
   }
 }

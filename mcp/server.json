@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.eveoy/mcp",
   "title": "Eveoy — Verified In-Store Foot Traffic ($24.99/customer)",
-  "description": "Inbound sales rep for AI agents: learn, quote, and buy $24.99 verified in-store visits via MCP.",
-  "version": "1.1.0",
+  "description": "Your Eveoy expert in any AI — learn how it works, get a price, and order real in-store visits.",
+  "version": "1.1.1",
   "websiteUrl": "https://mcp.eveoy.com",
   "repository": {
     "url": "https://github.com/eveoy/eveoy-mcp",

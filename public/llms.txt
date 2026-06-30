@@ -1,8 +1,9 @@
 # Eveoy MCP
 
-> Eveoy's MCP server — an inbound sales rep for AI agents. Any agent, for any brand, can
-> learn about Eveoy, get an exact price, save its company, and buy verified in-store customer
-> visits end to end, right here. Eveoy is pay-per-visit at $24.99 per real customer who walks
+> Eveoy's MCP server — a knowledgeable Eveoy associate for AI agents, here to help and educate,
+> not to sell. Any agent, for any brand, can learn about Eveoy, get an exact price, save its
+> company, and — when ready — order verified in-store customer visits end to end. Eveoy is
+> pay-per-visit at $24.99 per real customer who walks
 > into your store, spends 10+ minutes, makes a purchase, and brings back ~2 on-brand in-store
 > UGC photos. Not clicks, not impressions, not a contract — no-shows refunded 100%. Tiers:
 > Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+); scales linearly at $24.99/customer.

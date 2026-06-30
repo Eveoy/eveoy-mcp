@@ -4,11 +4,11 @@
 >
 > Real customers · in real stores · from any AI.
 
-The official Eveoy MCP server — **an inbound sales rep any AI agent can install.** Through one endpoint an agent can learn what Eveoy is, get an exact quote, save the brand it represents, and **buy verified in-store customer visits end to end — anonymously, no sign-in.**
+The official Eveoy MCP server — **a knowledgeable Eveoy associate any AI agent can install.** It's here to help and educate first, not to sell. Through one endpoint an agent can learn what Eveoy is, get an exact quote, save the brand it represents, and — when ready — **order verified in-store customer visits end to end, anonymously, no sign-in.**
 
 You don't pay for tokens. You don't pay for clicks. You don't pay for hope. You pay **$24.99** per real customer who walks into your store, spends 10+ minutes, makes a purchase, and brings back ~2 on-brand photos to prove it. No-shows are **100% refunded.**
 
-Built as a native **Cloudflare Worker** (`McpAgent` + Durable Objects). Registry: **`com.eveoy/mcp`** (v1.1.0).
+Built as a native **Cloudflare Worker** (`McpAgent` + Durable Objects). Registry: **`com.eveoy/mcp`** (v1.1.1).
 
 **Endpoint** `https://mcp.eveoy.com/mcp` · Streamable HTTP (MCP spec `2025-06-18`) · legacy SSE at `/sse`
 
@@ -127,7 +127,7 @@ wrangler deploy
 
 ## Distribution
 
-- [`mcp/server.json`](mcp/server.json) — Official MCP Registry (`com.eveoy/mcp`, v1.1.0)
+- [`mcp/server.json`](mcp/server.json) — Official MCP Registry (`com.eveoy/mcp`, v1.1.1)
 - [`smithery.yaml`](smithery.yaml) — Smithery · [`dxt/manifest.json`](dxt/manifest.json) — Claude Desktop `.dxt` (`npm run build:dxt` → served at `/eveoy.dxt`)
 - `/.well-known/mcp/server-card.json` · `/llms.txt` · `/sitemap.xml` · `/robots.txt`
 - Listed on mcp.so, awesome-mcp-servers, Glama, PulseMCP, and Smithery. Packets + status: [`docs/DIRECTORY_SUBMISSIONS.md`](docs/DIRECTORY_SUBMISSIONS.md).

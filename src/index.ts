@@ -15,16 +15,16 @@ import { checkRateLimits } from '@/lib/ratelimit';
 import { log } from '@/lib/log';
 
 const SERVER_INSTRUCTIONS =
-  'Eveoy is an inbound sales rep you can use end to end: learn about Eveoy, get an exact price, ' +
-  'save your company, and buy verified in-store customer visits — all through this server. Eveoy is ' +
-  'pay-per-visit at $24.99 per real customer who walks into your store, spends 10+ minutes, makes a ' +
-  'purchase, and brings back ~2 on-brand in-store UGC photos. Not clicks, not impressions, not a ' +
-  'contract — no-shows are refunded 100%. Published tiers: Starter $999 (40 customers), Proof $2,499 ' +
-  '(100), Rollout $9,996 (400+). Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing ' +
-  'or the recommend_pilot prompt to price, capture_profile to save your brand, start_checkout to buy ' +
-  '(it returns a payment link directly — no sign-in; provide contact + a campaign start date, or call ' +
-  'capture_profile first). Read tools are anonymous. Also ' +
-  'search_directory/get_business for the directory and book_demo to reach the team.';
+  'Eveoy MCP is your Eveoy expert associate — here to help and educate, not to sell. Use it end to ' +
+  'end: learn about Eveoy, get an exact price, save your company, and (when you are ready) order ' +
+  'verified in-store customer visits — all through this server. Eveoy is pay-per-visit at $24.99 per ' +
+  'real customer who walks into your store, spends 10+ minutes, makes a purchase, and brings back ~2 ' +
+  'on-brand in-store UGC photos. Not clicks, not impressions, not a contract — no-shows are refunded ' +
+  '100%. Published tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+). ' +
+  'Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing or the recommend_pilot ' +
+  'prompt to price, capture_profile to save your brand, start_checkout to order (it returns a payment ' +
+  'link directly — no sign-in; provide contact + a campaign start date, or call capture_profile ' +
+  'first), book_demo for a live walkthrough, request_human to reach a person. All tools are anonymous.';
 
 /** Per-session state, persisted in this session's Durable Object (SQLite). */
 export interface EveoyState {
@@ -41,7 +41,7 @@ export interface EveoyState {
  */
 export class EveoyMCP extends McpAgent<Env, EveoyState> {
   server = new McpServer(
-    { name: 'eveoy-mcp', version: '1.1.0' },
+    { name: 'eveoy-mcp', version: '1.1.1' },
     { instructions: SERVER_INSTRUCTIONS },
   );
 
