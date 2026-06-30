@@ -138,6 +138,11 @@ export const StartCheckoutInput = z.object({
     .optional()
     .describe(`Campaign start date (YYYY-MM-DD, ≥ ${CAMPAIGN_START_LEAD_DAYS} days out). Required to check out without signing in.`),
   advancedTargeting: AdvancedTargetingInput,
+  // OPT-IN authorization-receipt gate (off by default; see src/integrations/receipt.ts).
+  // Ignored entirely unless the maintainer enables RECEIPT_REQUIRED. An EP-RECEIPT-v1
+  // document proving a named human authorized THIS checkout.
+  authorization_receipt: z.unknown().optional()
+    .describe('Optional EMILIA authorization receipt (EP-RECEIPT-v1). Only used if this server has the opt-in Receipt Required gate enabled.'),
 }).strict();
 
 // ─── Output schemas ─────────────────────────────────────────────────

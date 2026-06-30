@@ -113,6 +113,31 @@ wrangler deploy
 - Fail-closed public-only output classifier — every response passes `assertPublic`
 - No tokens or secrets ever logged; IPs HMAC-hashed with a rotating salt
 - Session state isolated per Durable Object
+- **Opt-in Receipt Required gate on `start_checkout`** (off by default) — see below
+
+### Opt-in: Receipt Required on `start_checkout`
+
+`start_checkout` creates a Stripe checkout session and a Zoho CRM deal. Optionally,
+the server can require a verifiable **authorization receipt** — proof that a named
+human authorized *this exact order* — before that side effect runs. Verification is
+offline Ed25519 over canonical JSON ([`@emilia-protocol/require-receipt`](https://www.npmjs.com/package/@emilia-protocol/require-receipt),
+Apache-2.0): no backend, no API key, no third-party server trusted.
+
+- **Off by default — fully backward-compatible.** With no config, `start_checkout`
+  behaves exactly as before (the gate returns `{ required: false }` and passes through).
+- **Enable it:** set `RECEIPT_REQUIRED=1`. In production also pin the issuer key(s) you
+  trust via `RECEIPT_TRUSTED_KEYS` (comma-separated base64url SPKI); with none pinned the
+  gate accepts a receipt's own inline key (integrity only, not issuer trust) so the flow is
+  testable end-to-end first.
+- The agent supplies the receipt in `start_checkout`'s optional `authorization_receipt`
+  field. The receipt is bound to the specific order (customer count + locations + contact),
+  consumed one-time only on success, and refusals return a sanitized `{ reason }` challenge.
+- Manifest of what agents must bring: [`/.well-known/agent-actions.json`](public/.well-known/agent-actions.json).
+  RR-1 conformance (missing → refused, valid → runs, replay → refused, forged → refused) is
+  re-proven on every push in [`src/mcp/tools/start-checkout-receipt.test.ts`](src/mcp/tools/start-checkout-receipt.test.ts).
+
+Spec: IETF Internet-Draft `draft-schrock-ep-authorization-receipts`. This is a
+*necessary, not sufficient* accountability control — not auth, not permissions.
 
 ## Distribution
 

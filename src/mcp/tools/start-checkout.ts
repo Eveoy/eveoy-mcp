@@ -4,6 +4,7 @@ import { priceFor } from '@/lib/pricing';
 import { callEdge, edgeErrorMessage, EdgeError } from '@/integrations/edge';
 import { logEvent, type CompanyProfile } from '@/integrations/crm';
 import { resolveAgentCheckout } from './checkout-plan';
+import { gateCheckout } from '@/integrations/receipt';
 import { log } from '@/lib/log';
 
 /**
@@ -53,6 +54,24 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
       const st = agent.state ?? {};
       const session = agent.getSessionId();
 
+      // OPT-IN Receipt Required gate. No-op unless the maintainer sets RECEIPT_REQUIRED=1:
+      // with it off, gateCheckout() returns { required: false } and we fall straight through,
+      // so existing callers are unaffected. When on, this checkout (creates a Stripe session
+      // + Zoho deal) needs a verifiable authorization receipt bound to THIS exact order.
+      const orderTarget = `${p.total_customers}c@${locations}loc:${st.profile?.work_email ?? input.work_email ?? session}`;
+      const gate = gateCheckout(input.authorization_receipt ?? null, orderTarget);
+      if (gate.required && !gate.ok) {
+        // Receipt missing / invalid / replayed — refuse, and tell the agent what to bring.
+        return {
+          content: [{ type: 'text', text: `Receipt Required to start this checkout. ${JSON.stringify(gate.body)}` }],
+          structuredContent: { receipt_required: true, status: gate.status, challenge: gate.body },
+          isError: true,
+        };
+      }
+      // From here, gate is either off (required:false) or a verified+reserved receipt we must
+      // commit() on success and release() on any failure (a failed action never burns approval).
+      const releaseReceipt = (): void => { if (gate.required && gate.ok) gate.release(); };
+
       let data: { url?: string; sessionId?: string } | undefined;
 
       if (validJwt(st)) {
@@ -64,6 +83,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
             st.jwt,
           );
         } catch (err) {
+          releaseReceipt(); // action failed → keep the approval retryable
           if (err instanceof EdgeError && err.status === 401) {
             agent.setState({ ...st, jwt: undefined, jwtExp: undefined });
             return {
@@ -81,6 +101,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
         // Agent path (no JWT). Resolve contact from input, falling back to the captured profile.
         const r = resolveAgentCheckout(input, st.profile, session);
         if (r.missing.length) {
+          releaseReceipt(); // bailed before the action ran → keep the approval retryable
           return {
             content: [{
               type: 'text',
@@ -105,6 +126,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
             advancedTargeting: advancedTargeting ?? null,
           });
         } catch (err) {
+          releaseReceipt(); // action failed → keep the approval retryable
           return { content: [{ type: 'text', text: edgeErrorMessage(err) }], isError: true };
         }
         await logEvent({
@@ -118,6 +140,10 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
       }
 
       if (!data || typeof data.url !== 'string') {
+        // No usable payment link came back. The receipt is NOT committed (left retryable):
+        // even on the partial-session branch, the user recovers by reference, not by re-running
+        // a fresh gated checkout, so we don't burn the approval here.
+        releaseReceipt();
         // Partial success: a session (and Zoho Deal) exist but the payment link is missing
         // (idempotency hit / Stripe URL retrieval failure). Retrying dedups to the same dead
         // end, so steer the user to recover by reference — and make it observable.
@@ -137,6 +163,11 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
         log.error('checkout.empty_response', { session });
         return { content: [{ type: 'text', text: 'Checkout could not be created. Please try again.' }], isError: true };
       }
+
+      // Success: the checkout session + Zoho deal were created. Now (and only now) consume the
+      // receipt one-time, so a transient failure above never burned a valid approval.
+      if (gate.required && gate.ok) gate.commit();
+
       return {
         content: [{
           type: 'text',
@@ -147,6 +178,9 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
           session_id: data.sessionId,
           total: p.total_usd,
           customers: p.total_customers,
+          ...(gate.required && gate.ok
+            ? { authorization: { receipt_id: gate.receiptId, outcome: gate.outcome, signer: gate.signer } }
+            : {}),
         },
       };
     },

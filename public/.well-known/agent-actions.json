@@ -1,0 +1,17 @@
+{
+  "@version": "EP-ACTION-RISK-MANIFEST-v0.1",
+  "service": { "name": "eveoy-mcp", "manifest_url": "/.well-known/agent-actions.json" },
+  "actions": [
+    {
+      "id": "mcp.start_checkout",
+      "description": "Creates a Stripe checkout session and a Zoho CRM deal for a paid pilot. Opt-in: when enabled, requires a named human's authorization receipt for this exact order.",
+      "match": { "protocol": "mcp", "tool": "start_checkout" },
+      "action_type": "eveoy.checkout.create",
+      "risk": "high",
+      "receipt_required": true,
+      "assurance_class": "class_a",
+      "max_age_sec": 900,
+      "quorum": { "required": false }
+    }
+  ]
+}
