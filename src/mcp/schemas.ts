@@ -279,3 +279,14 @@ export const CaptureProfileOutput = z.object({
   company: z.string(),
   note: z.string(),
 });
+
+// ─── request_human ────────────────────────────────────────────────
+export const RequestHumanInput = z
+  .object({
+    reason: z.string().trim().max(500).optional().describe('Why you want a human, or what you need help with.'),
+    work_email: z.string().email().max(254).optional().describe('Email for the Eveoy team to reach you.'),
+    contact_name: z.string().trim().min(1).max(80).optional().describe('Your name.'),
+  })
+  .strict();
+
+export const RequestHumanOutput = z.object({ ok: z.boolean(), note: z.string() });

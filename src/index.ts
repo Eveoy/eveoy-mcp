@@ -6,6 +6,7 @@ import { registerAll } from '@/mcp/register';
 import { registerStartCheckout, type AuthAgent } from '@/mcp/tools/start-checkout';
 import { registerCaptureProfile, type ProfileAgent } from '@/mcp/tools/capture-profile';
 import { registerBookDemo, type DemoAgent } from '@/mcp/tools/book-demo';
+import { registerRequestHuman, type RequestHumanAgent } from '@/mcp/tools/request-human';
 import { handleLinkCallback, handleLinkFinish } from '@/auth/link';
 import type { CompanyProfile } from '@/integrations/crm';
 import { buildInfo } from '@/info';
@@ -57,6 +58,8 @@ export class EveoyMCP extends McpAgent<Env, EveoyState> {
     registerCaptureProfile(this.server, this as unknown as ProfileAgent);
     // book_demo needs the agent instance to log the high-intent demo_booked event.
     registerBookDemo(this.server, this as unknown as DemoAgent);
+    // request_human needs the agent instance to log the high-intent human_requested event.
+    registerRequestHuman(this.server, this as unknown as RequestHumanAgent);
   }
 
   /** Called via DO RPC from /link/finish after the user signs in at eveoy.com. */

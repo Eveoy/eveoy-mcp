@@ -135,6 +135,14 @@ export const CAPABILITIES: Capability[] = [
     triggers: ['sign me up', 'newsletter', 'keep me posted'],
     auth: 'none',
   },
+  {
+    name: 'request_human',
+    title: 'Talk to a human',
+    summary: 'Hand off to a person on the Eveoy team and flag the conversation for follow-up.',
+    group: 'More',
+    triggers: ['talk to a human', 'connect me with someone', 'have someone call me', 'escalate'],
+    auth: 'none',
+  },
 ];
 
 export const PROMPTS: Array<{ name: string; summary: string }> = [

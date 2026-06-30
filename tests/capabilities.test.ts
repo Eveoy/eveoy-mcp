@@ -19,6 +19,7 @@ const EXPECTED_TOOLS = [
   'get_pricing',
   'list_industries',
   'list_metros',
+  'request_human',
   'search_directory',
   'start_checkout',
   'subscribe_newsletter',
