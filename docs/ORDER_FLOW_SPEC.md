@@ -1,6 +1,15 @@
 # eveoy.com/order — Stripe + Supabase integration contract
 
-> Source: Lovable-authored spec, captured 2026-06-02. This is the **wire-level contract** the MCP must conform to so Phase 2 (`create_pilot_order` tool) is a thin call into the existing backend, not a parallel re-implementation.
+> **⚠️ STATUS (2026-06-28) — partially superseded. Read this before using this doc.**
+> The **wire-level checkout contract below** (the `create-checkout-session` body, pricing math,
+> order-form fields) is still accurate — it is what the live `start_checkout` tool conforms to.
+> But the **`create_pilot_order` tool name and the OAuth / sign-in framing are dead.** The buy
+> flow shipped as **`start_checkout` on the anonymous no-JWT agent path** — agents buy without
+> sign-in. **Do NOT add an OAuth/PKCE/DCR wrap; it would re-introduce the friction we removed.**
+> For the current, authoritative MCP state (live tools, the crm-log + checkout-agent-path
+> contracts, what's hidden), use [`NOTES_FOR_LOVABLE.md`](./NOTES_FOR_LOVABLE.md).
+
+> Source: Lovable-authored spec, captured 2026-06-02. This is the **wire-level contract** the MCP must conform to (the buy flow is a thin call into the existing backend, not a parallel re-implementation).
 
 ## High-level flow
 
