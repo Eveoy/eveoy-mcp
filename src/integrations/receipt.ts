@@ -35,18 +35,19 @@ function gateFor(req: {
 }): ReturnType<typeof makeReceiptGate> {
   let g = gates.get(req.action_type);
   if (!g) {
-    const { receiptTrustedKeys } = config();
+    const { receiptTrustedKeys, receiptAllowInlineKey } = config();
     g = makeReceiptGate({
       action: req.action_type,
       maxAgeSec: req.max_age_sec,
       statusCode: RECEIPT_REQUIRED_STATUS,
       manifestUrl: MANIFEST_URL,
       assuranceClass: req.assurance_class,
-      // Production: pin the issuer SPKI key(s) you trust via RECEIPT_TRUSTED_KEYS.
-      // With none configured we fall back to allowInlineKey (proves integrity, NOT
-      // issuer trust) so the opt-in is testable end-to-end before keys are pinned.
+      // Secure by default: pin issuer SPKI key(s) via RECEIPT_TRUSTED_KEYS. Inline
+      // (self-signed) keys are accepted ONLY with an explicit non-prod opt-in
+      // (RECEIPT_ALLOW_INLINE_KEY); gateCheckout fails closed before reaching here
+      // if neither is configured.
       trustedKeys: receiptTrustedKeys,
-      allowInlineKey: receiptTrustedKeys.length === 0,
+      allowInlineKey: receiptTrustedKeys.length === 0 && receiptAllowInlineKey,
     });
     gates.set(req.action_type, g);
   }
@@ -75,6 +76,24 @@ export function gateCheckout(receipt: unknown, target: string): GateResult {
 
   const req = findActionRequirement(RECEIPT_MANIFEST, { protocol: 'mcp', tool: 'start_checkout' });
   if (!req || !req.receipt_required) return { required: false };
+
+  // FAIL CLOSED: enforcement is on but no issuer key is trusted and inline keys
+  // are not explicitly enabled. Refuse the checkout rather than accept a
+  // self-signed receipt for a payment-creating action.
+  const { receiptTrustedKeys, receiptAllowInlineKey } = config();
+  if (receiptTrustedKeys.length === 0 && !receiptAllowInlineKey) {
+    return {
+      required: true,
+      ok: false,
+      status: 500,
+      body: {
+        rejected: { reason: 'receipt_enforcement_misconfigured' },
+        detail: 'Set RECEIPT_TRUSTED_KEYS to the issuer key(s) you trust '
+          + '(or RECEIPT_ALLOW_INLINE_KEY=1 for non-production demos); refusing to '
+          + 'accept a self-signed receipt for checkout.',
+      },
+    };
+  }
 
   const c = gateFor(req).check(receipt, { target });
   if (!c.ok) return { required: true, ok: false, status: c.status, body: c.body };

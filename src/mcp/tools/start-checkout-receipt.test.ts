@@ -87,7 +87,11 @@ describe('start_checkout — gate OFF (default, non-breaking)', () => {
 });
 
 describe('start_checkout — gate ON: RR-1 conformance', () => {
-  beforeEach(() => __setConfigForTest({ receiptRequired: true, receiptTrustedKeys: [] }));
+  // Self-contained: each receipt is minted with a fresh key, so run in explicit
+  // NON-PRODUCTION inline mode. Production pins receiptTrustedKeys instead (see
+  // the fail-closed test below, which proves the secure default refuses checkout
+  // when no trusted key is configured).
+  beforeEach(() => __setConfigForTest({ receiptRequired: true, receiptTrustedKeys: [], receiptAllowInlineKey: true }));
 
   it('1. missing receipt -> refused (Receipt Required)', async () => {
     const res = await handlerFor(profileAgent())(ORDER, {});
@@ -128,5 +132,18 @@ describe('start_checkout — gate ON: RR-1 conformance', () => {
     );
     expect(res.isError).toBe(true);
     expect(res.structuredContent?.receipt_required).toBe(true);
+  });
+});
+
+describe('start_checkout — gate ON: secure default (fails closed)', () => {
+  // Production posture: enforcement on, but no trusted key pinned and no inline opt-in.
+  beforeEach(() => __setConfigForTest({ receiptRequired: true, receiptTrustedKeys: [], receiptAllowInlineKey: false }));
+
+  it('refuses checkout when no issuer key is trusted (does not run, even with a valid receipt)', async () => {
+    const res = await handlerFor(profileAgent())({ ...ORDER, authorization_receipt: issueReceipt(ACTION) }, {});
+    expect(res.isError).toBe(true);
+    expect(res.structuredContent?.receipt_required).toBe(true);
+    // The Stripe checkout must NOT have been created under a self-signed receipt.
+    expect(res.structuredContent?.checkout_url).toBeUndefined();
   });
 });

@@ -21,6 +21,9 @@ export interface RuntimeConfig {
   // Off by default — fully backward-compatible. See src/integrations/receipt.ts.
   receiptRequired: boolean;
   receiptTrustedKeys: string[];
+  // Explicit NON-PRODUCTION opt-in to accept self-signed (inline-key) receipts.
+  // Off by default: with no trusted keys pinned, the gate fails closed instead.
+  receiptAllowInlineKey: boolean;
 }
 
 let current: RuntimeConfig = {
@@ -34,6 +37,7 @@ let current: RuntimeConfig = {
   siteUrl: 'https://www.eveoy.com',
   receiptRequired: false,
   receiptTrustedKeys: [],
+  receiptAllowInlineKey: false,
 };
 
 export function setRuntimeConfig(env: {
@@ -47,6 +51,7 @@ export function setRuntimeConfig(env: {
   SITE_URL?: string;
   RECEIPT_REQUIRED?: string;
   RECEIPT_TRUSTED_KEYS?: string;
+  RECEIPT_ALLOW_INLINE_KEY?: string;
 }): void {
   current = {
     classifierStrict: env.MCP_CLASSIFIER_STRICT === '1',
@@ -62,6 +67,7 @@ export function setRuntimeConfig(env: {
     receiptRequired: env.RECEIPT_REQUIRED === '1',
     receiptTrustedKeys: (env.RECEIPT_TRUSTED_KEYS ?? '')
       .split(',').map((s) => s.trim()).filter(Boolean),
+    receiptAllowInlineKey: env.RECEIPT_ALLOW_INLINE_KEY === '1',
   };
 }
 
