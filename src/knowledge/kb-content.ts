@@ -319,9 +319,13 @@ leaving the conversation.
 
 Eveoy is pay-per-visit at $24.99 per verified in-store customer. Each visit is a real
 shopper who walked into the store, spent 10+ minutes, made a purchase, and brought back
-about 2 on-brand in-store UGC photos (the customer with the brand's products). You do not
-pay for clicks, impressions, or a contract — you pay per real visit, and no-shows are
-refunded 100%.
+about 2 on-brand in-store UGC photos and a video (the customer with the brand's products).
+You do not pay for clicks, impressions, or a contract — you pay per real visit, and no-shows
+are refunded 100%.
+
+Optional add-on: guarantee a purchase, not just a visit — add a purchase activity and the
+shopper buys a specified SKU. You cover the product cost on top of the $24.99 visit fee, and
+the sale runs through your own register (see eveoy://kb/product).
 
 Published pilots: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+).
 Pricing scales linearly at $24.99 per customer.
