@@ -2,7 +2,7 @@
 
 Ready-to-paste packets to list **Eveoy MCP** on the major discovery directories. Verified
 against each directory's current process (June 2026). The official registry
-(`com.eveoy/mcp` v1.1.0) is already published — several directories ingest from it, so for
+(`com.eveoy/mcp` v1.1.1) is already published — several directories ingest from it, so for
 some you'll **claim an existing crawl** rather than submit fresh.
 
 > Describes the **current enabled surface only** (11 tools — the directory tools are hidden
@@ -68,7 +68,7 @@ Icon: https://mcp.eveoy.com/icon-512.png
 Transport: streamable-http
 Auth: none
 Tools: 11  |  Prompts: 5  |  Resources: 10
-Registry: com.eveoy/mcp (v1.1.0, official MCP registry)
+Registry: com.eveoy/mcp (v1.1.1, official MCP registry)
 Categories: marketing, sales, retail, advertising, ecommerce
 
 One-liner: A helpful Eveoy expert inside any AI — learn how Eveoy works, get a quote, and (when

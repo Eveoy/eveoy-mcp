@@ -43,4 +43,17 @@ describe('positioning + surface accuracy of served copy', () => {
     const raw = await readFile('src/knowledge/public/for-agents.md', 'utf8');
     expect(raw, 'for-agents.md still claims checkout may need sign-in').not.toMatch(/sign-?in/i);
   });
+
+  it('MCP_VERSION stays in sync across server.json, dxt, server-card, and src/info.ts', async () => {
+    const serverJson = JSON.parse(await readFile('mcp/server.json', 'utf8')) as { version: string };
+    const dxt = JSON.parse(await readFile('dxt/manifest.json', 'utf8')) as { version: string };
+    const card = JSON.parse(await readFile('public/.well-known/mcp/server-card.json', 'utf8')) as {
+      serverInfo: { version: string };
+    };
+    const infoTs = await readFile('src/info.ts', 'utf8');
+    const infoVersion = infoTs.match(/MCP_VERSION\s*=\s*'([^']+)'/)?.[1];
+    expect(dxt.version, 'dxt/manifest.json version').toBe(serverJson.version);
+    expect(card.serverInfo.version, 'server-card.json version').toBe(serverJson.version);
+    expect(infoVersion, 'src/info.ts MCP_VERSION').toBe(serverJson.version);
+  });
 });
