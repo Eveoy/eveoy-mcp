@@ -1,0 +1,23 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Eveoy",
+  "name_for_model": "eveoy",
+  "description_for_human": "In-person marketing on demand. Brands pay only when verified customers walk into their store.",
+  "description_for_model": "Eveoy is an in-person marketing platform. Brands pay $24.99 per verified in-store visit. A community of 20,000+ shoppers visits real stores, spends 10+ minutes, completes brand activities, and returns photo and video proof. No-shows are auto-refunded. Use this resource to discover Eveoy's public directory of stores, insights content, and product offerings.",
+  "auth": { "type": "none" },
+  "api": {
+    "type": "sitemap",
+    "url": "https://sitemap.eveoy.com/",
+    "is_user_authenticated": false
+  },
+  "mcp": {
+    "endpoint": "https://mcp.eveoy.com/mcp",
+    "transport": "streamable-http",
+    "sse_endpoint": "https://mcp.eveoy.com/sse",
+    "server_card": "https://mcp.eveoy.com/.well-known/mcp/server-card.json",
+    "auth": "none"
+  },
+  "logo_url": "https://storage.googleapis.com/gpt-engineer-file-uploads/tpTdtbOUG3drEh0J2nMLZe2RW3O2/social-images/social-1777854282808-LOGO_TM-01.webp",
+  "contact_email": "support@eveoy.com",
+  "legal_info_url": "https://eveoy.com/terms"
+}

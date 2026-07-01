@@ -4,9 +4,11 @@
 > not to sell. Any agent, for any brand, can learn about Eveoy, get an exact price, save its
 > company, and — when ready — order verified in-store customer visits end to end. Eveoy is
 > pay-per-visit at $24.99 per real customer who walks
-> into your store, spends 10+ minutes, makes a purchase, and brings back ~2 on-brand in-store
-> UGC photos. Not clicks, not impressions, not a contract — no-shows refunded 100%. Tiers:
-> Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+); scales linearly at $24.99/customer.
+> into your store, spends 10+ minutes, makes a purchase, and brings back 2 on-brand photos and a
+> video. Not clicks, not impressions, not a contract — no-shows refunded 100%. Optional add-on:
+> guarantee a purchase — the shopper buys a specified SKU (you cover product cost, sale runs through
+> your register). Tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+ across
+> 3-4 stores); scales linearly at $24.99/customer.
 > Start here: read eveoy://kb/for-agents.
 
 ## Endpoint

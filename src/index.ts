@@ -19,9 +19,11 @@ const SERVER_INSTRUCTIONS =
   'Eveoy MCP is your Eveoy expert associate — here to help and educate, not to sell. Use it end to ' +
   'end: learn about Eveoy, get an exact price, save your company, and (when you are ready) order ' +
   'verified in-store customer visits — all through this server. Eveoy is pay-per-visit at $24.99 per ' +
-  'real customer who walks into your store, spends 10+ minutes, makes a purchase, and brings back ~2 ' +
-  'on-brand in-store UGC photos. Not clicks, not impressions, not a contract — no-shows are refunded ' +
-  '100%. Published tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+). ' +
+  'real customer who walks into your store, spends 10+ minutes, makes a purchase, and brings back 2 ' +
+  'on-brand photos and a video. Not clicks, not impressions, not a contract — no-shows are refunded ' +
+  '100%. Published tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+ across ' +
+  '3-4 stores). Optional add-on: guarantee a purchase — the shopper buys a specified SKU (you cover ' +
+  'product cost on top of $24.99, sale runs through your register). ' +
   'Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing or the recommend_pilot ' +
   'prompt to price, capture_profile to save your brand, start_checkout to order (it returns a payment ' +
   'link directly — no sign-in; provide contact + a campaign start date, or call capture_profile ' +

@@ -1,0 +1,50 @@
+{
+  "ucp": "1.0",
+  "protocol_version": "1.0",
+  "vendor": {
+    "name": "Eveoy",
+    "url": "https://eveoy.com",
+    "contact": "support@eveoy.com"
+  },
+  "services": [
+    {
+      "id": "eveoy-directory",
+      "name": "Eveoy Directory",
+      "description": "Public directory of verified brick-and-mortar stores across the U.S.",
+      "type": "catalog",
+      "endpoints": {
+        "browse": "https://eveoy.com/directory",
+        "sitemap": "https://sitemap.eveoy.com/",
+        "mcp_search": "https://mcp.eveoy.com/mcp"
+      },
+      "auth": "none"
+    },
+    {
+      "id": "eveoy-checkout",
+      "name": "Eveoy Order",
+      "description": "Purchase verified in-store customer visits at $24.99 per customer. Tiers: Starter $999 (40), Proof $2,499 (100), Rollout $9,996 (400+).",
+      "type": "checkout",
+      "endpoints": {
+        "human_checkout": "https://eveoy.com/order",
+        "pricing": "https://eveoy.com/pricing",
+        "agent_checkout": "https://mcp.eveoy.com/mcp"
+      },
+      "currency": "USD",
+      "auth": "oauth2"
+    }
+  ],
+  "capabilities": {
+    "discovery": ["api-catalog", "mcp", "openid-configuration", "acp", "mpp"],
+    "payments": ["stripe-checkout"],
+    "identity": ["oauth2", "oidc"]
+  },
+  "endpoints": {
+    "api_catalog": "https://eveoy.com/.well-known/api-catalog",
+    "mcp_server_card": "https://eveoy.com/.well-known/mcp/server-card.json",
+    "oauth_authorization_server": "https://eveoy.com/.well-known/oauth-authorization-server",
+    "oauth_protected_resource": "https://eveoy.com/.well-known/oauth-protected-resource",
+    "acp": "https://eveoy.com/.well-known/acp.json",
+    "openapi": "https://eveoy.com/openapi.json"
+  },
+  "spec_url": "https://ucp.dev/specification/overview/"
+}
