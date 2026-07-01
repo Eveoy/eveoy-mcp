@@ -63,6 +63,10 @@ npm run deploy
 
 Custom Domain auto-creates the proxied DNS record + provisions/renews the TLS cert. Do **not** pre-create a `mcp` CNAME — let Wrangler create it.
 
+## 5a. Human-friendly redirect
+
+`mcp.eveoy.com` is an agent endpoint. The fetch handler ([`src/index.ts`](../src/index.ts)) calls `humanRedirect()` ([`src/lib/redirect.ts`](../src/lib/redirect.ts)) right after the security gate: a browser (`Accept: text/html`) hitting `/`, `/index.html`, or `/mcp` gets a **302 to `https://www.eveoy.com/mcp`** (the human marketing page). Agents send `*/*`, `application/json`, or `text/event-stream` and never match, so `POST /mcp`, the SSE stream, and `GET /mcp` for the Streamable-HTTP downstream are untouched — as are `/llms.txt`, `/robots.txt`, `/sitemap.xml`, `/.well-known/*`, `/info.json`, and `/health`. Non-browser `GET /` still proxies the Lovable landing edge fn. Behavior is pinned by `tests/redirect.test.ts`.
+
 ## 6. MCP Registry — publish `com.eveoy/mcp`
 
 The registry namespace is verified by a **DNS TXT record at the eveoy.com apex** (independent of which Worker hosts it). The Ed25519 keypair + GitHub Action are already wired (`.github/workflows/publish-mcp.yml`, secret `MCP_REGISTRY_DNS_PRIVATE_KEY`).

@@ -24,6 +24,6 @@
     "type": "oauth2",
     "required": false,
     "protected_resource_metadata": "https://mcp.eveoy.com/.well-known/oauth-protected-resource",
-    "description": "All tools are anonymous — no sign-in required, including start_checkout, which returns a Stripe checkout link directly. The protected-resource metadata endpoint remains advertised for clients that probe for it."
+    "description": "All tools are anonymous. Write tools (subscribe_newsletter, capture_profile, start_checkout, request_human, book_demo) accept contact details as arguments but require no OAuth sign-in. The protected-resource metadata endpoint is advertised for spec compliance only."
   }
 }

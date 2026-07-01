@@ -12,6 +12,7 @@ import type { CompanyProfile } from '@/integrations/crm';
 import { buildInfo } from '@/info';
 import { extractIp, hashIp } from '@/lib/ipc';
 import { checkRateLimits } from '@/lib/ratelimit';
+import { humanRedirect } from '@/lib/redirect';
 import { log } from '@/lib/log';
 
 const SERVER_INSTRUCTIONS =
@@ -213,6 +214,13 @@ export default {
 
     const blocked = gate(request, host);
     if (blocked) return blocked;
+
+    // Humans in a browser (Accept: text/html) who hit "/", "/index.html", or
+    // "/mcp" → 302 to the canonical marketing page. Agents (*/*, application/json,
+    // text/event-stream) never match, so POST /mcp, the SSE stream, and GET /mcp
+    // for the Streamable-HTTP downstream pass through untouched.
+    const redirect = humanRedirect(request);
+    if (redirect) return redirect;
 
     // Health (liveness + warm probe)
     if (url.pathname === '/health') {

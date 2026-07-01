@@ -12,6 +12,8 @@ Built as a native **Cloudflare Worker** (`McpAgent` + Durable Objects). Registry
 
 **Endpoint** `https://mcp.eveoy.com/mcp` · Streamable HTTP (MCP spec `2025-06-18`) · legacy SSE at `/sse`
 
+**Humans:** `mcp.eveoy.com` is an agent endpoint. A browser that lands on `/`, `/index.html`, or `/mcp` (Accept: `text/html`) is **302-redirected to the human-facing page at [www.eveoy.com/mcp](https://www.eveoy.com/mcp)**. Agents (Accept `*/*`, `application/json`, `text/event-stream`) are never redirected, and static/discovery paths (`/llms.txt`, `/robots.txt`, `/.well-known/*`, `/info.json`, `/health`, `POST /mcp`, `/sse`) pass through untouched.
+
 ## Add it to your AI
 
 Remote, no auth — connects immediately. `mcp-remote` is **not** needed.
