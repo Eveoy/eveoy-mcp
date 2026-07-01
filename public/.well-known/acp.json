@@ -24,10 +24,7 @@
     "order_status": "https://mcp.eveoy.com/mcp"
   },
   "auth": {
-    "type": "oauth2",
-    "authorization_server": "https://eveoy.com/.well-known/oauth-authorization-server",
-    "protected_resource": "https://eveoy.com/.well-known/oauth-protected-resource",
-    "register_uri": "https://eveoy.com/auth"
+    "type": "none"
   },
   "documentation": "https://eveoy.com/auth.md",
   "spec_url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol"

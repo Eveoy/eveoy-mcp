@@ -31,4 +31,17 @@ describe('mirrored site discovery files', () => {
       expect(() => JSON.parse(raw), `${f} valid JSON`).not.toThrow();
     }
   });
+
+  it('mirrored checkout surfaces are anonymous — match the MCP start_checkout (no OAuth)', async () => {
+    const acp = JSON.parse(await readFile('public/.well-known/acp.json', 'utf8')) as {
+      auth?: { type?: string };
+    };
+    expect(acp.auth?.type, 'acp.json auth.type must be "none"').toBe('none');
+
+    const ucp = JSON.parse(await readFile('public/.well-known/ucp', 'utf8')) as {
+      services?: Array<{ type?: string; auth?: string }>;
+    };
+    const checkout = (ucp.services ?? []).find((s) => s.type === 'checkout');
+    expect(checkout?.auth, 'ucp checkout service auth must be "none"').toBe('none');
+  });
 });
