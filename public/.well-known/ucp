@@ -30,7 +30,7 @@
         "agent_checkout": "https://mcp.eveoy.com/mcp"
       },
       "currency": "USD",
-      "auth": "oauth2"
+      "auth": "none"
     }
   ],
   "capabilities": {
