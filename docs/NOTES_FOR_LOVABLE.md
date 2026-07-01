@@ -1,5 +1,41 @@
 # Notes for Lovable — Eveoy MCP is live
 
+## ⚡ 2026-06-30 — Human redirect + positioning reframe (v1.1.1). Read this first.
+
+**Positioning changed:** the server is no longer framed as an "inbound sales rep" — it is a
+helpful **Eveoy expert associate** (educate first, can take an order, never pushy). Current
+surface is **11 tools, 5 prompts, 10 KB resources, v1.1.1** (not the "14 tools / v1.1.0 /
+sales-rep" numbers in the older sections below — those are stale). Registry `com.eveoy/mcp`
+auto-republished to v1.1.1 by CI (`publish-mcp.yml`).
+
+**Human redirect (this PR):** a browser (`Accept: text/html`) hitting `mcp.eveoy.com/`,
+`/index.html`, or `/mcp` now **302-redirects to `https://www.eveoy.com/mcp`**. Agents are
+unaffected (they send `*/*` / `application/json` / `text/event-stream`); `POST /mcp`, `/sse`,
+`/health`, `/info.json`, `/.well-known/*`, `/llms.txt`, `/robots.txt`, `/sitemap.xml` all pass
+through. Logic in `src/lib/redirect.ts`, pinned by `tests/redirect.test.ts`.
+
+### ⚠️ Open questions for Lovable (agent-facing copy conflicts — resolve before we hardcode)
+
+The Worker's copy was NOT changed for these, because `www.eveoy.com` disagrees with itself
+and/or with the Lovable sync spec. Please confirm the canonical value for each:
+
+1. **Dwell time** — `www.eveoy.com/llms.txt` says "10+ minutes" in most places but "15+ min"
+   in one (audit Q1); `mcp.eveoy.com` hero once said "15 minutes". Worker uses **10+**. Which is canonical?
+2. **Pilot pricing** — sync spec says Starter **$999**/40, Proof **$2,499**/100, Rollout
+   **$9,996**/400+ (Worker already uses these). But `www.eveoy.com/llms.txt` describes a
+   "**$10,000** pilot for ~400 visits" and "Starter pack (40) / Rollout pack (400+)" without
+   the $999/$2,499 tier names. Confirm the three tiers + prices are canonical.
+3. **Guaranteed purchase** — the site now sells an optional "guarantee a purchase, not just a
+   visit" add-on (buy a specified SKU). The Worker doesn't mention it. Add it to the agent surface?
+4. **Photo vs. photo+video** — the site says "photo **and video** proof, included on every
+   visit"; the Worker says "~2 on-brand photos". Should agent copy say "photo + video"?
+5. **`.well-known/ai-plugin.json`, `acp.json`, `ucp`** — served by `www.eveoy.com`, NOT mirrored
+   onto the Worker (deliberately skipped this pass). Want them mirrored to `mcp.eveoy.com`?
+6. **Disabled directory tools** (`search_directory`, `get_business`, `claim_business`,
+   `list_metros`) — excluded from every agent-facing surface via `MCP_DISABLE_TOOL`, but kept
+   registered in code so they can be reactivated. NOT deleted (that was a deliberate reversibility
+   decision). Confirm that's acceptable vs. the spec's "remove if referenced anywhere".
+
 ## ⚡ 2026-06-28 — Sales-rep upgrade is LIVE (v1.1.0). Read this first.
 
 The MCP is now an **inbound sales rep**: agents can learn → profile → quote → buy end to
