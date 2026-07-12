@@ -15,7 +15,7 @@ export const KB_CONTENT = {
 
 ## What it is, plainly
 
-Eveoy is a two-sided marketplace and software platform with automated verification built in. Real US consumers from a 20,000+ verified community opt into brand visits; the brand briefs a campaign and reviews receipts in software; the platform confirms every visit by GPS, time in store, completed activities, and photo/video proof. No account managers, no staffing — the software runs the visit end to end. The single unit you buy is a **verified in-store visit** at **$24.99**.
+Eveoy is a two-sided marketplace and software platform with automated verification built in. Real US consumers from a 21,500+ verified community opt into brand visits; the brand briefs a campaign and reviews receipts in software; the platform confirms every visit by GPS, time in store, completed brand-specified tasks, and photo/video proof. No account managers, no staffing — the software runs the visit end to end. The single unit you buy is a **verified in-store visit** at **$24.99**.
 
 ## What you pay for
 
@@ -23,7 +23,7 @@ You pay **$24.99 per real customer** who:
 
 - Walks into your store (GPS-verified)
 - Spends 10+ minutes with your brand
-- Completes the activities you define
+- Completes the in-store tasks you define
 - Delivers verified photos and video
 
 If any criterion isn't met, the visit is automatically refunded. No clicks, no impressions, no hope — just receipts.
@@ -46,7 +46,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 
 ## Receipts to date
 
-- 20,000+ verified shoppers in the community
+- 21,500+ verified shoppers in the community
 - 10,000+ brand experiences delivered
 - 0 fake clicks billed
 - 100% refunded on no-shows
@@ -56,7 +56,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 ## Three steps. No hassle. No guesswork.
 
 1. **Tell us what you want.** 5-minute setup in the app — audience, location, quantity.
-2. **We send the right shoppers.** Matched from the 20,000+ verified community.
+2. **We send the right shoppers.** Matched from the 21,500+ verified community.
 3. **You get a receipt.** Real visit + 10+ minutes in-store + verified photos and video.
 
 ## Eight things happen. You pay for one.
@@ -66,7 +66,7 @@ Every $24.99 customer triggers a bundle of eight outcomes. The brand is charged 
 1. **Foot traffic** — a real, demographically matched customer walks into the store
 2. **Social engagement** — interaction with staff and store environment
 3. **Brand learning** — the customer absorbs the brand (10+ minutes in-store)
-4. **Brand activities** — campaign-defined tasks completed
+4. **In-store tasks** — brand-specified tasks completed
 5. **Content creation** — verified photos and video, brand-owned forever
 6. **CRM data** — first-party data on a real, matched customer
 7. **Done-for-you service** — Eveoy runs the program end-to-end
@@ -94,18 +94,18 @@ You own every photo and video forever. No licensing fees, no expiration, no rest
 
 ## Optional: guarantee a purchase, not just a visit
 
-Add a purchase activity and the shopper buys a specified SKU. The brand covers the product cost on top of the $24.99 visit fee, and the sale flows through the brand's own register. You get a guaranteed transaction, not just a guaranteed visit.
+Add a purchase task and the shopper buys a specified SKU. The brand covers the product cost on top of the $24.99 visit fee, and the sale flows through the brand's own register. You get a guaranteed transaction, not just a guaranteed visit.
 
 ## The receipt
 
-A receipt is the proof bundle from one verified visit: GPS arrival, time in store, photos, and video. It is not a sales receipt unless you added a purchase activity. A receipt is harder to fake than an impression — it says this real person walked in, stayed, did the activities, and brought back proof you own.
+A receipt is the proof bundle from one verified visit: GPS arrival, time in store, photos, and video. It is not a sales receipt unless you added a purchase task. A receipt is harder to fake than an impression — it says this real person walked in, stayed, did the tasks, and brought back proof you own.
 
 ## Plain-English glossary
 
-- **Verified visit** — the single unit Eveoy sells: one real consumer + correct store + 10+ minutes + completed activities + photo/video proof, all confirmed by the app. $24.99.
+- **Verified visit** — the single unit Eveoy sells: one real consumer + correct store + 10+ minutes + completed tasks + photo/video proof, all confirmed by the app. $24.99.
 - **Shopper** — a real, everyday US consumer who signed up to the Eveoy app and opted into a brand's visit. Compensated per visit for their time and travel. Not an influencer, gig worker, actor, or mystery shopper.
 - **Action IRL** — Eveoy's phrase for buying real-world action instead of digital attention. It maps to "verified in-store visit" — it is not a separate product or tier.
-- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, activities, and any guaranteed-purchase add-on. Created at https://www.eveoy.com/order.
+- **Brief / campaign / order** — three names for the same brand-side setup: store(s), date window, number of shoppers, in-store tasks, and any guaranteed-purchase add-on. Created at https://www.eveoy.com/order.
 `,
   'pricing': String.raw`# Eveoy pricing
 
@@ -158,7 +158,7 @@ Below Starter, the smallest possible order is 20 customers × 1 store = $499.80.
 
 ## The guarantee never changes
 
-100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
+100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed tasks, ≥4.0/5 content quality — you don't pay for it.
 
 ## Custom quote
 
@@ -175,7 +175,7 @@ Anything above 50 locations or 1,000 shoppers per location? Email **support@eveo
 | UGC Creator   | $150–$500/piece         | No visit          | Yes (1 piece)  | None           | Moderate              |
 | Sampling      | $5–$50+                 | Partial           | No             | Limited        | Moderate              |
 
-To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activities + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
+To replicate the Eveoy bundle — verified visit + 10+ minutes + in-store tasks + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
 
 ## À la carte (the same outcome, bought separately)
 
@@ -184,7 +184,7 @@ To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activitie
 | Visit (foot traffic)      | $25 – $75       |
 | Social engagement         | $15 – $40       |
 | Brand learning            | $20 – $60       |
-| Brand activities          | $25 – $80       |
+| In-store tasks          | $25 – $80       |
 | Content creation          | $50 – $200      |
 | CRM data                  | $10 – $25       |
 | Done-for-you service      | $20 – $50       |
@@ -234,11 +234,11 @@ Every $24.99 visit triggers compounding organic effects:
 4. **Algorithmic advantage.** Authentic UGC gets higher engagement, lower CPMs, and better conversion when reused in paid campaigns.
 5. **Local SEO signals.** GPS-verified visits boost Google Maps visibility and local search.
 6. **First-party data.** Each visit creates an opportunity for email capture, loyalty enrollment, and CRM engagement.
-7. **Receipts as trust.** 20,247 receipts issued and 0 fake clicks billed is a track record competitors can't manufacture.
+7. **Receipts as trust.** 230,000+ verified visits delivered and 0 fake clicks billed is a track record competitors can't manufacture.
 `,
   'sectors': String.raw`# Industries served
 
-Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-store dwell, brand activities, photo/video quality, auto-refund — are sector-agnostic.
+Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-store time, brand-specified tasks, photo/video quality, auto-refund — are sector-agnostic.
 
 ## Public sector list
 
@@ -286,9 +286,9 @@ The directory is a separate surface from Eveoy's core product (verified in-store
 
 ## The receipts
 
-- 20,000+ verified shoppers in the community
-- 10,000+ brand experiences delivered
-- 20,247 receipts issued
+- 21,500+ verified shoppers in the community
+- 230,000+ verified in-store visits delivered
+- 40+ brands have tested the model
 - 0 fake clicks billed
 - 100% refunded on no-shows
 
@@ -302,7 +302,7 @@ These are receipts, not projections: every number ties back to a real customer w
 ## Sample campaigns
 
 - **Retail Reveal** — Los Angeles, CA
-- **Cafe Crowd** — Las Vegas, NV
+- **Cafe Fill** — Las Vegas, NV
 - **Shelf Sweep** — Los Angeles, CA
 - **Taco Turnout** — Temecula, CA
 

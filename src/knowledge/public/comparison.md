@@ -9,7 +9,7 @@
 | UGC Creator   | $150–$500/piece         | No visit          | Yes (1 piece)  | None           | Moderate              |
 | Sampling      | $5–$50+                 | Partial           | No             | Limited        | Moderate              |
 
-To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activities + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
+To replicate the Eveoy bundle — verified visit + 10+ minutes + in-store tasks + photos/video + full content rights + CRM data + done-for-you — through traditional channels costs **$160–$870+ per customer** with zero guarantees.
 
 ## À la carte (the same outcome, bought separately)
 
@@ -18,7 +18,7 @@ To replicate the Eveoy bundle — verified visit + 10+ minutes + brand activitie
 | Visit (foot traffic)      | $25 – $75       |
 | Social engagement         | $15 – $40       |
 | Brand learning            | $20 – $60       |
-| Brand activities          | $25 – $80       |
+| In-store tasks          | $25 – $80       |
 | Content creation          | $50 – $200      |
 | CRM data                  | $10 – $25       |
 | Done-for-you service      | $20 – $50       |

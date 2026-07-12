@@ -1,6 +1,6 @@
 # Industries served
 
-Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-store dwell, brand activities, photo/video quality, auto-refund — are sector-agnostic.
+Eveoy serves 23+ sectors. The platform's verification mechanics — GPS, in-store time, brand-specified tasks, photo/video quality, auto-refund — are sector-agnostic.
 
 ## Public sector list
 

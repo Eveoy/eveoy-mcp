@@ -49,7 +49,7 @@ Below Starter, the smallest possible order is 20 customers × 1 store = $499.80.
 
 ## The guarantee never changes
 
-100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed activities, ≥4.0/5 content quality — you don't pay for it.
+100% refunded for no-shows at every tier. If a visit doesn't clear verification — right customer, 10+ minutes in-store, completed tasks, ≥4.0/5 content quality — you don't pay for it.
 
 ## Custom quote
 

@@ -2,9 +2,9 @@
 
 ## The receipts
 
-- 20,000+ verified shoppers in the community
-- 10,000+ brand experiences delivered
-- 20,247 receipts issued
+- 21,500+ verified shoppers in the community
+- 230,000+ verified in-store visits delivered
+- 40+ brands have tested the model
 - 0 fake clicks billed
 - 100% refunded on no-shows
 
@@ -18,7 +18,7 @@ These are receipts, not projections: every number ties back to a real customer w
 ## Sample campaigns
 
 - **Retail Reveal** — Los Angeles, CA
-- **Cafe Crowd** — Las Vegas, NV
+- **Cafe Fill** — Las Vegas, NV
 - **Shelf Sweep** — Los Angeles, CA
 - **Taco Turnout** — Temecula, CA
 

@@ -8,4 +8,4 @@ Every $24.99 visit triggers compounding organic effects:
 4. **Algorithmic advantage.** Authentic UGC gets higher engagement, lower CPMs, and better conversion when reused in paid campaigns.
 5. **Local SEO signals.** GPS-verified visits boost Google Maps visibility and local search.
 6. **First-party data.** Each visit creates an opportunity for email capture, loyalty enrollment, and CRM engagement.
-7. **Receipts as trust.** 20,247 receipts issued and 0 fake clicks billed is a track record competitors can't manufacture.
+7. **Receipts as trust.** 230,000+ verified visits delivered and 0 fake clicks billed is a track record competitors can't manufacture.

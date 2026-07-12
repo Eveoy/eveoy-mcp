@@ -8,7 +8,7 @@
 
 ## What it is, plainly
 
-Eveoy is a two-sided marketplace and software platform with automated verification built in. Real US consumers from a 20,000+ verified community opt into brand visits; the brand briefs a campaign and reviews receipts in software; the platform confirms every visit by GPS, time in store, completed activities, and photo/video proof. No account managers, no staffing — the software runs the visit end to end. The single unit you buy is a **verified in-store visit** at **$24.99**.
+Eveoy is a two-sided marketplace and software platform with automated verification built in. Real US consumers from a 21,500+ verified community opt into brand visits; the brand briefs a campaign and reviews receipts in software; the platform confirms every visit by GPS, time in store, completed brand-specified tasks, and photo/video proof. No account managers, no staffing — the software runs the visit end to end. The single unit you buy is a **verified in-store visit** at **$24.99**.
 
 ## What you pay for
 
@@ -16,7 +16,7 @@ You pay **$24.99 per real customer** who:
 
 - Walks into your store (GPS-verified)
 - Spends 10+ minutes with your brand
-- Completes the activities you define
+- Completes the in-store tasks you define
 - Delivers verified photos and video
 
 If any criterion isn't met, the visit is automatically refunded. No clicks, no impressions, no hope — just receipts.
@@ -39,7 +39,7 @@ If any criterion isn't met, the visit is automatically refunded. No clicks, no i
 
 ## Receipts to date
 
-- 20,000+ verified shoppers in the community
+- 21,500+ verified shoppers in the community
 - 10,000+ brand experiences delivered
 - 0 fake clicks billed
 - 100% refunded on no-shows
