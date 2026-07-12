@@ -6,14 +6,34 @@
 
 ## The math is the same as eveoy.com/order
 
-Total = **shoppers per location × locations × $24.99**
+Base total = **shoppers per location × locations × $24.99**
 
 You pick:
 - **Shoppers per location** — min 20, max 1,000
 - **Locations** — min 1, max 50
 - **Campaign start date** — at least 14 days from today
+- **Guarantee** — visit + purchase (recommended) or visit only
+- **Shopper bonus** — optional, $20–$200 per shopper
 
-Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 customers → 80 photos), yours to keep forever. Brands can add a photo bonus at eveoy.com/order — **+1 photo per +$20, max +3 extra per shopper**. (The "~3 photos per visit" line on the marketing site reflects a typical configured bundle with a small bonus added; the base SKU is 2.)
+Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 customers → 80 photos), yours to keep forever.
+
+## Guaranteed purchase (the recommended option)
+
+With **guaranteed visit + purchase**, every shopper also buys your chosen SKU at your register. You set the SKU price ($5–$100, tax included) and cover it plus a **7.5% platform fee on the SKU amount only** — never on the $24.99 base. The item money rings right back into your till, because the sale runs through your own register. Choose **visit only** to skip the purchase: just the visit and the photos.
+
+## Shopper bonus (optional)
+
+Add **$20–$200 per shopper** (any amount) with a **33% platform fee on the bonus only**. Every full $20 unlocks **+1 photo AND +1 follow/like/comment set per shopper**, each capped at +3 — so $60 maxes the rewards (5 photos + 3 social sets per shopper). Amounts above $60 increase the shopper's bonus but not the unit rewards.
+
+## The full formula (what Stripe actually charges)
+
+    units    = shoppers_per_location × locations
+    base     = units × $24.99
+    purchase = visit+purchase ? round(units × sku_price × 1.075) : 0
+    bonus    = bonus > 0      ? round(units × bonus × 1.33)      : 0
+    total    = base + purchase + bonus
+
+Worked example: 40 shoppers × 1 store, guaranteed purchase with a $5.00 SKU, $60 bonus → $999.60 + $215.00 + $3,192.00 = **$4,406.60**.
 
 ## Published tiers
 
@@ -23,9 +43,9 @@ Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 custom
 | **Proof** | $2,499 | 100 real customers | 200 | 1 store + 90-day readout |
 | **Rollout** | $9,996 | 400+ real customers | 800+ | 3–4 stores |
 
-Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer.
+Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer. All three tier prices are the **visit-only base** — the guaranteed purchase (SKU + 7.5%) and shopper bonus (+33%) are added on top when selected.
 
-Below Starter, the smallest possible order is 20 customers × 1 store = $499.80. Above Rollout it scales linearly to a ceiling of 1,000 × 50 = $1,249,500.
+Below Starter, the smallest possible order is 20 customers × 1 store = $499.80. Above Rollout it scales linearly to a ceiling of 1,000 × 50 = $1,249,500 (base).
 
 ## The guarantee never changes
 

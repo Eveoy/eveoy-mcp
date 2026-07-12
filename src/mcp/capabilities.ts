@@ -50,7 +50,7 @@ export const CAPABILITIES: Capability[] = [
   {
     name: 'get_pricing',
     title: 'Get exact pricing',
-    summary: 'Calculate the exact pilot price for N shoppers per location across M locations ($24.99 each, $999 Starter floor).',
+    summary: 'Calculate the exact pilot price ($24.99 per shopper base; optional guaranteed purchase = SKU + 7.5% fee; optional shopper bonus + 33% fee) with the full fee breakdown.',
     group: 'Pricing & ordering',
     triggers: ['how much', 'price for 100 customers', 'cost of a pilot'],
     auth: 'none',
@@ -58,7 +58,7 @@ export const CAPABILITIES: Capability[] = [
   {
     name: 'start_checkout',
     title: 'Start a checkout',
-    summary: 'Create a Stripe checkout link to buy a pilot — works for agents directly, no sign-in (provide contact + campaign date, or call capture_profile first).',
+    summary: 'Create a Stripe checkout link to buy a pilot — visit-only or guaranteed visit + purchase, optional shopper bonus — no sign-in (provide contact + campaign date, or call capture_profile first).',
     group: 'Pricing & ordering',
     triggers: ['buy a pilot', 'check out', 'place an order', 'pay'],
     auth: 'none',

@@ -3,7 +3,7 @@
   "name": "com.eveoy/mcp",
   "title": "Eveoy — Verified In-Store Foot Traffic ($24.99/customer)",
   "description": "Your Eveoy expert in any AI — learn how it works, get a price, and order real in-store visits.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "websiteUrl": "https://mcp.eveoy.com",
   "repository": {
     "url": "https://github.com/eveoy/eveoy-mcp",

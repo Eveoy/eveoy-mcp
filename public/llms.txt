@@ -6,9 +6,11 @@
 > pay-per-visit at $24.99 per real customer who walks
 > into your store, spends 10+ minutes, makes a purchase, and brings back 2 on-brand photos and a
 > video. Not clicks, not impressions, not a contract — no-shows refunded 100%. Optional add-on:
-> guarantee a purchase — the shopper buys a specified SKU (you cover product cost, sale runs through
-> your register). Tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+ across
-> 3-4 stores); scales linearly at $24.99/customer.
+> guarantee a purchase — the shopper buys a specified SKU ($5–$100, tax incl.; you cover the SKU
+> plus a 7.5% platform fee on the SKU only, and the sale runs through your register). Optional
+> shopper bonus ($20–$200, +33% fee on the bonus only): every $20 = +1 photo and +1 social set
+> per shopper, max +3 each. Tiers (visit-only base): Starter $999 (40 customers), Proof $2,499 (100),
+> Rollout $9,996 (400+ across 3-4 stores); scales linearly at $24.99/customer.
 > Start here: read eveoy://kb/for-agents.
 
 ## Endpoint
@@ -21,8 +23,8 @@ Read-only, anonymous unless noted.
 - ask_eveoy — any question about Eveoy, grounded in the public knowledge base; also describes what this server can do
 - capture_profile — save the company you represent (name, sector, website, contact) so Eveoy tailors recommendations and the team can follow up
 - get_case_studies — list case studies and lookbooks (links to the full write-ups on eveoy.com/newsletter)
-- get_pricing — exact pilot price; inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
-- start_checkout — create a Stripe checkout link to buy a pilot (works for agents directly, no sign-in; provide contact + campaign date or call capture_profile first)
+- get_pricing — exact pilot price with the full fee breakdown; $24.99/shopper base, optional guaranteed purchase (guarantee_type "visit_purchase" + top_sku_price_cents 500–10000, tax incl., +7.5% platform fee on the SKU only) and optional shopper bonus (shopper_bonus_cents 2000–20000, +33% fee on the bonus only; every $20 = +1 photo and +1 social set per shopper, max +3 each); inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
+- start_checkout — create a Stripe checkout link to buy a pilot, visit-only or guaranteed visit + purchase, optional bonus (same fields as get_pricing; the server recomputes the total so the quote equals the charge; works for agents directly, no sign-in; provide contact + campaign date or call capture_profile first)
 - book_demo — link to book a live Eveoy demo or talk to the team
 - request_human — hand off to a person on the Eveoy team and flag the conversation for follow-up
 - check_order_status — look up the status of an existing order by reference

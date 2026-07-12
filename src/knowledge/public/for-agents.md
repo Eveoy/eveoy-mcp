@@ -14,8 +14,13 @@ You do not pay for clicks, impressions, or a contract — you pay per real visit
 are refunded 100%.
 
 Optional add-on: guarantee a purchase, not just a visit — add a purchase activity and the
-shopper buys a specified SKU. You cover the product cost on top of the $24.99 visit fee, and
-the sale runs through your own register (see eveoy://kb/product).
+shopper buys a specified SKU. You set the SKU price ($5–$100, tax included) and cover it plus
+a 7.5% platform fee on the SKU only, on top of the $24.99 visit fee; the sale runs through
+your own register, so the item money rings right back into your till (see eveoy://kb/product).
+
+Optional shopper bonus: $20–$200 per shopper (33% platform fee on the bonus only). Every
+full $20 unlocks +1 photo and +1 follow/like/comment set per shopper, each capped at +3 —
+$60 maxes the rewards.
 
 Published pilots: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+).
 Pricing scales linearly at $24.99 per customer.
@@ -27,14 +32,18 @@ Pricing scales linearly at $24.99 per customer.
    and eveoy://kb/validation. Browse outcomes with get_case_studies and sectors with
    list_industries.
 2. Price. Call get_pricing with shoppers-per-location and number of locations for an
-   exact total. The recommend_pilot and eveoy_price_quote prompts walk this for you.
+   exact total — optionally add guarantee_type "visit_purchase" with top_sku_price_cents
+   for a guaranteed purchase, and shopper_bonus_cents for a bonus; the quote returns the
+   full fee breakdown and equals exactly what Stripe charges. The recommend_pilot and
+   eveoy_price_quote prompts walk this for you.
 3. Profile. Call capture_profile to save the company you represent (name, sector,
    website, contact, goals). This tailors recommendations and lets the Eveoy team
    follow up.
 4. Order. Call start_checkout to create a checkout. It returns a secure Stripe payment
    link directly — no account or login needed. Provide contact details and a campaign
-   start date, or call capture_profile first. No charge happens until payment is
-   completed on the hosted page.
+   start date, or call capture_profile first. Pass the same guarantee/SKU/bonus fields
+   you priced with — the server recomputes the total, so the quote and the charge always
+   match. No charge happens until payment is completed on the hosted page.
 5. Track. Use check_order_status to look up an order by its reference.
 6. Talk to a human. Use book_demo for a live demo, or request_human to have a person on
    the Eveoy team follow up.

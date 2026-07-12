@@ -2,7 +2,7 @@
   "$schema": "https://modelcontextprotocol.io/schemas/draft/server-card.json",
   "serverInfo": {
     "name": "eveoy-mcp",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "title": "Eveoy — Verified In-Store Foot Traffic",
     "description": "Eveoy brings real customers into real stores — you pay $24.99 only after a real person shows up, spends 10+ minutes, buys, and brings back photos and a video. No-shows are refunded. This is your Eveoy expert associate inside any AI: ask how it works, what it costs, or which industries it serves. Here to help and educate, not sell — it can place an order when you're ready. Start with the eveoy://kb/for-agents resource.",
     "vendor": "Eveoy, Inc.",

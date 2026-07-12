@@ -29,6 +29,20 @@ export const DEFAULT_LOCATIONS = 1;
 export const CAMPAIGN_START_LEAD_DAYS = 14;
 export const UGC_PHOTOS_PER_CUSTOMER = 2;
 
+// ─── v8 guarantee + fee terms (create-checkout-session, eveoy.com 6fba648) ──
+// The edge fn recomputes the total server-side with this exact math; the
+// Worker mirrors it so quotes always equal what Stripe charges.
+export const SKU_FEE_RATE = 0.075; // platform fee on the SKU price only — never on the $24.99 base
+export const BONUS_FEE_RATE = 0.33; // platform fee on the shopper bonus only
+export const MIN_SKU_PRICE_CENTS = 500;
+export const MAX_SKU_PRICE_CENTS = 10000;
+export const MIN_BONUS_CENTS = 2000;
+export const MAX_BONUS_CENTS = 20000;
+export const BONUS_TIER_CENTS = 2000; // every $20 of bonus = +1 photo AND +1 social set per shopper
+export const MAX_BONUS_TIERS = 3; // both rewards cap at +3 ($60 maxes them; paying more buys no extra units)
+
+export type GuaranteeType = 'visit_purchase' | 'visit';
+
 export interface PricingInput {
   customersPerLocation?: number;
   locations?: number;
@@ -78,6 +92,91 @@ export function priceFor(input: PricingInput = {}): PricingResult {
 
 export function formatUsd(cents: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+}
+
+// ─── v8 quote: base + optional guaranteed purchase (SKU) + optional bonus ──
+
+export interface QuoteInput extends PricingInput {
+  /** Omitted = visit-only pricing (the legacy math). */
+  guaranteeType?: GuaranteeType;
+  /** Required when guaranteeType is 'visit_purchase'. Tax-inclusive, 500–10000. */
+  topSkuPriceCents?: number;
+  /** 0 or 2000–20000 (any integer — no $20-step requirement). */
+  shopperBonusCents?: number;
+}
+
+export interface QuoteResult extends PricingResult {
+  guarantee_type: GuaranteeType;
+  top_sku_price_cents: number | null;
+  shopper_bonus_cents: number;
+  base_cents: number;
+  sku_cents: number;
+  bonus_cents: number;
+  /** min(3, floor(bonus_usd / 20)) — each tier = +1 photo and +1 social set per shopper. */
+  bonus_tiers: number;
+  bonus_extra_photos_per_shopper: number;
+  bonus_social_sets_per_shopper: number;
+}
+
+/**
+ * Mirror of the edge fn's server-side recomputation (float-multiply per
+ * component, Math.round each component once, sum):
+ *   units       = customers_per_location × locations
+ *   base_cents  = units × 2499
+ *   sku_cents   = visit_purchase ? round(units × top_sku_price_cents × 1.075) : 0
+ *   bonus_cents = bonus > 0      ? round(units × shopper_bonus_cents × 1.33)  : 0
+ * Pinned by tests/pricing-v8.test.ts to the contract's worked example (440,660¢).
+ */
+export function quoteFor(input: QuoteInput = {}): QuoteResult {
+  const p = priceFor(input);
+  const guarantee: GuaranteeType = input.guaranteeType ?? 'visit';
+
+  let topSku: number | null = null;
+  if (guarantee === 'visit_purchase') {
+    const sku = input.topSkuPriceCents;
+    if (sku === undefined || sku === null) {
+      throw new RangeError(
+        `top_sku_price_cents is required when guarantee_type is "visit_purchase" (integer ${MIN_SKU_PRICE_CENTS}–${MAX_SKU_PRICE_CENTS} cents, tax included)`,
+      );
+    }
+    if (!Number.isInteger(sku) || sku < MIN_SKU_PRICE_CENTS || sku > MAX_SKU_PRICE_CENTS) {
+      throw new RangeError(
+        `top_sku_price_cents must be an integer in [${MIN_SKU_PRICE_CENTS}, ${MAX_SKU_PRICE_CENTS}], got ${sku}`,
+      );
+    }
+    topSku = sku;
+  }
+
+  const bonus = input.shopperBonusCents ?? 0;
+  if (!Number.isInteger(bonus) || (bonus !== 0 && (bonus < MIN_BONUS_CENTS || bonus > MAX_BONUS_CENTS))) {
+    throw new RangeError(
+      `shopper_bonus_cents must be 0 or an integer in [${MIN_BONUS_CENTS}, ${MAX_BONUS_CENTS}], got ${bonus}`,
+    );
+  }
+
+  const units = p.total_customers;
+  const base_cents = units * UNIT_PRICE_CENTS;
+  const sku_cents = topSku !== null ? Math.round(units * topSku * (1 + SKU_FEE_RATE)) : 0;
+  const bonus_cents = bonus > 0 ? Math.round(units * bonus * (1 + BONUS_FEE_RATE)) : 0;
+  const total_cents = base_cents + sku_cents + bonus_cents;
+
+  const bonus_tiers = bonus > 0 ? Math.min(MAX_BONUS_TIERS, Math.floor(bonus / BONUS_TIER_CENTS)) : 0;
+
+  return {
+    ...p,
+    total_cents,
+    total_usd: formatUsd(total_cents),
+    ugc_photos: units * (UGC_PHOTOS_PER_CUSTOMER + bonus_tiers),
+    guarantee_type: guarantee,
+    top_sku_price_cents: topSku,
+    shopper_bonus_cents: bonus,
+    base_cents,
+    sku_cents,
+    bonus_cents,
+    bonus_tiers,
+    bonus_extra_photos_per_shopper: bonus_tiers,
+    bonus_social_sets_per_shopper: bonus_tiers,
+  };
 }
 
 /**

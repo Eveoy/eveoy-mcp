@@ -22,8 +22,10 @@ const SERVER_INSTRUCTIONS =
   'real customer who walks into your store, spends 10+ minutes, makes a purchase, and brings back 2 ' +
   'on-brand photos and a video. Not clicks, not impressions, not a contract — no-shows are refunded ' +
   '100%. Published tiers: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+ across ' +
-  '3-4 stores). Optional add-on: guarantee a purchase — the shopper buys a specified SKU (you cover ' +
-  'product cost on top of $24.99, sale runs through your register). ' +
+  '3-4 stores, all visit-only base). Optional add-ons: guarantee a purchase — the shopper buys your ' +
+  'chosen SKU ($5-$100, tax included; you cover the SKU plus a 7.5% platform fee on the SKU only, and ' +
+  'the sale runs through your register) — and a shopper bonus ($20-$200, +33% fee on the bonus only; ' +
+  'every $20 = +1 photo and +1 social set per shopper, max +3 each). ' +
   'Flow: ask_eveoy (or read eveoy://kb/for-agents) to learn, get_pricing or the recommend_pilot ' +
   'prompt to price, capture_profile to save your brand, start_checkout to order (it returns a payment ' +
   'link directly — no sign-in; provide contact + a campaign start date, or call capture_profile ' +
@@ -44,7 +46,7 @@ export interface EveoyState {
  */
 export class EveoyMCP extends McpAgent<Env, EveoyState> {
   server = new McpServer(
-    { name: 'eveoy-mcp', version: '1.1.1' },
+    { name: 'eveoy-mcp', version: '1.2.0' },
     { instructions: SERVER_INSTRUCTIONS },
   );
 

@@ -9,6 +9,10 @@ export interface AgentCheckoutInput {
   work_email?: string;
   brand_website?: string;
   campaign_start_date?: string;
+  /** v8 guarantee + fee fields — order-shaping, folded into the idempotency identity. */
+  guarantee_type?: 'visit_purchase' | 'visit';
+  top_sku_price_cents?: number;
+  shopper_bonus_cents?: number;
   /** Paid, order-shaping targeting — folded into the idempotency identity. */
   advancedTargeting?: unknown;
 }
@@ -49,6 +53,9 @@ export function resolveAgentCheckout(
   if (!work_email) missing.push('work_email');
   if (!brand_website) missing.push('brand_website');
   if (!campaign_start_date) missing.push('campaign_start_date');
+  if (input.guarantee_type === 'visit_purchase' && input.top_sku_price_cents == null) {
+    missing.push('top_sku_price_cents (required for guarantee_type "visit_purchase": the in-store SKU price in cents, 500–10000, tax included)');
+  }
 
   const identity = stableId(
     JSON.stringify({
@@ -56,6 +63,9 @@ export function resolveAgentCheckout(
       locations: input.locations,
       campaign_start_date: campaign_start_date ?? null,
       work_email: work_email ?? null,
+      guarantee_type: input.guarantee_type ?? null,
+      top_sku_price_cents: input.top_sku_price_cents ?? null,
+      shopper_bonus_cents: input.shopper_bonus_cents ?? null,
       advancedTargeting: input.advancedTargeting ?? null,
     }),
   );

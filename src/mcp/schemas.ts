@@ -8,8 +8,48 @@ import {
   DEFAULT_CUSTOMERS_PER_LOCATION,
   DEFAULT_LOCATIONS,
   CAMPAIGN_START_LEAD_DAYS,
+  MIN_SKU_PRICE_CENTS,
+  MAX_SKU_PRICE_CENTS,
+  MIN_BONUS_CENTS,
+  MAX_BONUS_CENTS,
   earliestStartDate,
 } from '@/lib/pricing';
+
+// ─── v8 guarantee + fee fields (shared by get_pricing + start_checkout) ──
+// Wire names match the create-checkout-session edge fn exactly.
+const GuaranteeTypeField = z
+  .enum(['visit_purchase', 'visit'])
+  .optional()
+  .describe(
+    'Guarantee level. "visit_purchase" (the recommended default on eveoy.com/order): every shopper also buys ' +
+      'your chosen SKU at your register — you cover the SKU price plus a 7.5% platform fee on the SKU only, and ' +
+      'the item money rings back into your till. "visit": visit + photos only, no purchase. ' +
+      'Omit for a visit-only quote/order (the $24.99 base is all that is charged).',
+  );
+
+const TopSkuPriceCentsField = z
+  .number()
+  .int()
+  .min(MIN_SKU_PRICE_CENTS)
+  .max(MAX_SKU_PRICE_CENTS)
+  .optional()
+  .describe(
+    `In-store price of the SKU each shopper buys, in CENTS, tax included (${MIN_SKU_PRICE_CENTS}–${MAX_SKU_PRICE_CENTS} ` +
+      `= $5–$100). Required when guarantee_type is "visit_purchase". A 7.5% platform fee applies to this amount only.`,
+  );
+
+const ShopperBonusCentsField = z
+  .number()
+  .int()
+  .refine((v) => v === 0 || (v >= MIN_BONUS_CENTS && v <= MAX_BONUS_CENTS), {
+    message: `shopper_bonus_cents must be 0 or between ${MIN_BONUS_CENTS} and ${MAX_BONUS_CENTS}`,
+  })
+  .optional()
+  .describe(
+    `Optional per-shopper bonus in CENTS: 0 or ${MIN_BONUS_CENTS}–${MAX_BONUS_CENTS} ($20–$200, any amount — no $20 step). ` +
+      'Every full $20 unlocks +1 photo AND +1 follow/like/comment set per shopper (each capped at +3, so $60 maxes the ' +
+      'rewards). A 33% platform fee applies to the bonus only.',
+  );
 
 // ─── Input schemas — mirror eveoy.com/order constraints exactly ────
 // Wire-format field names align with the Supabase edge function body
@@ -58,6 +98,9 @@ export const GetPricingInput = z.object({
       `Number of store locations. Mirrors eveoy.com/order: min ${MIN_LOCATIONS}, max ${MAX_LOCATIONS}. ` +
         `Default ${DEFAULT_LOCATIONS}.`,
     ),
+  guarantee_type: GuaranteeTypeField,
+  top_sku_price_cents: TopSkuPriceCentsField,
+  shopper_bonus_cents: ShopperBonusCentsField,
 }).strict();
 
 export const ListIndustriesInput = z.object({}).strict();
@@ -137,6 +180,9 @@ export const StartCheckoutInput = z.object({
     })
     .optional()
     .describe(`Campaign start date (YYYY-MM-DD, ≥ ${CAMPAIGN_START_LEAD_DAYS} days out). Required to check out without signing in.`),
+  guarantee_type: GuaranteeTypeField,
+  top_sku_price_cents: TopSkuPriceCentsField,
+  shopper_bonus_cents: ShopperBonusCentsField,
   advancedTargeting: AdvancedTargetingInput,
 }).strict();
 
@@ -151,6 +197,16 @@ export const GetPricingOutput = z.object({
   formatted_total: z.string(),
   ugc_photos: z.number().int(),
   is_starter_tier: z.boolean(),
+  // v8 guarantee + fee breakdown (mirrors the edge fn's server-side recomputation)
+  guarantee_type: z.enum(['visit_purchase', 'visit']),
+  top_sku_price_cents: z.number().int().nullable(),
+  shopper_bonus_cents: z.number().int(),
+  fee_breakdown: z.object({
+    base_cents: z.number().int(),
+    sku_cents: z.number().int(),
+    bonus_cents: z.number().int(),
+  }),
+  bonus_tiers: z.number().int(),
 });
 
 export const ListIndustriesOutput = z.object({

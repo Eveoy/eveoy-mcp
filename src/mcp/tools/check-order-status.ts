@@ -13,7 +13,7 @@ Use this when the user wants to:
 
 Trigger phrases include: "check my order", "order status", "did my payment go through", "status of session cs_...".
 
-Returns: { customer_email (masked), locations, customers_per_location, total_cents, status }.
+Returns: { customer_email (masked), locations, customers_per_location, total_cents, status, guarantee_type, top_sku_price_cents, shopper_bonus_cents, fee_breakdown { base_cents, sku_cents, bonus_cents } }.
 
 Do NOT use this for: creating an order (use start_checkout) or pricing (use get_pricing). Requires the cs_... session id from a prior checkout.
 

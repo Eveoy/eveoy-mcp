@@ -1,6 +1,6 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StartCheckoutInput } from '@/mcp/schemas';
-import { priceFor } from '@/lib/pricing';
+import { quoteFor } from '@/lib/pricing';
 import { callEdge, edgeErrorMessage, EdgeError } from '@/integrations/edge';
 import { logEvent, type CompanyProfile } from '@/integrations/crm';
 import { resolveAgentCheckout } from './checkout-plan';
@@ -20,17 +20,17 @@ export interface AuthAgent {
   setState(s: { jwt?: string; jwtExp?: number; profile?: CompanyProfile }): void;
 }
 
-const DESCRIPTION = `Create an Eveoy checkout and return a payment link. Pricing mirrors the order page ($24.99 per verified customer; Starter/Proof/Rollout). Works for agents directly — no sign-in required.
+const DESCRIPTION = `Create an Eveoy checkout and return a payment link. Pricing mirrors the order page: $24.99 per verified customer base, plus two options — a guaranteed purchase (guarantee_type "visit_purchase": every shopper buys your chosen SKU at your register; you add the SKU price in cents, tax included, $5–$100, plus a 7.5% platform fee on the SKU only) and a shopper bonus ($20–$200 per shopper, 33% platform fee on the bonus only; every $20 = +1 photo and +1 social set per shopper, max +3 each). Omit guarantee_type for a visit-only order. The server recomputes the total — what get_pricing quotes is exactly what Stripe charges. Works for agents directly — no sign-in required.
 
 Use this when the user has decided to buy and confirmed the size:
-- They picked a customers-per-location count (and optionally locations) and want to pay
-- Trigger phrases: "buy a pilot", "start checkout", "place an order", "let's order 100 customers"
+- They picked a customers-per-location count (and optionally locations, guarantee, SKU price, bonus) and want to pay
+- Trigger phrases: "buy a pilot", "start checkout", "place an order", "let's order 100 customers with a guaranteed purchase"
 
-Provide your_name, work_email, brand_website, and campaign_start_date (at least 14 days out) — or call capture_profile first and I will reuse your saved details, then I only need campaign_start_date.
+Provide your_name, work_email, brand_website, and campaign_start_date (at least 14 days out) — or call capture_profile first and I will reuse your saved details, then I only need campaign_start_date. For a guaranteed purchase also provide top_sku_price_cents.
 
-Returns: { checkout_url, session_id, total, customers } — pay on Stripe's hosted page; no charge until then.
+Returns: { checkout_url, session_id, total, customers, guarantee_type, fee_breakdown } — pay on Stripe's hosted page; no charge until then.
 
-Do NOT use this for: price-only questions (use get_pricing), saving your company (use capture_profile), or order status (use check_order_status). Confirm the customer count and total with the user first.
+Do NOT use this for: price-only questions (use get_pricing), saving your company (use capture_profile), or order status (use check_order_status). Confirm the customer count, guarantee choice, and total with the user first.
 
 Cost: free to call. Latency: 2-5s. Creates a real checkout session and a CRM deal (no charge until the user pays). Confirm first.`;
 
@@ -48,10 +48,36 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
       annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true, idempotentHint: false },
     },
     async (input) => {
-      const { customers_per_location, locations, advancedTargeting } = input;
-      const p = priceFor({ customersPerLocation: customers_per_location, locations });
+      const { customers_per_location, locations, advancedTargeting, guarantee_type, top_sku_price_cents, shopper_bonus_cents } = input;
+      let p;
+      try {
+        p = quoteFor({
+          customersPerLocation: customers_per_location,
+          locations,
+          guaranteeType: guarantee_type,
+          topSkuPriceCents: top_sku_price_cents,
+          shopperBonusCents: shopper_bonus_cents,
+        });
+      } catch (err) {
+        return {
+          content: [{ type: 'text' as const, text: err instanceof Error ? err.message : 'Invalid checkout inputs.' }],
+          isError: true,
+        };
+      }
       const st = agent.state ?? {};
       const session = agent.getSessionId();
+      // The edge fn treats an omitted guarantee_type as the legacy visit-only path
+      // and IGNORES sku/bonus there — so send explicit v8 fields only when the
+      // agent opted into them, and always together.
+      const v8Fields = guarantee_type
+        ? {
+            guarantee_type,
+            top_sku_price_cents: guarantee_type === 'visit_purchase' ? top_sku_price_cents : null,
+            shopper_bonus_cents: shopper_bonus_cents ?? 0,
+          }
+        : shopper_bonus_cents
+          ? { guarantee_type: 'visit' as const, top_sku_price_cents: null, shopper_bonus_cents }
+          : {};
 
       let data: { url?: string; sessionId?: string } | undefined;
 
@@ -60,7 +86,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
         try {
           data = await callEdge(
             '/create-checkout-session',
-            { locations, customers_per_location, advancedTargeting: advancedTargeting ?? null },
+            { locations, customers_per_location, advancedTargeting: advancedTargeting ?? null, ...v8Fields },
             st.jwt,
           );
         } catch (err) {
@@ -103,6 +129,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
             idempotency_key: r.idempotencyKey,
             session_id: session,
             advancedTargeting: advancedTargeting ?? null,
+            ...v8Fields,
           });
         } catch (err) {
           return { content: [{ type: 'text', text: edgeErrorMessage(err) }], isError: true };
@@ -111,9 +138,17 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
           event_type: 'checkout_started',
           session_id: session,
           tool: 'start_checkout',
-          summary: `Checkout started: ${p.total_customers} customers (${p.total_usd}) — ${r.work_email}`,
+          summary: `Checkout started: ${p.total_customers} customers (${p.total_usd}, ${p.guarantee_type}) — ${r.work_email}`,
           event_id: r.idempotencyKey,
-          metadata: { customers: p.total_customers, total_usd: p.total_usd, locations },
+          metadata: {
+            customers: p.total_customers,
+            total_usd: p.total_usd,
+            locations,
+            guarantee_type: p.guarantee_type,
+            top_sku_price_cents: p.top_sku_price_cents ?? 0,
+            shopper_bonus_cents: p.shopper_bonus_cents,
+            total_cents: p.total_cents,
+          },
         });
       }
 
@@ -137,16 +172,27 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
         log.error('checkout.empty_response', { session });
         return { content: [{ type: 'text', text: 'Checkout could not be created. Please try again.' }], isError: true };
       }
+      const guaranteeLine =
+        p.guarantee_type === 'visit_purchase'
+          ? ` — guaranteed visit + purchase (SKU + 7.5% fee included)`
+          : ` — guaranteed visit only`;
+      const bonusLine = p.shopper_bonus_cents > 0 ? `, shopper bonus included (+33% fee)` : '';
       return {
         content: [{
           type: 'text',
-          text: `Checkout ready for ${p.total_customers} customers (${p.total_usd}). Complete payment: ${data.url}`,
+          text: `Checkout ready for ${p.total_customers} customers (${p.total_usd}${guaranteeLine}${bonusLine}). Complete payment: ${data.url}`,
         }],
         structuredContent: {
           checkout_url: data.url,
           session_id: data.sessionId,
           total: p.total_usd,
           customers: p.total_customers,
+          guarantee_type: p.guarantee_type,
+          fee_breakdown: {
+            base_cents: p.base_cents,
+            sku_cents: p.sku_cents,
+            bonus_cents: p.bonus_cents,
+          },
         },
       };
     },
