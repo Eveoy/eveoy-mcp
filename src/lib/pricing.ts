@@ -29,10 +29,11 @@ export const DEFAULT_LOCATIONS = 1;
 export const CAMPAIGN_START_LEAD_DAYS = 14;
 export const UGC_PHOTOS_PER_CUSTOMER = 2;
 
-// ─── v8 guarantee + fee terms (create-checkout-session, eveoy.com 6fba648) ──
+// ─── v8 guarantee + fee terms (create-checkout-session) ──
 // The edge fn recomputes the total server-side with this exact math; the
 // Worker mirrors it so quotes always equal what Stripe charges.
-export const SKU_FEE_RATE = 0.075; // platform fee on the SKU price only — never on the $24.99 base
+// The item fee is WAIVED (2026-07-14): the SKU is a pure pass-through at
+// cost. The 33% bonus fee is the ONLY platform fee.
 export const BONUS_FEE_RATE = 0.33; // platform fee on the shopper bonus only
 export const MIN_SKU_PRICE_CENTS = 500;
 export const MAX_SKU_PRICE_CENTS = 10000;
@@ -119,13 +120,12 @@ export interface QuoteResult extends PricingResult {
 }
 
 /**
- * Mirror of the edge fn's server-side recomputation (float-multiply per
- * component, Math.round each component once, sum):
+ * Mirror of the edge fn's server-side recomputation:
  *   units       = customers_per_location × locations
  *   base_cents  = units × 2499
- *   sku_cents   = visit_purchase ? round(units × top_sku_price_cents × 1.075) : 0
- *   bonus_cents = bonus > 0      ? round(units × shopper_bonus_cents × 1.33)  : 0
- * Pinned by tests/pricing-v8.test.ts to the contract's worked example (440,660¢).
+ *   sku_cents   = visit_purchase ? units × top_sku_price_cents : 0   (at cost — item fee waived)
+ *   bonus_cents = bonus > 0      ? round(units × shopper_bonus_cents × 1.33) : 0
+ * Pinned by tests/pricing-v8.test.ts to the contract's worked example (439,160¢).
  */
 export function quoteFor(input: QuoteInput = {}): QuoteResult {
   const p = priceFor(input);
@@ -156,7 +156,7 @@ export function quoteFor(input: QuoteInput = {}): QuoteResult {
 
   const units = p.total_customers;
   const base_cents = units * UNIT_PRICE_CENTS;
-  const sku_cents = topSku !== null ? Math.round(units * topSku * (1 + SKU_FEE_RATE)) : 0;
+  const sku_cents = topSku !== null ? units * topSku : 0;
   const bonus_cents = bonus > 0 ? Math.round(units * bonus * (1 + BONUS_FEE_RATE)) : 0;
   const total_cents = base_cents + sku_cents + bonus_cents;
 

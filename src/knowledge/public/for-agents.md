@@ -13,14 +13,14 @@ about 2 on-brand in-store UGC photos and a video (the customer with the brand's 
 You do not pay for clicks, impressions, or a contract — you pay per real visit, and no-shows
 are refunded 100%.
 
-Optional add-on: guarantee a purchase, not just a visit — add a purchase activity and the
-shopper buys a specified SKU. You set the SKU price ($5–$100, tax included) and cover it plus
-a 7.5% platform fee on the SKU only, on top of the $24.99 visit fee; the sale runs through
+Optional add-on: guarantee a purchase, not just a visit — add a purchase task and the
+shopper buys a specified SKU. You set the SKU price ($5–$100, tax included) and cover it
+at cost — no platform fee on the item — on top of the $24.99 visit fee; the sale runs through
 your own register, so the item money rings right back into your till (see eveoy://kb/product).
 
-Optional shopper bonus: $20–$200 per shopper (33% platform fee on the bonus only). Every
-full $20 unlocks +1 photo and +1 follow/like/comment set per shopper, each capped at +3 —
-$60 maxes the rewards.
+Optional shopper bonus: $20–$200 per shopper (33% platform fee on the bonus only — the only
+platform fee). Every full $20 unlocks +1 photo and +1 follow/like/comment set per shopper,
+each capped at +3 — $60 maxes the rewards.
 
 Published pilots: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+).
 Pricing scales linearly at $24.99 per customer.

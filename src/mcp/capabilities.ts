@@ -50,7 +50,7 @@ export const CAPABILITIES: Capability[] = [
   {
     name: 'get_pricing',
     title: 'Get exact pricing',
-    summary: 'Calculate the exact pilot price ($24.99 per shopper base; optional guaranteed purchase = SKU + 7.5% fee; optional shopper bonus + 33% fee) with the full fee breakdown.',
+    summary: 'Calculate the exact pilot price ($24.99 per shopper base; optional guaranteed purchase = SKU at cost, no item fee; optional shopper bonus + 33% fee) with the full breakdown.',
     group: 'Pricing & ordering',
     triggers: ['how much', 'price for 100 customers', 'cost of a pilot'],
     auth: 'none',

@@ -22,7 +22,7 @@ const GuaranteeTypeField = z
   .optional()
   .describe(
     'Guarantee level. "visit_purchase" (the recommended default on eveoy.com/order): every shopper also buys ' +
-      'your chosen SKU at your register — you cover the SKU price plus a 7.5% platform fee on the SKU only, and ' +
+      'your chosen SKU at your register — you cover the SKU price at cost (no item fee), and ' +
       'the item money rings back into your till. "visit": visit + photos only, no purchase. ' +
       'Omit for a visit-only quote/order (the $24.99 base is all that is charged).',
   );
@@ -35,7 +35,7 @@ const TopSkuPriceCentsField = z
   .optional()
   .describe(
     `In-store price of the SKU each shopper buys, in CENTS, tax included (${MIN_SKU_PRICE_CENTS}–${MAX_SKU_PRICE_CENTS} ` +
-      `= $5–$100). Required when guarantee_type is "visit_purchase". A 7.5% platform fee applies to this amount only.`,
+      `= $5–$100). Required when guarantee_type is "visit_purchase". Charged at cost — no platform fee on the item.`,
   );
 
 const ShopperBonusCentsField = z

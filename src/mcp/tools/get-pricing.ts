@@ -14,7 +14,7 @@ import {
 } from '@/lib/pricing';
 import { assertPublic } from '@/classifier/public-only';
 
-const DESCRIPTION = `Compute the exact Eveoy price for a pilot. Pricing mirrors eveoy.com/order. Base: customers_per_location × locations × $24.99. Optional guaranteed purchase (guarantee_type "visit_purchase"): every shopper also buys your chosen SKU at your register — add the SKU price (in cents, tax included, $5–$100) plus a 7.5% platform fee on the SKU only; the item money rings back into your till. Optional shopper bonus ($20–$200 per shopper, 33% platform fee on the bonus only): every $20 unlocks +1 photo and +1 follow/like/comment set per shopper, each capped at +3. Total = units×2499 + round(units×sku×1.075) + round(units×bonus×1.33) cents — the same server-side math Stripe charges. The marketing-default $999 pilot is 40 customers at 1 location, visit-only. Floor 20/location, ceiling 1,000/location, locations cap 50.
+const DESCRIPTION = `Compute the exact Eveoy price for a pilot. Pricing mirrors eveoy.com/order. Base: customers_per_location × locations × $24.99. Optional guaranteed purchase (guarantee_type "visit_purchase"): every shopper also buys your chosen SKU at your register — add the SKU price (in cents, tax included, $5–$100) at cost, no item fee; the item money rings back into your till. Optional shopper bonus ($20–$200 per shopper, 33% platform fee on the bonus only — the only platform fee): every $20 unlocks +1 photo and +1 follow/like/comment set per shopper, each capped at +3. Total = units×2499 + units×sku + round(units×bonus×1.33) cents — the same server-side math Stripe charges. The marketing-default $999 pilot is 40 customers at 1 location, visit-only. Floor 20/location, ceiling 1,000/location, locations cap 50.
 
 Use this when the user wants to:
 - Get a price for a specific shopper/customer count and location count ("price 200 shoppers across 3 stores")
@@ -78,7 +78,7 @@ export function registerGetPricing(server: McpServer, agent: ToolAgent) {
         `  Total: ${p.total_usd}`,
         `    Base visits: ${formatUsd(p.base_cents)} (${formatUsd(UNIT_PRICE_CENTS)} per shopper, flat)`,
         withPurchase
-          ? `    Guaranteed purchase: ${formatUsd(p.sku_cents)} (SKU ${formatUsd(p.top_sku_price_cents ?? 0)} tax-incl. per shopper + 7.5% platform fee on the SKU — the item money rings back at your register)`
+          ? `    Guaranteed purchase: ${formatUsd(p.sku_cents)} (SKU ${formatUsd(p.top_sku_price_cents ?? 0)} tax-incl. per shopper, at cost — no item fee; the item money rings back at your register)`
           : '    Guarantee: visit only (no purchase). Add guarantee_type "visit_purchase" + a SKU price to guarantee a purchase per shopper.',
         p.shopper_bonus_cents > 0
           ? `    Shopper bonus: ${formatUsd(p.bonus_cents)} (${formatUsd(p.shopper_bonus_cents)} per shopper + 33% platform fee) → +${p.bonus_extra_photos_per_shopper} photo${p.bonus_extra_photos_per_shopper === 1 ? '' : 's'} and +${p.bonus_social_sets_per_shopper} follow/like/comment set${p.bonus_social_sets_per_shopper === 1 ? '' : 's'} per shopper`

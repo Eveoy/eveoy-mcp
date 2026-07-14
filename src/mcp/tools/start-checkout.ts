@@ -20,7 +20,7 @@ export interface AuthAgent {
   setState(s: { jwt?: string; jwtExp?: number; profile?: CompanyProfile }): void;
 }
 
-const DESCRIPTION = `Create an Eveoy checkout and return a payment link. Pricing mirrors the order page: $24.99 per verified customer base, plus two options — a guaranteed purchase (guarantee_type "visit_purchase": every shopper buys your chosen SKU at your register; you add the SKU price in cents, tax included, $5–$100, plus a 7.5% platform fee on the SKU only) and a shopper bonus ($20–$200 per shopper, 33% platform fee on the bonus only; every $20 = +1 photo and +1 social set per shopper, max +3 each). Omit guarantee_type for a visit-only order. The server recomputes the total — what get_pricing quotes is exactly what Stripe charges. Works for agents directly — no sign-in required.
+const DESCRIPTION = `Create an Eveoy checkout and return a payment link. Pricing mirrors the order page: $24.99 per verified customer base, plus two options — a guaranteed purchase (guarantee_type "visit_purchase": every shopper buys your chosen SKU at your register; you add the SKU price in cents, tax included, $5–$100, at cost — no item fee) and a shopper bonus ($20–$200 per shopper, 33% platform fee on the bonus only — the only platform fee; every $20 = +1 photo and +1 social set per shopper, max +3 each). Omit guarantee_type for a visit-only order. The server recomputes the total — what get_pricing quotes is exactly what Stripe charges. Works for agents directly — no sign-in required.
 
 Use this when the user has decided to buy and confirmed the size:
 - They picked a customers-per-location count (and optionally locations, guarantee, SKU price, bonus) and want to pay
@@ -174,7 +174,7 @@ export function registerStartCheckout(server: McpServer, agent: AuthAgent) {
       }
       const guaranteeLine =
         p.guarantee_type === 'visit_purchase'
-          ? ` — guaranteed visit + purchase (SKU + 7.5% fee included)`
+          ? ` — guaranteed visit + purchase (SKU at cost included, no item fee)`
           : ` — guaranteed visit only`;
       const bonusLine = p.shopper_bonus_cents > 0 ? `, shopper bonus included (+33% fee)` : '';
       return {

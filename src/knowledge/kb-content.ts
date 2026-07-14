@@ -128,21 +128,21 @@ Every shopper returns **2 quality-rated UGC photos** as the base (e.g. 40 custom
 
 ## Guaranteed purchase (the recommended option)
 
-With **guaranteed visit + purchase**, every shopper also buys your chosen SKU at your register. You set the SKU price ($5–$100, tax included) and cover it plus a **7.5% platform fee on the SKU amount only** — never on the $24.99 base. The item money rings right back into your till, because the sale runs through your own register. Choose **visit only** to skip the purchase: just the visit and the photos.
+With **guaranteed visit + purchase**, every shopper also buys your chosen SKU at your register. You set the SKU price ($5–$100, tax included) and cover it **at cost — there is no platform fee on the item**. The item money rings right back into your till, because the sale runs through your own register. Choose **visit only** to skip the purchase: just the visit and the photos.
 
 ## Shopper bonus (optional)
 
-Add **$20–$200 per shopper** (any amount) with a **33% platform fee on the bonus only**. Every full $20 unlocks **+1 photo AND +1 follow/like/comment set per shopper**, each capped at +3 — so $60 maxes the rewards (5 photos + 3 social sets per shopper). Amounts above $60 increase the shopper's bonus but not the unit rewards.
+Add **$20–$200 per shopper** (any amount) with a **33% platform fee on the bonus only** — the only platform fee Eveoy charges. Every full $20 unlocks **+1 photo AND +1 follow/like/comment set per shopper**, each capped at +3 — so $60 maxes the rewards (5 photos + 3 social sets per shopper). Amounts above $60 increase the shopper's bonus but not the unit rewards.
 
 ## The full formula (what Stripe actually charges)
 
     units    = shoppers_per_location × locations
     base     = units × $24.99
-    purchase = visit+purchase ? round(units × sku_price × 1.075) : 0
-    bonus    = bonus > 0      ? round(units × bonus × 1.33)      : 0
+    purchase = visit+purchase ? units × sku_price : 0        (item at cost — no fee)
+    bonus    = bonus > 0      ? round(units × bonus × 1.33) : 0
     total    = base + purchase + bonus
 
-Worked example: 40 shoppers × 1 store, guaranteed purchase with a $5.00 SKU, $60 bonus → $999.60 + $215.00 + $3,192.00 = **$4,406.60**.
+Worked example: 40 shoppers × 1 store, guaranteed purchase with a $5.00 SKU, $60 bonus → $999.60 + $200.00 + $3,192.00 = **$4,391.60**.
 
 ## Published tiers
 
@@ -152,7 +152,7 @@ Worked example: 40 shoppers × 1 store, guaranteed purchase with a $5.00 SKU, $6
 | **Proof** | $2,499 | 100 real customers | 200 | 1 store + 90-day readout |
 | **Rollout** | $9,996 | 400+ real customers | 800+ | 3–4 stores |
 
-Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer. All three tier prices are the **visit-only base** — the guaranteed purchase (SKU + 7.5%) and shopper bonus (+33%) are added on top when selected.
+Starter is the entry point. Proof adds purchase-volume data, repeat-visit signals, and a 90-day readout. Rollout is multi-store at the same $24.99 per customer. All three tier prices are the **visit-only base** — the guaranteed purchase (item at cost, no fee) and shopper bonus (+33%) are added on top when selected.
 
 Below Starter, the smallest possible order is 20 customers × 1 store = $499.80. Above Rollout it scales linearly to a ceiling of 1,000 × 50 = $1,249,500 (base).
 
@@ -343,14 +343,14 @@ about 2 on-brand in-store UGC photos and a video (the customer with the brand's 
 You do not pay for clicks, impressions, or a contract — you pay per real visit, and no-shows
 are refunded 100%.
 
-Optional add-on: guarantee a purchase, not just a visit — add a purchase activity and the
-shopper buys a specified SKU. You set the SKU price ($5–$100, tax included) and cover it plus
-a 7.5% platform fee on the SKU only, on top of the $24.99 visit fee; the sale runs through
+Optional add-on: guarantee a purchase, not just a visit — add a purchase task and the
+shopper buys a specified SKU. You set the SKU price ($5–$100, tax included) and cover it
+at cost — no platform fee on the item — on top of the $24.99 visit fee; the sale runs through
 your own register, so the item money rings right back into your till (see eveoy://kb/product).
 
-Optional shopper bonus: $20–$200 per shopper (33% platform fee on the bonus only). Every
-full $20 unlocks +1 photo and +1 follow/like/comment set per shopper, each capped at +3 —
-$60 maxes the rewards.
+Optional shopper bonus: $20–$200 per shopper (33% platform fee on the bonus only — the only
+platform fee). Every full $20 unlocks +1 photo and +1 follow/like/comment set per shopper,
+each capped at +3 — $60 maxes the rewards.
 
 Published pilots: Starter $999 (40 customers), Proof $2,499 (100), Rollout $9,996 (400+).
 Pricing scales linearly at $24.99 per customer.

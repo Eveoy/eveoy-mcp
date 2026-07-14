@@ -1,14 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { quoteFor, SKU_FEE_RATE, BONUS_FEE_RATE } from '../src/lib/pricing';
+import { quoteFor, BONUS_FEE_RATE } from '../src/lib/pricing';
 import { resolveAgentCheckout } from '../src/mcp/tools/checkout-plan';
 import { StartCheckoutInput, GetPricingInput } from '../src/mcp/schemas';
 
 /**
- * v8 order contract — mirrors supabase/functions/create-checkout-session
- * (eveoy.com commit 6fba648). The worked example is pinned to the value the
+ * v8 order contract — mirrors supabase/functions/create-checkout-session.
+ * The 7.5% item fee is WAIVED (2026-07-14 pass): the SKU is a pure
+ * pass-through at cost. The worked example is pinned to the value the
  * edge fn actually computes: 40×1, visit_purchase, sku 500¢, bonus 6000¢
- * → 99,960 + round(40×500×1.075)=21,500 + round(40×6000×1.33)=319,200
- * → total_cents 440,660.
+ * → 99,960 + 40×500=20,000 + round(40×6000×1.33)=319,200
+ * → total_cents 439,160.
  */
 describe('quoteFor — v8 fee math (contract-pinned)', () => {
   it('matches the edge fn worked example exactly', () => {
@@ -20,9 +21,9 @@ describe('quoteFor — v8 fee math (contract-pinned)', () => {
       shopperBonusCents: 6000,
     });
     expect(q.base_cents).toBe(99_960);
-    expect(q.sku_cents).toBe(21_500);
+    expect(q.sku_cents).toBe(20_000);
     expect(q.bonus_cents).toBe(319_200);
-    expect(q.total_cents).toBe(440_660);
+    expect(q.total_cents).toBe(439_160);
     expect(q.guarantee_type).toBe('visit_purchase');
   });
 
@@ -44,8 +45,9 @@ describe('quoteFor — v8 fee math (contract-pinned)', () => {
     expect(q.total_cents).toBe(99_960 + q.bonus_cents);
   });
 
-  it('fee rates are exactly 7.5% (SKU) and 33% (bonus)', () => {
-    expect(SKU_FEE_RATE).toBe(0.075);
+  it('the SKU is charged at cost (no item fee) and the bonus fee is exactly 33%', () => {
+    const q = quoteFor({ customersPerLocation: 100, locations: 2, guaranteeType: 'visit_purchase', topSkuPriceCents: 9999 });
+    expect(q.sku_cents).toBe(200 * 9999); // pure pass-through — no multiplier, no rounding
     expect(BONUS_FEE_RATE).toBe(0.33);
   });
 
