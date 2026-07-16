@@ -21,6 +21,7 @@ export interface Env {
   // Secrets (wrangler secret put)
   IP_HASH_SALT?: string;
   SUPABASE_ANON_KEY?: string; // publishable, but stored as a secret per Lovable
+  MCP_WEBHOOK_SECRET?: string; // shared secret for crm-log (X-MCP-Secret); empty = rollout mode
 }
 
 /** Cloudflare Rate Limiting binding (GA). */

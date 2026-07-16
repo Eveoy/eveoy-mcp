@@ -82,11 +82,18 @@ async function post(
   url: string,
   key: string,
   payload: unknown,
+  webhookSecret: string,
 ): Promise<{ ok: boolean; status: number | null; error?: string }> {
   try {
     const r = await fetch(url, {
       method: 'POST',
-      headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`, // Supabase gateway auth (anon key)
+        'Content-Type': 'application/json',
+        // Shared-secret auth for crm-log itself (enforced there once armed).
+        ...(webhookSecret ? { 'X-MCP-Secret': webhookSecret } : {}),
+      },
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
@@ -102,7 +109,7 @@ async function post(
  * follow-up that didn't happen.
  */
 export async function logEvent(event: CrmEvent): Promise<CrmResult> {
-  const { supabaseUrl, supabaseAnonKey } = config();
+  const { supabaseUrl, supabaseAnonKey, mcpWebhookSecret } = config();
   if (!supabaseUrl || !supabaseAnonKey) {
     log.info('crm.skipped_unwired', { event_type: event.event_type });
     return 'skipped'; // backend not wired yet
@@ -126,11 +133,11 @@ export async function logEvent(event: CrmEvent): Promise<CrmResult> {
   };
   const url = `${supabaseUrl}/functions/v1/crm-log`;
 
-  let res = await post(url, supabaseAnonKey, payload);
+  let res = await post(url, supabaseAnonKey, payload, mcpWebhookSecret);
   if (res.ok) return 'accepted';
 
   if (HIGH_INTENT.has(event.event_type)) {
-    res = await post(url, supabaseAnonKey, payload); // at-least-once; crm-log dedups on event_id
+    res = await post(url, supabaseAnonKey, payload, mcpWebhookSecret); // at-least-once; crm-log dedups on event_id
     if (res.ok) return 'accepted';
   }
 

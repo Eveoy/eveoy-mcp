@@ -77,6 +77,21 @@ describe('crm.logEvent', () => {
     expect(f).toHaveBeenCalledTimes(1);
   });
 
+  it('sends X-MCP-Secret when the webhook secret is configured, omits it otherwise', async () => {
+    __setConfigForTest({ ...CONFIGURED, mcpWebhookSecret: 'shhh-armed' });
+    const f = mockFetch(async () => ({ ok: true, status: 200 }));
+    await logEvent(base);
+    let headers = (f.mock.calls[0] as unknown as [string, RequestInit])[1].headers as Record<string, string>;
+    expect(headers['X-MCP-Secret']).toBe('shhh-armed');
+    expect(headers.Authorization).toBe('Bearer anon-key'); // gateway auth unchanged
+
+    __setConfigForTest({ ...CONFIGURED, mcpWebhookSecret: '' });
+    f.mockClear();
+    await logEvent(base);
+    headers = (f.mock.calls[0] as unknown as [string, RequestInit])[1].headers as Record<string, string>;
+    expect(headers['X-MCP-Secret']).toBeUndefined();
+  });
+
   it('marks synthetic identities with test:true (explicit flag, example.com, internal domains)', async () => {
     __setConfigForTest(CONFIGURED);
     const f = mockFetch(async () => ({ ok: true, status: 200 }));

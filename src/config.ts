@@ -16,6 +16,8 @@ export interface RuntimeConfig {
   // Supabase edge-function backend (the "brain"). Worker is a thin adapter.
   supabaseUrl: string;
   supabaseAnonKey: string;
+  /** Shared secret for crm-log (X-MCP-Secret header). Empty = not armed. */
+  mcpWebhookSecret: string;
   siteUrl: string;
 }
 
@@ -27,6 +29,7 @@ let current: RuntimeConfig = {
   eveoyOrigin: 'https://www.eveoy.com',
   supabaseUrl: '',
   supabaseAnonKey: '',
+  mcpWebhookSecret: '',
   siteUrl: 'https://www.eveoy.com',
 };
 
@@ -38,6 +41,7 @@ export function setRuntimeConfig(env: {
   EVEOY_ORIGIN?: string;
   SUPABASE_URL?: string;
   SUPABASE_ANON_KEY?: string;
+  MCP_WEBHOOK_SECRET?: string;
   SITE_URL?: string;
 }): void {
   current = {
@@ -50,6 +54,7 @@ export function setRuntimeConfig(env: {
     eveoyOrigin: env.EVEOY_ORIGIN ?? current.eveoyOrigin,
     supabaseUrl: env.SUPABASE_URL ?? current.supabaseUrl,
     supabaseAnonKey: env.SUPABASE_ANON_KEY ?? current.supabaseAnonKey,
+    mcpWebhookSecret: env.MCP_WEBHOOK_SECRET ?? current.mcpWebhookSecret,
     siteUrl: env.SITE_URL ?? current.siteUrl,
   };
 }
