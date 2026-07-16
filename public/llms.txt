@@ -25,7 +25,7 @@ Read-only, anonymous unless noted.
 - get_case_studies — list case studies and lookbooks (links to the full write-ups on eveoy.com/newsletter)
 - get_pricing — exact pilot price with the full breakdown; $24.99/shopper base, optional guaranteed purchase (guarantee_type "visit_purchase" + top_sku_price_cents 500–10000, tax incl., charged at cost — no item fee) and optional shopper bonus (shopper_bonus_cents 2000–20000, +33% fee on the bonus only, the only platform fee; every $20 = +1 photo and +1 social set per shopper, max +3 each); inputs mirror eveoy.com/order (customers_per_location 20–1000, locations 1–50)
 - start_checkout — create a Stripe checkout link to buy a pilot, visit-only or guaranteed visit + purchase, optional bonus (same fields as get_pricing; the server recomputes the total so the quote equals the charge; works for agents directly, no sign-in; provide contact + campaign date or call capture_profile first)
-- book_demo — link to book a live Eveoy demo or talk to the team
+- book_demo — link to book a live Eveoy demo or talk to the team; pass contact_name, work_email, and company_name when known (or call capture_profile first) to prefill the booking page and identify the request to the team
 - request_human — hand off to a person on the Eveoy team and flag the conversation for follow-up
 - check_order_status — look up the status of an existing order by reference
 - list_industries — the 23+ sectors Eveoy serves

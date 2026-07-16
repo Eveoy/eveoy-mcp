@@ -76,4 +76,22 @@ describe('crm.logEvent', () => {
     await expect(logEvent(base)).resolves.toBe('failed');
     expect(f).toHaveBeenCalledTimes(1);
   });
+
+  it('marks synthetic identities with test:true (explicit flag, example.com, internal domains)', async () => {
+    __setConfigForTest(CONFIGURED);
+    const f = mockFetch(async () => ({ ok: true, status: 200 }));
+    const sent = () => JSON.parse((f.mock.calls.at(-1) as unknown as [string, RequestInit])[1].body as string);
+
+    await logEvent({ ...base, test: true });
+    expect(sent().test).toBe(true);
+
+    await logEvent({ ...base, event_type: 'demo_booked', profile: { company_name: 'T', work_email: 'x@example.com' } });
+    expect(sent().test).toBe(true);
+
+    await logEvent({ ...base, event_type: 'demo_booked', profile: { company_name: 'E', work_email: 'brad@eveoy.com' } });
+    expect(sent().test).toBe(true);
+
+    await logEvent({ ...base, event_type: 'demo_booked', profile: { company_name: 'Real Co', work_email: 'sam@wildbar.co' } });
+    expect(sent().test).toBeUndefined();
+  });
 });

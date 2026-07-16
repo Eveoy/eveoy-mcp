@@ -66,7 +66,7 @@ export const CAPABILITIES: Capability[] = [
   {
     name: 'book_demo',
     title: 'Book a demo',
-    summary: 'Get the link to book a live Eveoy demo or talk to the team.',
+    summary: 'Get the link to book a live Eveoy demo — pass name/email/company to prefill the booking page and tell the team who is coming.',
     group: 'Pricing & ordering',
     triggers: ['book a demo', 'schedule a call', 'talk to sales'],
     auth: 'none',

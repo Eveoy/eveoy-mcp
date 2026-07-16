@@ -62,6 +62,15 @@ export interface CrmEvent {
   metadata?: Record<string, string | number | boolean>;
   /** Optional deterministic/content-derived dedup key; falls back to a uuid. */
   event_id?: string;
+  /** Mark synthetic traffic. Auto-set for known test/internal identities; crm-log skips Zoho/Cliq but keeps the row. */
+  test?: boolean;
+}
+
+/** Identities that are always synthetic: RFC-2606 example domains + Eveoy-internal. */
+const TEST_EMAIL_RE = /@(example\.(com|org|net)|test\.com|eveoy\.com|eycrowd\.com)$/i;
+
+function isSyntheticEvent(event: CrmEvent): boolean {
+  return event.test === true || TEST_EMAIL_RE.test(event.profile?.work_email ?? '');
 }
 
 /** Coarse outcome of a logEvent call. NEVER thrown — returned so callers can be honest. */
@@ -110,7 +119,11 @@ export async function logEvent(event: CrmEvent): Promise<CrmResult> {
     return 'skipped';
   }
 
-  const payload = { ...event, event_id: event.event_id ?? crypto.randomUUID() };
+  const payload = {
+    ...event,
+    event_id: event.event_id ?? crypto.randomUUID(),
+    ...(isSyntheticEvent(event) ? { test: true } : {}),
+  };
   const url = `${supabaseUrl}/functions/v1/crm-log`;
 
   let res = await post(url, supabaseAnonKey, payload);

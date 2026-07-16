@@ -109,7 +109,14 @@ export const ListMetrosInput = z.object({}).strict();
 
 export const GetAppLinkInput = z.object({}).strict();
 
-export const BookDemoInput = z.object({}).strict();
+export const BookDemoInput = z.object({
+  contact_name: z.string().trim().min(1).max(80).optional()
+    .describe('Name of the person requesting the demo — prefills the booking page and tells the Eveoy team who is coming.'),
+  work_email: z.string().email().max(254).optional()
+    .describe('Work email of the requester — prefills the booking page and lets the team follow up if the booking is not completed.'),
+  company_name: z.string().trim().min(1).max(120).optional()
+    .describe('Company or brand the demo is for. Optional if capture_profile was called first.'),
+}).strict();
 
 // ─── Advanced targeting (shared by start_checkout + Phase-2 order) ──
 // Exact JSONB shape stored on public.orders.advanced_targeting.
